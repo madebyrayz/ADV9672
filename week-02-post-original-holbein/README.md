@@ -67,6 +67,13 @@ $PY lab/build_scenes.py                         # refresh the app manifest
 $PY method_figures.py                           # redraw every plate
 ```
 
+## Third-party source material
+
+Boxer's essay, his two MATLAB listings and his figures are his work, so they are
+not republished here. `boxer_repro/reproduce.py` compares the port against his
+`OptimalSkull.jpg`; save it to `anamorph/data/boxer_figs/` from the essay linked
+above before running that step.
+
 ## Conventions
 
 Δx = mm right of the panel's right edge · Δy = mm above its bottom edge · Δz = mm out

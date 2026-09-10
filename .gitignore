@@ -35,3 +35,16 @@ __pycache__/
 *.pyc
 .DS_Store
 .ipynb_checkpoints/
+
+# ---- third-party source material -------------------------------------------
+# Scraped copies of Boxer's essay and his two MATLAB listings, kept locally as a
+# working reference. They are his writing, not ours, and the study cites the
+# canonical URL, so they are not republished here.
+week-*/anamorph/data/boxer_page.html
+week-*/anamorph/data/boxer_text.txt
+week-*/anamorph/data/anamorphic-m.*
+week-*/anamorph/data/inversetrapezoid-m.*
+week-*/anamorph/data/boxer_figs/
+
+# ---- machine-specific --------------------------------------------------------
+.claude/
