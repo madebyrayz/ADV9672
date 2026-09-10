@@ -346,11 +346,20 @@ class Handler(BaseHTTPRequestHandler):
     # running on the same machine the page can borrow it, which needs CORS. The allowance is
     # limited to the published origin and to localhost: a wildcard would let any site the
     # browser visits read this machine's research data for as long as the server is up.
-    ALLOWED_ORIGINS = {"https://madebyrayz.github.io", "http://localhost:8765", "http://127.0.0.1:8765"}
+    PUBLISHED_ORIGIN = "https://madebyrayz.github.io"
+
+    @staticmethod
+    def _origin_allowed(origin):
+        if not origin:
+            return False
+        if origin == Handler.PUBLISHED_ORIGIN:
+            return True
+        host = urlparse(origin)
+        return host.scheme == "http" and host.hostname in ("localhost", "127.0.0.1")
 
     def _cors(self):
         origin = self.headers.get("Origin")
-        if origin in self.ALLOWED_ORIGINS:
+        if self._origin_allowed(origin):
             self.send_header("Access-Control-Allow-Origin", origin)
             self.send_header("Vary", "Origin")
             self.send_header("Access-Control-Allow-Private-Network", "true")

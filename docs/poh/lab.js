@@ -845,8 +845,10 @@ async function findLocalServer() {
   } catch { return false; }
 }
 // The local server returns absolute paths; from a published page those would resolve
-// against github.io, so they are re-pointed at the machine that served them.
-const rebase = (v) => typeof v === "string" ? (v.startsWith("anamorph/") ? LOCAL_ORIGIN + v : v)
+// against the published host, so they are re-pointed at the machine that served them.
+// The test is for a leading slash rather than a named prefix: the static build rewrites
+// absolute asset prefixes to relative ones, and a literal here would be rewritten too.
+const rebase = (v) => typeof v === "string" ? (v.startsWith("/") ? LOCAL_ORIGIN + v : v)
   : Array.isArray(v) ? v.map(rebase)
   : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, rebase(x)]))
   : v;
