@@ -1,0 +1,270 @@
+{
+ "clip_skull": {
+  "peak": {
+   "value": 0.9516050219535828,
+   "dx": 1450.0,
+   "dz": 600.0
+  },
+  "above_50pct": {
+   "area_mm2": 42000.0,
+   "dx_range": [
+    950.0,
+    1500.0
+   ],
+   "dz_range": [
+    360.0,
+    600.0
+   ]
+  },
+  "above_70pct": {
+   "area_mm2": 20000.0,
+   "dx_range": [
+    1350.0,
+    1500.0
+   ],
+   "dz_range": [
+    400.0,
+    600.0
+   ]
+  },
+  "above_90pct": {
+   "area_mm2": 4000.0,
+   "dx_range": [
+    1400.0,
+    1450.0
+   ],
+   "dz_range": [
+    600.0,
+    600.0
+   ]
+  },
+  "above_95pct": {
+   "area_mm2": 4000.0,
+   "dx_range": [
+    1400.0,
+    1450.0
+   ],
+   "dz_range": [
+    600.0,
+    600.0
+   ]
+  },
+  "displacement_from_boxer_mm": {
+   "dx": 673.1,
+   "dz": 342.1,
+   "euclid": 755.0470316476981
+  },
+  "displacement_in_expert_disagreement_units": {
+   "dx": 51.776923076923076,
+   "dz": 2.478985507246377
+  },
+  "inside_boxer_2sigma_ellipse": false
+ },
+ "clip_sim": {
+  "peak": {
+   "value": 0.2823476195335388,
+   "dx": 1400.0,
+   "dz": 600.0
+  },
+  "above_50pct": {
+   "area_mm2": 750000.0,
+   "dx_range": [
+    300.0,
+    1500.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_70pct": {
+   "area_mm2": 732000.0,
+   "dx_range": [
+    300.0,
+    1500.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_90pct": {
+   "area_mm2": 8000.0,
+   "dx_range": [
+    1350.0,
+    1450.0
+   ],
+   "dz_range": [
+    520.0,
+    600.0
+   ]
+  },
+  "above_95pct": {
+   "area_mm2": 4000.0,
+   "dx_range": [
+    1400.0,
+    1450.0
+   ],
+   "dz_range": [
+    600.0,
+    600.0
+   ]
+  },
+  "displacement_from_boxer_mm": {
+   "dx": 623.1,
+   "dz": 342.1,
+   "euclid": 710.8347346605962
+  },
+  "displacement_in_expert_disagreement_units": {
+   "dx": 47.93076923076923,
+   "dz": 2.478985507246377
+  },
+  "inside_boxer_2sigma_ellipse": false
+ },
+ "symmetry": {
+  "peak": {
+   "value": 1.0,
+   "dx": 300.0,
+   "dz": 40.0
+  },
+  "above_50pct": {
+   "area_mm2": 290000.0,
+   "dx_range": [
+    300.0,
+    850.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_70pct": {
+   "area_mm2": 290000.0,
+   "dx_range": [
+    300.0,
+    850.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_90pct": {
+   "area_mm2": 290000.0,
+   "dx_range": [
+    300.0,
+    850.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_95pct": {
+   "area_mm2": 290000.0,
+   "dx_range": [
+    300.0,
+    850.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  }
+ },
+ "resemblance": {
+  "peak": {
+   "value": 0.5509174466133118,
+   "dx": 1350.0,
+   "dz": 280.0
+  },
+  "above_50pct": {
+   "area_mm2": 446000.0,
+   "dx_range": [
+    500.0,
+    1500.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_70pct": {
+   "area_mm2": 444000.0,
+   "dx_range": [
+    500.0,
+    1500.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_90pct": {
+   "area_mm2": 260000.0,
+   "dx_range": [
+    650.0,
+    1500.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "above_95pct": {
+   "area_mm2": 76000.0,
+   "dx_range": [
+    750.0,
+    1500.0
+   ],
+   "dz_range": [
+    40.0,
+    600.0
+   ]
+  },
+  "displacement_from_boxer_mm": {
+   "dx": 573.1,
+   "dz": 22.100000000000023,
+   "euclid": 573.5259540770584
+  },
+  "displacement_in_expert_disagreement_units": {
+   "dx": 44.08461538461539,
+   "dz": 0.16014492753623205
+  },
+  "inside_boxer_2sigma_ellipse": false
+ },
+ "crop": "tracked 3D bbox of SHARP's skull Gaussians",
+ "hole_fraction_at_published": {
+  "National Gallery 1997": 0.9725566007653061,
+  "Boxer inverseTrapezoid.m": 0.99609375,
+  "Boxer anamorphic.m": 1.0,
+  "Boxer 8x8 grid hypothesis": 0.99609375
+ },
+ "scores_at_published": {
+  "National Gallery 1997": {
+   "clip_skull": 0.12039954215288162,
+   "clip_sim": 0.23311913013458252,
+   "resemblance": 0.5003363490104675
+  },
+  "Boxer inverseTrapezoid.m": {
+   "clip_skull": 0.031750939786434174,
+   "clip_sim": 0.2269216775894165,
+   "resemblance": 0.45914527773857117
+  },
+  "Boxer anamorphic.m": {
+   "clip_skull": 0.4058493971824646,
+   "clip_sim": 0.2137213796377182,
+   "resemblance": 0.25299522280693054
+  },
+  "Boxer 8x8 grid hypothesis": {
+   "clip_skull": 0.031750939786434174,
+   "clip_sim": 0.2269216775894165,
+   "resemblance": 0.45914527773857117
+  }
+ },
+ "grid_step": [
+  50.0,
+  40.0
+ ],
+ "n_missing": 0
+}

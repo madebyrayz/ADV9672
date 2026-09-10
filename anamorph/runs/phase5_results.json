@@ -1,0 +1,56 @@
+{
+ "sharp_best": {
+  "source": "SHARP best pose fine_d800_el+10_az+58 (-354, 375, 417) mm, resemblance 0.60",
+  "streak_px": [
+   3656,
+   2130
+  ],
+  "streak_mm": [
+   913.9913760754181,
+   532.2936385777905
+  ],
+  "print_scale_px_per_mm": 4,
+  "lateral_extent_mm_expected": 915,
+  "files": [
+   "figures/phase5_sharp_best_anamorph_print.png",
+   "figures/phase5_sharp_best_in_painting.jpg",
+   "figures/phase5_sharp_best_from_O.jpg"
+  ]
+ },
+ "torn_from_O": {
+  "source": "SHARP render from Boxer's O (torn floor, lower-left crop)",
+  "streak_px": [
+   3656,
+   2130
+  ],
+  "streak_mm": [
+   913.9913760754181,
+   532.2936385777905
+  ],
+  "print_scale_px_per_mm": 4,
+  "lateral_extent_mm_expected": 915,
+  "files": [
+   "figures/phase5_torn_from_O_anamorph_print.png",
+   "figures/phase5_torn_from_O_in_painting.jpg",
+   "figures/phase5_torn_from_O_from_O.jpg"
+  ]
+ },
+ "depth_skull": {
+  "source": "SHARP depth map of the skull region (bright = near)",
+  "streak_px": [
+   3656,
+   2130
+  ],
+  "streak_mm": [
+   913.9913760754181,
+   532.2936385777905
+  ],
+  "print_scale_px_per_mm": 4,
+  "lateral_extent_mm_expected": 915,
+  "files": [
+   "figures/phase5_depth_skull_anamorph_print.png",
+   "figures/phase5_depth_skull_in_painting.jpg",
+   "figures/phase5_depth_skull_from_O.jpg"
+  ]
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "image": "data/Holbein-ambassadors.jpg",
+ "width": 1084,
+ "height": 1069,
+ "f35_mm": 35.0,
+ "f_px": 1231.5575020582953,
+ "device": "mps",
+ "inference_s": 4.96,
+ "n_gaussians": 1179648,
+ "sharp_internal_shape": [
+  1536,
+  1536
+ ],
+ "depth_m": {
+  "min": 1.3218175172805786,
+  "p05": 2.0019700169563293,
+  "median": 2.3305068016052246,
+  "p95": 2.8342318534851074,
+  "max": 7.91015625,
+  "mean": 2.382693416942703
+ },
+ "scale_size_p50_m": 0.0015375606129769757,
+ "panel": {
+  "scale_mm_per_m": 875.7952174353126,
+  "scale_y_mm_per_m": 925.3422124309234,
+  "plane_rms_border_m": 0.18471140088007626,
+  "plane_rms_all_m": 0.2531007454123695,
+  "plane_rms_border_mm": 161.76936149654756,
+  "plane_rms_all_mm": 221.66442236146582,
+  "relief_p95_minus_p05_mm": 726.756950725586,
+  "normal": [
+   -0.0020076413609254164,
+   -0.389683379608209,
+   -0.9209467047735664
+  ],
+  "tilt_from_camera_axis_deg": 22.93512154081869,
+  "camera0_mm": [
+   -1038.1461821546936,
+   14.02294064275018,
+   1882.0129910322285
+  ]
+ },
+ "convention": "SHARP frame x right, y down, z forward, metres; panel frame per lib/bridge.py; (dx,dy,dz) = right of right edge, above bottom edge, off the wall, mm",
+ "panel_variants": {
+  "skull_frontoparallel": {
+   "scale_mm_per_unit": 1096.1763809425668,
+   "camera0_mm": [
+    -1047.5,
+    1033.0050738007378,
+    2380.178013664325
+   ],
+   "z_ref": 2.171345829963684,
+   "tilt_deg": 0.0
+  },
+  "median_frontoparallel": {
+   "scale_mm_per_unit": 1022.073852405266,
+   "camera0_mm": [
+    -1047.5,
+    1033.0050738007378,
+    2380.178013664325
+   ],
+   "z_ref": 2.328773021697998,
+   "tilt_deg": 0.0
+  },
+  "border_plane": {
+   "scale_mm_per_unit": 875.7952174353126,
+   "camera0_mm": [
+    -1038.1461821546936,
+    14.02294064275018,
+    1882.0129910322285
+   ],
+   "z_ref": null,
+   "tilt_deg": 22.93512154081869
+  }
+ },
+ "skull_lateral_extent_units": 0.8837911570072172,
+ "skull_scale_mm_per_unit_from_915mm": 1035.312463521886
+}

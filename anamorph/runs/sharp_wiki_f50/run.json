@@ -1,0 +1,78 @@
+{
+ "image": "data/Holbein-ambassadors.jpg",
+ "width": 1084,
+ "height": 1069,
+ "f35_mm": 50.0,
+ "f_px": 1759.3678600832789,
+ "device": "mps",
+ "inference_s": 5.09,
+ "n_gaussians": 1179648,
+ "sharp_internal_shape": [
+  1536,
+  1536
+ ],
+ "depth_m": {
+  "min": 1.8878933191299438,
+  "p05": 2.860234498977661,
+  "median": 3.3302347660064697,
+  "p95": 4.049449443817139,
+  "max": 12.11864185333252,
+  "mean": 3.4058350755817495
+ },
+ "scale_size_p50_m": 0.0015793381734222566,
+ "panel": {
+  "scale_mm_per_m": 875.3090151049738,
+  "scale_y_mm_per_m": 798.250933655312,
+  "plane_rms_border_m": 0.24290592964883131,
+  "plane_rms_all_m": 0.3371981168569722,
+  "plane_rms_border_mm": 212.6177500440766,
+  "plane_rms_all_mm": 295.1525515613282,
+  "relief_p95_minus_p05_mm": 1038.7017119074849,
+  "normal": [
+   -0.004266574994693792,
+   -0.5339639435944155,
+   -0.8454964833036944
+  ],
+  "tilt_from_camera_axis_deg": 32.274830965858406,
+  "camera0_mm": [
+   -1029.545556750215,
+   -521.977879630404,
+   2460.871309532595
+  ]
+ },
+ "convention": "SHARP frame x right, y down, z forward, metres; panel frame per lib/bridge.py; (dx,dy,dz) = right of right edge, above bottom edge, off the wall, mm",
+ "panel_variants": {
+  "skull_frontoparallel": {
+   "scale_mm_per_unit": 1097.5535042385707,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    3400.2543052347505
+   ],
+   "z_ref": 3.0980305671691895,
+   "tilt_deg": 0.0
+  },
+  "median_frontoparallel": {
+   "scale_mm_per_unit": 1021.6105936743435,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    3400.25430523475
+   ],
+   "z_ref": 3.328327178955078,
+   "tilt_deg": 0.0
+  },
+  "border_plane": {
+   "scale_mm_per_unit": 875.3090151049738,
+   "camera0_mm": [
+    -1029.545556750215,
+    -521.977879630404,
+    2460.871309532595
+   ],
+   "z_ref": null,
+   "tilt_deg": 32.274830965858406
+  }
+ },
+ "skull_lateral_extent_units": 0.8824530762434004,
+ "skull_scale_mm_per_unit_from_915mm": 1036.8823279478515
+}

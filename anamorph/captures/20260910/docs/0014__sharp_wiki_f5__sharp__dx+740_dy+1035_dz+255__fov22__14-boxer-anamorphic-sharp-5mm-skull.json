@@ -1,0 +1,94 @@
+{
+ "id": "20260910/docs/0014__sharp_wiki_f5__sharp__dx+740_dy+1035_dz+255__fov22__14-boxer-anamorphic-sharp-5mm-skull",
+ "file": "captures/20260910/docs/0014__sharp_wiki_f5__sharp__dx+740_dy+1035_dz+255__fov22__14-boxer-anamorphic-sharp-5mm-skull.jpg",
+ "meta": "captures/20260910/docs/0014__sharp_wiki_f5__sharp__dx+740_dy+1035_dz+255__fov22__14-boxer-anamorphic-sharp-5mm-skull.json",
+ "time": "2026-09-10T00:24:58",
+ "scene": "sharp_wiki_f5",
+ "mode": "sharp",
+ "tag": "14-boxer-anamorphic-sharp-5mm-skull",
+ "pose_mm": {
+  "dx": 740.5,
+  "dy": 1035,
+  "dz": 255.3
+ },
+ "fov_deg": 22,
+ "note": "SHARP at an assumed 5 mm lens from Boxer's anamorphic.m point, 22 deg FOV on the skull.",
+ "kind": "capture",
+ "folder": "docs",
+ "scene_label": "SHARP 5 mm eq (Wikimedia 1084px)",
+ "scene_group": "Reference runs",
+ "f35_mm": 5,
+ "f_px": 175.93678600832789,
+ "splat": "/anamorph/runs/sharp_wiki_f5/model.splat",
+ "compare": "flat",
+ "split": 0.5,
+ "target_mm": {
+  "dx": -1022.5,
+  "dy": 236,
+  "dz": 0
+ },
+ "target_mode": "skull",
+ "pose_sharp": {
+  "pos": [
+   1.63246,
+   -0.00182,
+   0.07735
+  ],
+  "target": [
+   0.02283,
+   0.72767,
+   0.31045
+  ]
+ },
+ "eye": {
+  "R_mm": 1806.1,
+  "alpha_deg": 81.87,
+  "skull_az_deg": 81.76,
+  "skull_el_deg": 24.16,
+  "skull_dist_mm": 1952.4
+ },
+ "fratio": 2.5722770079851554,
+ "photo_fit": false,
+ "canvas_px": [
+  2644,
+  2530
+ ],
+ "overlays": {
+  "grid": false,
+  "skull": true,
+  "points": false,
+  "construction": false,
+  "sight": false,
+  "wire": false
+ },
+ "overlays_drawn": true,
+ "panel": {
+  "origin": [
+   -0.9563753176231746,
+   0.943141341825806,
+   0.31044575572013855
+  ],
+  "u": [
+   1,
+   0,
+   0
+  ],
+  "v": [
+   0,
+   -1,
+   0
+  ],
+  "n": [
+   0,
+   0,
+   -1
+  ],
+  "scale_mm_per_unit": 1095.2812987722145,
+  "width_units": 1.9127506352463493,
+  "height_units": 1.886282683651612
+ },
+ "trajectory": null,
+ "url": "http://localhost:8765/?scene=sharp_wiki_f5&v=16",
+ "app": "Anamorph Lab",
+ "conventions": "pose_mm = (dx right of the panel's right edge, dy above the bottom edge, dz off the wall); pose_sharp = SHARP camera frame metres (x right, y down, z forward)"
+}

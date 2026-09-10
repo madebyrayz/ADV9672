@@ -1,0 +1,94 @@
+{
+ "id": "20260910/docs/0013__sharp_wiki_f5__split__dx+777_dy+1035_dz+258__fov50__13-boxer-O-split-5mm-lens",
+ "file": "captures/20260910/docs/0013__sharp_wiki_f5__split__dx+777_dy+1035_dz+258__fov50__13-boxer-O-split-5mm-lens.jpg",
+ "meta": "captures/20260910/docs/0013__sharp_wiki_f5__split__dx+777_dy+1035_dz+258__fov50__13-boxer-O-split-5mm-lens.json",
+ "time": "2026-09-10T00:24:57",
+ "scene": "sharp_wiki_f5",
+ "mode": "split",
+ "tag": "13-boxer-O-split-5mm-lens",
+ "pose_mm": {
+  "dx": 776.9,
+  "dy": 1035,
+  "dz": 257.9
+ },
+ "fov_deg": 50,
+ "note": "Assumed 5 mm lens: relief 104 mm, the reconstruction is nearly flat; SHARP (left) approaches the flat model (right).",
+ "kind": "capture",
+ "folder": "docs",
+ "scene_label": "SHARP 5 mm eq (Wikimedia 1084px)",
+ "scene_group": "Reference runs",
+ "f35_mm": 5,
+ "f_px": 175.93678600832789,
+ "splat": "/anamorph/runs/sharp_wiki_f5/model.splat",
+ "compare": "flat",
+ "split": 0.5,
+ "target_mm": {
+  "dx": -1047.5,
+  "dy": 1035,
+  "dz": 0
+ },
+ "target_mode": "centre",
+ "pose_sharp": {
+  "pos": [
+   1.66569,
+   -0.00182,
+   0.07498
+  ],
+  "target": [
+   0,
+   -0.00182,
+   0.31045
+  ]
+ },
+ "eye": {
+  "R_mm": 1842.5,
+  "alpha_deg": 81.95,
+  "skull_az_deg": 81.84,
+  "skull_el_deg": 23.73,
+  "skull_dist_mm": 1985.6
+ },
+ "fratio": 1.0722534602547793,
+ "photo_fit": false,
+ "canvas_px": [
+  2644,
+  2530
+ ],
+ "overlays": {
+  "grid": true,
+  "skull": true,
+  "points": false,
+  "construction": false,
+  "sight": false,
+  "wire": false
+ },
+ "overlays_drawn": true,
+ "panel": {
+  "origin": [
+   -0.9563753176231746,
+   0.943141341825806,
+   0.31044575572013855
+  ],
+  "u": [
+   1,
+   0,
+   0
+  ],
+  "v": [
+   0,
+   -1,
+   0
+  ],
+  "n": [
+   0,
+   0,
+   -1
+  ],
+  "scale_mm_per_unit": 1095.2812987722145,
+  "width_units": 1.9127506352463493,
+  "height_units": 1.886282683651612
+ },
+ "trajectory": null,
+ "url": "http://localhost:8765/?scene=sharp_wiki_f5&v=16",
+ "app": "Anamorph Lab",
+ "conventions": "pose_mm = (dx right of the panel's right edge, dy above the bottom edge, dz off the wall); pose_sharp = SHARP camera frame metres (x right, y down, z forward)"
+}

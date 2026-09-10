@@ -1,0 +1,94 @@
+{
+ "id": "20260910/docs/0005__sharp_wiki_f30__sharp__dx-3200_dy+1400_dz+1800__fov55__05-oblique-left-wireframe",
+ "file": "captures/20260910/docs/0005__sharp_wiki_f30__sharp__dx-3200_dy+1400_dz+1800__fov55__05-oblique-left-wireframe.jpg",
+ "meta": "captures/20260910/docs/0005__sharp_wiki_f30__sharp__dx-3200_dy+1400_dz+1800__fov55__05-oblique-left-wireframe.json",
+ "time": "2026-09-10T00:24:52",
+ "scene": "sharp_wiki_f30",
+ "mode": "sharp",
+ "tag": "05-oblique-left-wireframe",
+ "pose_mm": {
+  "dx": -3200,
+  "dy": 1400,
+  "dz": 1800
+ },
+ "fov_deg": 55,
+ "note": "Oblique from the left: the floor relief that carries the skull streak.",
+ "kind": "capture",
+ "folder": "docs",
+ "scene_label": "SHARP 30 mm eq (Wikimedia 1084px)",
+ "scene_group": "Reference runs",
+ "f35_mm": 30,
+ "f_px": 1055.6207160499673,
+ "splat": "/anamorph/runs/sharp_wiki_f30/model.splat",
+ "compare": "flat",
+ "split": 0.5,
+ "target_mm": {
+  "dx": -1022.5,
+  "dy": 236,
+  "dz": 0
+ },
+ "target_mode": "skull",
+ "pose_sharp": {
+  "pos": [
+   -1.96525,
+   -0.33507,
+   0.21926
+  ],
+  "target": [
+   0.02283,
+   0.72767,
+   1.86267
+  ]
+ },
+ "eye": {
+  "R_mm": 2805.9,
+  "alpha_deg": -50.1,
+  "skull_az_deg": -50.42,
+  "skull_el_deg": 22.39,
+  "skull_dist_mm": 3055.6
+ },
+ "fratio": 0.960491063485583,
+ "photo_fit": false,
+ "canvas_px": [
+  2644,
+  2530
+ ],
+ "overlays": {
+  "grid": true,
+  "skull": true,
+  "points": true,
+  "construction": false,
+  "sight": false,
+  "wire": true
+ },
+ "overlays_drawn": true,
+ "panel": {
+  "origin": [
+   -0.9563754400372841,
+   0.9431414625459933,
+   1.8626747727394104
+  ],
+  "u": [
+   1,
+   0,
+   0
+  ],
+  "v": [
+   0,
+   -1,
+   0
+  ],
+  "n": [
+   0,
+   0,
+   -1
+  ],
+  "scale_mm_per_unit": 1095.281158578438,
+  "width_units": 1.9127508800745683,
+  "height_units": 1.8862829250919866
+ },
+ "trajectory": null,
+ "url": "http://localhost:8765/?scene=sharp_wiki_f30&v=16",
+ "app": "Anamorph Lab",
+ "conventions": "pose_mm = (dx right of the panel's right edge, dy above the bottom edge, dz off the wall); pose_sharp = SHARP camera frame metres (x right, y down, z forward)"
+}

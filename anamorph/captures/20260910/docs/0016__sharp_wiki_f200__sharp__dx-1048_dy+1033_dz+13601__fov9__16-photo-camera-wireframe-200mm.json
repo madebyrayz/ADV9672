@@ -1,0 +1,94 @@
+{
+ "id": "20260910/docs/0016__sharp_wiki_f200__sharp__dx-1048_dy+1033_dz+13601__fov9__16-photo-camera-wireframe-200mm",
+ "file": "captures/20260910/docs/0016__sharp_wiki_f200__sharp__dx-1048_dy+1033_dz+13601__fov9__16-photo-camera-wireframe-200mm.jpg",
+ "meta": "captures/20260910/docs/0016__sharp_wiki_f200__sharp__dx-1048_dy+1033_dz+13601__fov9__16-photo-camera-wireframe-200mm.json",
+ "time": "2026-09-10T00:24:59",
+ "scene": "sharp_wiki_f200",
+ "mode": "sharp",
+ "tag": "16-photo-camera-wireframe-200mm",
+ "pose_mm": {
+  "dx": -1047.5,
+  "dy": 1033.01,
+  "dz": 13601.02
+ },
+ "fov_deg": 8.81,
+ "note": "Depth wireframe at an assumed 200 mm lens.",
+ "kind": "capture",
+ "folder": "docs",
+ "scene_label": "SHARP 200 mm eq (Wikimedia 1084px)",
+ "scene_group": "Reference runs",
+ "f35_mm": 200,
+ "f_px": 7037.471440333115,
+ "splat": "/anamorph/runs/sharp_wiki_f200/model.splat",
+ "compare": "flat",
+ "split": 0.5,
+ "target_mm": {
+  "dx": -1047.5,
+  "dy": 1033.01,
+  "dz": 12525.59
+ },
+ "target_mode": "centre",
+ "pose_sharp": {
+  "pos": [
+   0,
+   0,
+   0
+  ],
+  "target": [
+   0,
+   0,
+   1
+  ]
+ },
+ "eye": {
+  "R_mm": 13601,
+  "alpha_deg": 0,
+  "skull_az_deg": -0.11,
+  "skull_el_deg": 3.35,
+  "skull_dist_mm": 13624.4
+ },
+ "fratio": null,
+ "photo_fit": true,
+ "canvas_px": [
+  2644,
+  2530
+ ],
+ "overlays": {
+  "grid": true,
+  "skull": false,
+  "points": false,
+  "construction": false,
+  "sight": false,
+  "wire": true
+ },
+ "overlays_drawn": true,
+ "panel": {
+  "origin": [
+   -0.9740318329932113,
+   0.960553532721165,
+   12.647087097167969
+  ],
+  "u": [
+   1,
+   0,
+   0
+  ],
+  "v": [
+   0,
+   -1,
+   0
+  ],
+  "n": [
+   0,
+   0,
+   -1
+  ],
+  "scale_mm_per_unit": 1075.4268644188148,
+  "width_units": 1.9480636659864226,
+  "height_units": 1.92110706544233
+ },
+ "trajectory": null,
+ "url": "http://localhost:8765/?scene=sharp_wiki_f200&v=16",
+ "app": "Anamorph Lab",
+ "conventions": "pose_mm = (dx right of the panel's right edge, dy above the bottom edge, dz off the wall); pose_sharp = SHARP camera frame metres (x right, y down, z forward)"
+}

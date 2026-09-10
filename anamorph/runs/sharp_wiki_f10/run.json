@@ -1,0 +1,78 @@
+{
+ "image": "data/Holbein-ambassadors.jpg",
+ "width": 1084,
+ "height": 1069,
+ "f35_mm": 10.0,
+ "f_px": 351.87357201665577,
+ "device": "mps",
+ "inference_s": 4.82,
+ "n_gaussians": 1179648,
+ "sharp_internal_shape": [
+  1536,
+  1536
+ ],
+ "depth_m": {
+  "min": 0.3776003420352936,
+  "p05": 0.5718954563140869,
+  "median": 0.6657318472862244,
+  "p95": 0.8098265111446381,
+  "max": 2.4237289428710938,
+  "mean": 0.6807875601098052
+ },
+ "scale_size_p50_m": 0.001537196639128373,
+ "panel": {
+  "scale_mm_per_m": 876.0582985033893,
+  "scale_y_mm_per_m": 998.2474031473062,
+  "plane_rms_border_m": 0.05647955804470268,
+  "plane_rms_all_m": 0.0759522808357301,
+  "plane_rms_border_mm": 49.47938552086564,
+  "plane_rms_all_mm": 66.53862591640129,
+  "relief_p95_minus_p05_mm": 207.76642748755492,
+  "normal": [
+   -0.0013374935500545535,
+   -0.11423410495957324,
+   -0.9934529583100998
+  ],
+  "tilt_from_camera_axis_deg": 6.559902941195461,
+  "camera0_mm": [
+   -1039.8976121176304,
+   679.5648321966224,
+   581.2731294027875
+  ]
+ },
+ "convention": "SHARP frame x right, y down, z forward, metres; panel frame per lib/bridge.py; (dx,dy,dz) = right of right edge, above bottom edge, off the wall, mm",
+ "panel_variants": {
+  "skull_frontoparallel": {
+   "scale_mm_per_unit": 1095.2811936268788,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    680.0508610469501
+   ],
+   "z_ref": 0.6208915710449219,
+   "tilt_deg": 0.0
+  },
+  "median_frontoparallel": {
+   "scale_mm_per_unit": 1022.1930636566933,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    680.0508610469501
+   ],
+   "z_ref": 0.665286123752594,
+   "tilt_deg": 0.0
+  },
+  "border_plane": {
+   "scale_mm_per_unit": 876.0582985033893,
+   "camera0_mm": [
+    -1039.8976121176304,
+    679.5648321966224,
+    581.2731294027875
+   ],
+   "z_ref": null,
+   "tilt_deg": 6.559902941195461
+  }
+ },
+ "skull_lateral_extent_units": 0.8834137186408042,
+ "skull_scale_mm_per_unit_from_915mm": 1035.7548006021386
+}

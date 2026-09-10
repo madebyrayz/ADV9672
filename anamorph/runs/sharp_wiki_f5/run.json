@@ -1,0 +1,78 @@
+{
+ "image": "data/Holbein-ambassadors.jpg",
+ "width": 1084,
+ "height": 1069,
+ "f35_mm": 5.0,
+ "f_px": 175.93678600832789,
+ "device": "mps",
+ "inference_s": 6.03,
+ "n_gaussians": 1179648,
+ "sharp_internal_shape": [
+  1536,
+  1536
+ ],
+ "depth_m": {
+  "min": 0.1888001561164856,
+  "p05": 0.28594772815704345,
+  "median": 0.33286595344543457,
+  "p95": 0.4049133062362671,
+  "max": 1.2118651866912842,
+  "mean": 0.34039377074923294
+ },
+ "scale_size_p50_m": 0.0015371742830203497,
+ "panel": {
+  "scale_mm_per_m": 876.0583650897445,
+  "scale_y_mm_per_m": 1003.0780345594845,
+  "plane_rms_border_m": 0.028378512018991567,
+  "plane_rms_all_m": 0.03808176328467163,
+  "plane_rms_border_mm": 24.861232843037417,
+  "plane_rms_all_mm": 33.36184728290409,
+  "relief_p95_minus_p05_mm": 103.88316942245658,
+  "normal": [
+   -0.0006726319859203644,
+   -0.057191370275733726,
+   -0.9983630074938652
+  ],
+  "tilt_from_camera_axis_deg": 3.2788401043019384,
+  "camera0_mm": [
+   -1040.511560630826,
+   726.2178802935935,
+   292.11254891667875
+  ]
+ },
+ "convention": "SHARP frame x right, y down, z forward, metres; panel frame per lib/bridge.py; (dx,dy,dz) = right of right edge, above bottom edge, off the wall, mm",
+ "panel_variants": {
+  "skull_frontoparallel": {
+   "scale_mm_per_unit": 1095.2812987722145,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    340.025430523475
+   ],
+   "z_ref": 0.31044575572013855,
+   "tilt_deg": 0.0
+  },
+  "median_frontoparallel": {
+   "scale_mm_per_unit": 1022.19315523753,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    340.025430523475
+   ],
+   "z_ref": 0.3326430320739746,
+   "tilt_deg": 0.0
+  },
+  "border_plane": {
+   "scale_mm_per_unit": 876.0583650897445,
+   "camera0_mm": [
+    -1040.511560630826,
+    726.2178802935935,
+    292.11254891667875
+   ],
+   "z_ref": null,
+   "tilt_deg": 3.2788401043019384
+  }
+ },
+ "skull_lateral_extent_units": 0.883413414657116,
+ "skull_scale_mm_per_unit_from_915mm": 1035.755157006693
+}

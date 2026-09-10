@@ -1,0 +1,94 @@
+{
+ "id": "20260910/docs/0012__sharp_wiki_f30__sharp__dx-500_dy+236_dz+700__fov45__12-sharp-skull-streak-on-floor",
+ "file": "captures/20260910/docs/0012__sharp_wiki_f30__sharp__dx-500_dy+236_dz+700__fov45__12-sharp-skull-streak-on-floor.jpg",
+ "meta": "captures/20260910/docs/0012__sharp_wiki_f30__sharp__dx-500_dy+236_dz+700__fov45__12-sharp-skull-streak-on-floor.json",
+ "time": "2026-09-10T00:24:56",
+ "scene": "sharp_wiki_f30",
+ "mode": "sharp",
+ "tag": "12-sharp-skull-streak-on-floor",
+ "pose_mm": {
+  "dx": -500,
+  "dy": 236,
+  "dz": 700
+ },
+ "fov_deg": 45,
+ "note": "Low, close, looking at the skull: SHARP's skull streak lies on the reconstructed floor, not on the wall.",
+ "kind": "capture",
+ "folder": "docs",
+ "scene_label": "SHARP 30 mm eq (Wikimedia 1084px)",
+ "scene_group": "Reference runs",
+ "f35_mm": 30,
+ "f_px": 1055.6207160499673,
+ "splat": "/anamorph/runs/sharp_wiki_f30/model.splat",
+ "compare": "flat",
+ "split": 0.5,
+ "target_mm": {
+  "dx": -1022.5,
+  "dy": 236,
+  "dz": 0
+ },
+ "target_mode": "skull",
+ "pose_sharp": {
+  "pos": [
+   0.49987,
+   0.72767,
+   1.22357
+  ],
+  "target": [
+   0.02283,
+   0.72767,
+   1.86267
+  ]
+ },
+ "eye": {
+  "R_mm": 888.7,
+  "alpha_deg": 38.03,
+  "skull_az_deg": 36.74,
+  "skull_el_deg": 0,
+  "skull_dist_mm": 873.5
+ },
+ "fratio": 1.2071067811865475,
+ "photo_fit": false,
+ "canvas_px": [
+  2644,
+  2530
+ ],
+ "overlays": {
+  "grid": false,
+  "skull": true,
+  "points": false,
+  "construction": false,
+  "sight": false,
+  "wire": true
+ },
+ "overlays_drawn": true,
+ "panel": {
+  "origin": [
+   -0.9563754400372841,
+   0.9431414625459933,
+   1.8626747727394104
+  ],
+  "u": [
+   1,
+   0,
+   0
+  ],
+  "v": [
+   0,
+   -1,
+   0
+  ],
+  "n": [
+   0,
+   0,
+   -1
+  ],
+  "scale_mm_per_unit": 1095.281158578438,
+  "width_units": 1.9127508800745683,
+  "height_units": 1.8862829250919866
+ },
+ "trajectory": null,
+ "url": "http://localhost:8765/?scene=sharp_wiki_f30&v=16",
+ "app": "Anamorph Lab",
+ "conventions": "pose_mm = (dx right of the panel's right edge, dy above the bottom edge, dz off the wall); pose_sharp = SHARP camera frame metres (x right, y down, z forward)"
+}
