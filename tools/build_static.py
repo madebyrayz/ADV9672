@@ -113,7 +113,8 @@ def main() -> None:
     index = DOCS / "index.html"
     html = index.read_text()
     html = html.replace('<link rel="stylesheet" href="/ui/', '<link rel="stylesheet" href="ui/')
-    html = html.replace("<head>", '<head>\n<meta name="build" content="static" />')
+    stamp = __import__("datetime").datetime.now().strftime("%Y%m%d%H%M%S")
+    html = html.replace("<head>", f'<head>\n<meta name="build" content="static" />\n<meta name="build-id" content="{stamp}" />')
     index.write_text(html)
     for js in DOCS.glob("*.js"):
         t = js.read_text()

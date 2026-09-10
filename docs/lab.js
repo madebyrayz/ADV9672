@@ -22,7 +22,14 @@ function toast(title, desc, kind = "") {
   el.querySelector(".title").textContent = title; if (desc) el.querySelector(".desc").textContent = desc;
   $("toaster").appendChild(el); setTimeout(() => { el.style.opacity = "0"; el.style.transition = "opacity .3s"; setTimeout(() => el.remove(), 300); }, 4000);
 }
-const api = (path, body) => fetch(path, body ? { method: "POST", body: JSON.stringify(body) } : {}).then((r) => r.json());
+// A published build serves the API as plain files, which caches happily and would
+// otherwise hand a returning visitor last week's data. The build stamp busts it once
+// per deploy while still allowing caching in between.
+const BUILD_ID = document.querySelector('meta[name="build-id"]')?.content || "";
+const api = (path, body) => {
+  const url = !body && BUILD_ID ? `${path}${path.includes("?") ? "&" : "?"}v=${BUILD_ID}` : path;
+  return fetch(url, body ? { method: "POST", body: JSON.stringify(body) } : {}).then((r) => r.json());
+};
 const v3 = { add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]], sub: (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], mul: (a, s) => [a[0] * s, a[1] * s, a[2] * s], dot: (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2], len: (a) => Math.hypot(a[0], a[1], a[2]) };
 function toSharp(p, dx, dy, dz) { const s = p.scale_mm_per_unit; return v3.add(v3.add(v3.add(p.origin, v3.mul(p.u, (dx + LX) / s)), v3.mul(p.v, dy / s)), v3.mul(p.n, dz / s)); }
 function toMM(p, P) { const d = v3.sub(P, p.origin), s = p.scale_mm_per_unit; return { dx: v3.dot(d, p.u) * s - LX, dy: v3.dot(d, p.v) * s, dz: v3.dot(d, p.n) * s }; }
