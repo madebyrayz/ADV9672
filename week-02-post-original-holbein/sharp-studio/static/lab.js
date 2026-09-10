@@ -466,6 +466,33 @@ function renderUserRuns() {
 }
 async function refreshManifest() { M = await api("/api/lab/scenes"); sceneOptions(); if (scene) $("scene-select").value = scene.id; }
 
+// ---------------------------------------------------------------- tooltips
+// A CSS ::after tooltip is laid out inside its trigger, so any scrolling ancestor —
+// the stage, a side panel, the log grid — clips it. One fixed-position node appended
+// to <body> escapes every container, and flipping/clamping keeps it on screen.
+const tip = Object.assign(document.createElement("div"), { className: "tip" });
+tip.hidden = true; document.body.appendChild(tip);
+let tipFor = null;
+function showTip(el) {
+  const text = el.getAttribute("data-tip"); if (!text) return;
+  tipFor = el; tip.textContent = text; tip.hidden = false;
+  const r = el.getBoundingClientRect(), t = tip.getBoundingClientRect(), gap = 8;
+  const below = r.top < t.height + gap * 2;                       // not enough room above
+  let top = below ? r.bottom + gap : r.top - t.height - gap;
+  let left = r.left + r.width / 2 - t.width / 2;
+  left = Math.max(8, Math.min(left, innerWidth - t.width - 8));   // never past the viewport
+  tip.style.top = `${Math.round(top)}px`; tip.style.left = `${Math.round(left)}px`;
+}
+function hideTip() { tip.hidden = true; tipFor = null; }
+document.addEventListener("pointerover", (e) => {
+  const el = e.target.closest("[data-tip]");
+  if (el === tipFor) return;
+  el ? showTip(el) : hideTip();
+});
+document.addEventListener("pointerdown", hideTip);
+addEventListener("scroll", () => tipFor && hideTip(), true);
+addEventListener("blur", hideTip);
+
 // Footnotes jump both ways. The essay scrolls inside .page rather than the document, so the
 // container is driven directly and the target flashed, otherwise the jump is invisible.
 document.getElementById("method").addEventListener("click", (e) => {
@@ -667,12 +694,56 @@ async function renderReports() {
 
   // ---- 8 captures
   g = section("8", "Captures and recordings", `Provenance for every frame reproduced in the essay. ${caps.length} entries, each a JPEG beside a JSON sidecar recording pose in both coordinate frames, field of view, view mode, active overlays and bridge parameters. The plan below shows where each was taken relative to the panel and the published points.`);
-  const c4 = card(g, "Where captures were taken (plan)");
-  c4.appendChild(svgChart(560, 340, (add) => { const X = (x) => 40 + (x + 300) * 500 / 3600, Y = (z) => 300 - (z + 100) * 270 / 2700;
-    add("line", { x1: X(0), y1: Y(0), x2: X(LX), y2: Y(0), stroke: fg, "stroke-width": 3 }); add("text", { x: X(LX / 2), y: Y(0) + 16, fill: mu, "font-size": 11, "text-anchor": "middle" }, "panel");
-    for (const p of M.published_points) add("circle", { cx: X(p.dx + LX), cy: Y(p.dz), r: 4, fill: COLORS[p.name], stroke: "#000" });
-    for (const c of caps) if (c.pose_mm) add("circle", { cx: X(c.pose_mm.dx + LX), cy: Y(c.pose_mm.dz), r: 3, fill: c.kind === "recording" ? "#a78bfa" : c.kind === "user_run" ? "#4ade80" : "#f87171", "fill-opacity": .8 });
-    add("text", { x: 48, y: 48, fill: fg, "font-size": 12 }, "red captures · purple recordings · green SHARP runs"); }));
+  const c4 = card(g, "Where captures were taken", "span2");
+  c4.appendChild(svgChart(760, 430, (add) => {
+    // plan of the room: Δx along the wall, Δz out from it. Axes are drawn because the
+    // question this answers is "from where", and that is unreadable without a scale.
+    const X0 = 62, Y0 = 372, W = 660, H = 320;
+    const xmin = -400, xmax = 3200, zmin = 0, zmax = 2600;
+    const X = (x) => X0 + (x - xmin) * W / (xmax - xmin);
+    const Y = (z) => Y0 - (z - zmin) * H / (zmax - zmin);
+    const txt = (x, y, t, o = {}) => add("text", { x, y, fill: o.fill || mu, "font-size": o.size || 10,
+      "text-anchor": o.anchor || "start", "font-family": "var(--font-mono)" }, t);
+
+    for (let z = 0; z <= zmax; z += 500) {                              // grid + Δz ticks
+      add("line", { x1: X0, y1: Y(z), x2: X0 + W, y2: Y(z), stroke: mu, "stroke-opacity": z ? .12 : .35 });
+      txt(X0 - 8, Y(z) + 3, String(z), { anchor: "end" });
+    }
+    for (let x = 0; x <= 3000; x += 500) {                              // Δx ticks
+      add("line", { x1: X(x), y1: Y0, x2: X(x), y2: Y0 + 4, stroke: mu, "stroke-opacity": .4 });
+      txt(X(x), Y0 + 16, String(x - LX), { anchor: "middle" });
+    }
+    txt(X0 + W / 2, Y0 + 32, "Δx  mm right of the panel's right edge", { anchor: "middle", size: 10.5 });
+    add("text", { x: 16, y: Y0 - H / 2, fill: mu, "font-size": 10.5, "text-anchor": "middle",
+      "font-family": "var(--font-mono)", transform: `rotate(-90 16 ${Y0 - H / 2})` }, "Δz  mm from the wall");
+
+    add("line", { x1: X(0), y1: Y(0), x2: X(LX), y2: Y(0), stroke: fg, "stroke-width": 4, "stroke-linecap": "butt" });
+    txt(X(LX / 2), Y(0) - 9, "panel, 2095 mm", { anchor: "middle", fill: fg });
+
+    const seen = {};
+    for (const c of caps) {                                            // captures, jittered so stacks stay countable
+      if (!c.pose_mm) continue;
+      const k = `${Math.round(c.pose_mm.dx / 25)}|${Math.round(c.pose_mm.dz / 25)}`;
+      const n = (seen[k] = (seen[k] || 0) + 1) - 1;
+      const col = c.kind === "recording" ? "#a78bfa" : c.kind === "user_run" ? "#4ade80" : "#f87171";
+      add("circle", { cx: X(c.pose_mm.dx + LX) + (n % 3) * 3.5, cy: Y(c.pose_mm.dz) - Math.floor(n / 3) * 3.5,
+        r: 4, fill: col, "fill-opacity": .55, stroke: col, "stroke-width": .8 });
+    }
+    for (const p of M.published_points) {                              // ground truth on top
+      add("circle", { cx: X(p.dx + LX), cy: Y(p.dz), r: 5.5, fill: "none", stroke: COLORS[p.name], "stroke-width": 2 });
+      add("circle", { cx: X(p.dx + LX), cy: Y(p.dz), r: 1.6, fill: COLORS[p.name] });
+    }
+    const legend = [["#f87171", "capture"], ["#a78bfa", "recording"], ["#4ade80", "reconstruction"],
+                    [null, "published station point"]];
+    legend.forEach(([col, name], i) => {
+      const ly = 34 + i * 17;
+      if (col) add("circle", { cx: X0 + 12, cy: ly - 3.5, r: 4, fill: col, "fill-opacity": .55, stroke: col, "stroke-width": .8 });
+      else { add("circle", { cx: X0 + 12, cy: ly - 3.5, r: 5.5, fill: "none", stroke: fg, "stroke-width": 2 });
+             add("circle", { cx: X0 + 12, cy: ly - 3.5, r: 1.6, fill: fg }); }
+      txt(X0 + 26, ly, name, { fill: fg, size: 11 });
+    });
+  }));
+  c4.innerHTML += `<p class="text-xs text-muted" style="margin-top:6px">Eye positions in plan. Overlapping captures are offset slightly so a stack of frames taken from one point stays countable.</p>`;
   const byKind = {}; for (const c of caps) byKind[c.kind] = (byKind[c.kind] || 0) + 1;
   const byScene = {}; for (const c of caps) if (c.scene) byScene[c.scene] = (byScene[c.scene] || 0) + 1;
   card(g, "Counts").innerHTML += kvTable([...Object.entries(byKind), ...Object.entries(byScene).slice(0, 12)]);

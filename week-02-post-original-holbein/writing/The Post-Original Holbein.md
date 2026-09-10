@@ -6,7 +6,7 @@ tags:
   - media-theory
 ---
 # The Post-Original Holbein
-## A study of the original as a coordinate rather than an object.
+## A hallucinative fascite of the Ambassador
 
 ![](../00_Attachment/ADV9672_00_skull-resolved.jpg)
 
@@ -45,7 +45,7 @@ Another earlier precedent that informed this experiment is the visualization of 
 
 Both projects exemplify an interrogation of the boundary between the real and the artificial. When machines encounter incomplete or ambiguous information, they are programmed to generate plausible reconstructions—effectively hallucinating. This behavior inherently introduces biases embedded within the training data and algorithmic assumptions. For example, it raises questions regarding whether the model's architecture—such as the weighting schemes in deep learning frameworks—favors certain image types over others. Consequently, the notion of authorship and agency is challenged. In the context of this experiment, three agents—Holbein, the regression model, and myself—debate the apparent paradoxical existence of a shared agency within our differing perceptions of reality.
 
-## 04 — Ground truth, and what it rests on
+## 04 — Premise
 
 Boxer's construction uses five points marked on the anamorphic skull, measured in millimetres from the panel's lower-left corner, plus two conditions on the restored image: the jaw line becomes horizontal, and the restored skull fits a square. Eye height is fixed at the panel's midline, which the painting's own perspective supports. With the panel at 2095 × 2070 mm after the restoration record[^8], the viewing point lands at Δx = 776.9 mm right of the panel's right edge, Δy = 1035 mm above its bottom edge, Δz = 257.9 mm off the wall, with a stated uncertainty of 20 × 4 mm. The National Gallery's own figure, obtained by dragging the image in a graphics program until the skull looked right, is (790, 1040, 120)[^9].
 
@@ -75,7 +75,7 @@ These are different kinds of answer, and the study keeps them apart rather than 
 
 **Fig. 4** Perceptual basin of the flat panel over (Δx, Δz) at Δy = 1035 mm: skull probability, resemblance to the resolved skull, symmetry, and Boxer's two geometric conditions, with the four published points and his 2σ ellipse.
 
-## 06 — A room where there is a board
+## 06 — Invented Depth
 
 SHARP was given the same photograph. When an image carries no camera data the model assumes a 30 mm lens and reports depth in metres derived from that assumption. There was no lens in 1533, so every metre it returns descends from a default.
 
@@ -103,7 +103,7 @@ Resemblance across the whole grid stays between 0.30 and 0.61, below what the fl
 
 **Fig. 7** Resection plate. The photograph as picture plane; below it in plan, Boxer's construction with S and O, rays from O through the skull's extent, the published points with the 2σ ellipse, the reconstructed surface along three image rows, the grid and orbit maxima, and the camera position the model assigns to the photograph itself.
 
-## 08 — The lens that never existed
+## 08 — Phantom Lens
 
 Since every metre descends from a default, the default was swept from 5 to 200 mm. Depth is exactly linear in the assumed focal length and the lateral scale does not move: the model's metric guess is a depth guess only, and relief follows it, from 104 mm at 5 mm to 4.1 m at 200 mm. No lens brings the model's best position inside the ellipse.
 
@@ -123,7 +123,7 @@ The depth map reads best from O: a machine's belief about where the skull is, st
 
 **Fig. 9** Idolmorphosis. Left, the streak composited into the painting; right, the same streak seen from Boxer's O, where it resolves back into its square. Sources top to bottom: best-pose crop, torn render from O, depth map of the skull region.
 
-## 10 — What the measurement says back
+## 10 — What Held
 
 The geometer's answer is the viewpoint saved in this instrument as the resolved skull: (740.5, 1035, 255.3) mm, R = 1806 mm, 81.9° from the wall normal, where the flat panel scores 0.997 and Boxer's construction reproduces to a hundredth of a millimetre. The model's answer is not slightly wrong. It answers a different question. Given a photograph with no lens it fills in a room, and once there is a room the floor carries the smear away from the wall the construction lives on.
 
@@ -133,7 +133,7 @@ The precession of simulacra is not a property of models. It is a property of sit
 
 Benjamin's aura did not stay in the panel and it did not pass to the model. It sits in the bridge: the list of assumptions that permit millimetres to be compared to metres. Davis is right that the moment of seeing survives reproduction, but here it survives as a coordinate someone has to argue for, and the argument is the artifact.
 
-## 11 — Against this study
+## 11 — Objections
 
 Four objections, in descending order of how much they threaten the result.
 
@@ -147,7 +147,7 @@ Four objections, in descending order of how much they threaten the result.
 
 None of the four touches the central observation, which depends on no metric at all: at the one position where the geometry resolves the skull, the model has nothing on the wall.
 
-## 12 — Reading the instrument
+## 12 — The Instrument
 
 The interface is not an illustration of this study; it is the apparatus the measurements were taken with, and every figure above can be reproduced from it. It holds one painting, several reconstructions of it, and three coordinate frames kept deliberately separate. **Lab** is the instrument, **Log** is its record, **Report** is its running summary.
 

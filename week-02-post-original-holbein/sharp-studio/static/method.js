@@ -44,27 +44,30 @@ function renderMethod() {
 <header class="mhead">
   <div class="tags"><span class="badge badge-outline">Design research</span><span class="badge badge-outline">Computer vision</span><span class="badge badge-outline">Media theory</span></div>
   <h1>The Post-Original Holbein</h1>
-  <p class="msub">Where to stand, according to a painter, a geometer and a model</p>
-  <div class="mmeta">10 September 2026</div>
+  <h2 class="msub">A hallucinative fascite of the Ambassador</h2>
+  <div class="mmeta">
+    <span>10 September 2026</span>
+    <a class="mtag" href="https://github.com/madebyrayz/ADV9672/tree/main/week-02-post-original-holbein" target="_blank" rel="noopener">ADV9672 · Week 02 · reflection artifact</a>
+  </div>
   <figure class="mhead-fig">
     <img src="${HERO}" alt="Holbein's anamorphic skull seen from the viewing point that resolves it." />
-    <figcaption>The lower panel of <i>The Ambassadors</i> rendered from (740.5, 1035, 255.3) mm — the position at which the smear becomes a skull.</figcaption>
+    <figcaption>Caption 1: The lower section of <i>The Ambassadors</i> rendered from (740.5, 1035, 255.3) mm relative to the centroid of the original 207 × 209.5 cm artwork, the position at which the smear becomes a skull.</figcaption>
   </figure>
 </header>
 
 <section>
-<p class="lede">Holbein painted a skull that exists only from one position in a room. That position can be recovered from the panel by geometry, to within millimetres. This study asks a generative model for the same position — and uses the distance between the two answers to test a claim that usually gets asserted rather than measured: that a good enough simulation leaves nothing outside itself to check it against.</p>
+<p class="lede">To observe the skull depicted by Holbein, one must stand at a specific vantage point within the Renaissance collection at the National Gallery. This optimal viewing position can be accurately reconstructed from the panel through precise geometrical analysis, achieving millimeter-level accuracy as demonstrated by Idols of the Cave${cite(3)}. However, the objective of this study is to utilize a predictive regression model to perform reverse engineering of the position that most closely approximates the “imaginary position” from which Holbein was situated during the creation of the painting.</p>
 </section>
 
 <section>
-<h2>01 — Coordination</h2>
+<h2><span class="num">01</span>Coordination</h2>
 <p>Walter Benjamin, writing in 1936, posited that while a reproduction can disseminate across any geographic location, it inherently lacks the capacity to convey the original's unique presence at a specific place and moment in time. He designated this phenomenon as <i>aura</i> and regarded it as being diminished or lost through mechanical reproduction processes${cite(1)}.</p>
 <p>Holbein's <i>The Ambassadors</i> (1533) presents a compelling case study for analyzing the concept of aura. The depiction of the skull within the lower panel appears as a smudged image that becomes perceptible only from an oblique viewing angle to the right of the composition. A straightforward photograph of the painting fails to reliably reproduce the skull, because the perception of the skull does not solely reside in the mechanical transition from pigments to pixels. Instead, it emerges within the experiential context of the viewer’s perception at the precise “moment of originality”${cite(2)}. The <i>Ambassadors</i> exemplifies this ephemeral quality of the “here and now,” which necessitates specific spatial and perceptual coordinates during the act of viewing.</p>
 <p>This analysis draws methodological inspiration from Alexander Booker’s approach, applying solely geometric analysis through an “inverse trapezoid” transformation${cite(3)}. This technique reconstructs the formation and assesses the extent to which an observer’s gaze can drift before the skull ceases to be perceptually resolvable. Additionally, the <a href="https://github.com/apple/ml-sharp" target="_blank" rel="noopener">SHARP</a> neural network—designed to convert a single photographic image into a metric 3D scene${cite(4)}—is employed to investigate the same perceptual phenomena from a computational perspective.</p>
 </section>
 
 <section>
-<h2>02 — Simulation</h2>
+<h2><span class="num">02</span>Simulation</h2>
 <p>For Baudrillard, simulation is distinguished from pretense${cite(5)}. He employs an illustrative example that I find particularly enlightening: an individual feigning illness remains healthy; the pretense exists externally, and an examination can detect the falsehood. Conversely, a person engaging in simulation of illness produces genuine symptoms, rendering the examination unable to differentiate between reality and simulation. This conceptual experiment can be extended to our context to question what we actually perceive when we “see”—are we merely engaging in pretense, since we are essentially receiving light stimuli through the retina, or is the act of seeing itself a form of mental simulation mediated by neural processes within the brain?</p>
 <p>Baudrillard larger claim extends this to representation itself. Once models are cheap, detailed and everywhere, the copy stops depending on an original and begins standing in for it. A model that has displaced its referent is referred to a <i>simulacrum</i>; the condition it produces is called <i>hyperreal</i>, meaning not false but no longer answerable to anything outside itself.</p>
 <p>An anamorphosis is a rare object that keeps its outside: the correct viewing position is recoverable from the panel independently of any model, with a published uncertainty attached. The model can therefore be caught — and the interesting work is catching it precisely enough that the disagreement means something.</p>
@@ -75,14 +78,14 @@ ${F(1, "/anamorph/figures/method/resolution_ladder.png",
 </section>
 
 <section>
-<h2>03 — Error and Bias</h2>
+<h2><span class="num">03</span>Error and Bias</h2>
 <p>In Troika's <i>Ghost Specimen</i>, the artists began with a pressed herbarium sheet depicting a flower that had been extinct for a century. Pressing captures one planar aspect of the organism while obliterating the other. When requested to reconstruct the entire plant, a generative image model produced the missing face based on the statistical frequencies of all other observed specimens, resulting in an image that combined the original pressed specimen with the artificially generated face, subsequently exhibited on a wall—thus concealing the model's “imperfection”${cite(6)}.</p>
 <p>Another earlier precedent that informed this experiment is the visualization of fluid dynamics data generated by electromechanical plotters at Los Alamos Laboratories during the 1950s and 1960s, as documented in laboratory reports${cite(7)}. These outputs enabled scientists to analyze phenomena such as shockwaves and high-velocity collisions—conditions under which solids undergo deformation, liquefaction, or vaporization—without necessitating physical experimentation. The process involved generating a series of drawings through cumulative calculations, thereby creating and examining representations of phenomena and spatial configurations that were not physically realizable.</p>
 <p>Both projects exemplify an interrogation of the boundary between the real and the artificial. When machines encounter incomplete or ambiguous information, they are programmed to generate plausible reconstructions—effectively hallucinating. This behavior inherently introduces biases embedded within the training data and algorithmic assumptions. For example, it raises questions regarding whether the model's architecture—such as the weighting schemes in deep learning frameworks—favors certain image types over others. Consequently, the notion of authorship and agency is challenged. In the context of this experiment, three agents—Holbein, the regression model, and myself—debate the apparent paradoxical existence of a shared agency within our differing perceptions of reality.</p>
 </section>
 
 <section>
-<h2>04 — Ground truth, and what it rests on</h2>
+<h2><span class="num">04</span>Premise</h2>
 <p>Boxer's construction uses five points marked on the anamorphic skull, measured in millimetres from the panel's lower-left corner, plus two conditions on the restored image: the jaw line becomes horizontal, and the restored skull fits a square. Eye height is fixed at the panel's midline, which the painting's own perspective supports. With the panel at 2095 × 2070 mm after the restoration record${cite(8)}, the viewing point lands at Δx = 776.9 mm right of the panel's right edge, Δy = 1035 mm above its bottom edge, Δz = 257.9 mm off the wall, with a stated uncertainty of 20 × 4 mm. The National Gallery's own figure, obtained by dragging the image in a graphics program until the skull looked right, is (790, 1040, 120)${cite(9)}.</p>
 ${F(2, "/anamorph/figures/method/tiepoints_plate.png",
   "Tie points. Boxer's five marked skull points on the source photograph, the jaw line at 25.1° whose extension meets eye level at S, the central axis, and the 8 × 8 grid that places S three units right of the panel edge.")}
@@ -94,7 +97,7 @@ ${F(3, "/anamorph/figures/method/two_eyes.png",
 </section>
 
 <section>
-<h2>05 — How wide is “it looks like a skull”?</h2>
+<h2><span class="num">05</span>How wide is “it looks like a skull”?</h2>
 <p>Before asking a model for the position, the flat painting was projected from 13 700 eye positions on a 10 × 5 mm grid at eye height, and each skull crop scored with CLIP, a network that rates how well an image matches a phrase${cite(10)}. "A human skull" scores above 0.99 almost everywhere. A skull stretched to twice its length is still a skull to the network, and the region within 5 % of the best score covers ${ratioP} times the area of Boxer's ellipse. A stricter score — image-to-image similarity against the resolved skull itself — still leaves a basin ${ratio} times that ellipse.</p>
 <p>Perception puts the viewer somewhere in a large region of acceptable smears. Geometry puts him inside a few millimetres.</p>
 <p>These are different kinds of answer, and the study keeps them apart rather than splitting the difference. It is also the quantitative form of Boxer's objection to the National Gallery's method: dragging until it looks right cannot be more precise than the tolerance of looking, and that tolerance turns out to be enormous.</p>
@@ -103,7 +106,7 @@ ${F(4, M.phase1.figure,
 </section>
 
 <section>
-<h2>06 — A room where there is a board</h2>
+<h2><span class="num">06</span>Invented Depth</h2>
 <p>SHARP was given the same photograph. When an image carries no camera data the model assumes a 30 mm lens and reports depth in metres derived from that assumption. There was no lens in 1533, so every metre it returns descends from a default.</p>
 <p>It did not reconstruct a panel. It reconstructed the room depicted in the painting: the floor advances, the curtain recedes, and 623 mm of relief appear across a surface 2095 mm wide that is physically flat. A plane fitted to the image border tilts twenty degrees, because the bottom border is the depicted floor.</p>
 ${F(5, "/anamorph/captures/20260910/docs/0002__sharp_wiki_f30__sharp__dx-1048_dy+1033_dz+2040__fov54__02-photo-camera-depth-wireframe.jpg",
@@ -114,7 +117,7 @@ ${F(6, "/anamorph/figures/method/section_plate.png",
 </section>
 
 <section>
-<h2>07 — Resection</h2>
+<h2><span class="num">07</span>Resection</h2>
 <p>In photogrammetry, resection means recovering a camera's position from what it saw. The model's scene was photographed from 1421 positions on the same grid as the perceptual sweep, looking horizontally at the panel's centre as in Boxer's script, and from a 532-position orbit around the skull.</p>
 <p>The scoring crop cannot be placed where the flat panel puts the skull, because that box comes back empty — the model's skull is not on the wall. The crop instead follows the projected 3D bounding box of the Gaussians belonging to the skull in the photograph${cite(11)}. At Boxer's O that box is 87 % empty.</p>
 <p>Resemblance across the whole grid stays between 0.30 and 0.61, below what the flat panel scores even at the National Gallery's point, and its maximum sits 141 mm from Boxer's O, at (675, 1035, 160). Measured against the disagreement between the two human estimates — 13 mm along the wall, 138 mm out from it — that is eight units off along the wall and less than one unit out from it. The number is not a station point. It is the least bad view of a streak lying on a receding floor.</p>
@@ -123,7 +126,7 @@ ${F(7, "/anamorph/figures/method/resection_plate.png",
 </section>
 
 <section>
-<h2>08 — The lens that never existed</h2>
+<h2><span class="num">08</span>Phantom Lens</h2>
 <p>Since every metre descends from a default, the default was swept from 5 to 200 mm. Depth is exactly linear in the assumed focal length and the lateral scale does not move: the model's metric guess is a depth guess only, and relief follows it, from 104 mm at 5 mm to 4.1 m at 200 mm. No lens brings the model's best position inside the ellipse.</p>
 <p>What a short lens does is flatten the scene, and at 5 mm, from Boxer's exact-perspective point with a narrow field of view, the skull begins to read. That is suggestive and not proof: it is a single capture, the scoring crop misses it because the crop sits at the wrong depth, and a 5 mm equivalent lens is not a plausible camera. It does locate the obstacle. The lens prior is what stands between the model and the panel.</p>
 ${F(8, "/anamorph/figures/depth_strip.png",
@@ -131,7 +134,7 @@ ${F(8, "/anamorph/figures/depth_strip.png",
 </section>
 
 <section>
-<h2>09 — Idolmorphosis</h2>
+<h2><span class="num">09</span>Idolmorphosis</h2>
 <p>Boxer ends by running his procedure backwards: a square image placed in the 142 mm box of the restored painting and forward-transformed with the same D and d lands exactly where Holbein's skull lies. The same was done here with the model's output — its best crop, its torn render from O, and its depth map of the skull region. Each becomes a 914 × 532 mm streak, saved at four pixels per millimetre for a 36-inch print, that resolves only from the exact-perspective point.</p>
 <p>The depth map reads best from O: a machine's belief about where the skull is, stretched across the floor exactly where Holbein stretched the skull. Whether that is an artifact or a diagram is the question the print puts to a visitor who has to walk to it.</p>
 ${F(9, "/anamorph/figures/phase5_pairs.jpg",
@@ -139,7 +142,7 @@ ${F(9, "/anamorph/figures/phase5_pairs.jpg",
 </section>
 
 <section>
-<h2>10 — What the measurement says back</h2>
+<h2><span class="num">10</span>What Held</h2>
 <p>The geometer's answer is the viewpoint saved in this instrument as the resolved skull: (740.5, 1035, 255.3) mm, R = 1806 mm, 81.9° from the wall normal, where the flat panel scores ${flat} and Boxer's construction reproduces to a hundredth of a millimetre. The model's answer is not slightly wrong. It answers a different question. Given a photograph with no lens it fills in a room, and once there is a room the floor carries the smear away from the wall the construction lives on.</p>
 <p>This is the useful result, and it cuts against the theory it was meant to illustrate. Baudrillard's model does not pretend to see a skull; it produces the symptoms of a scene, and the symptoms are coherent enough to be measured. But they <i>were</i> measured, and they were found wanting at a specific coordinate. The hyperreal is supposed to have absorbed its outside. Here the outside held — not because the model is weak, but because the object was chosen so that a physical fact stayed recoverable.</p>
 <p>The precession of simulacra is not a property of models. It is a property of situations in which nothing survives to check them — and those situations are made, not given.</p>
@@ -147,7 +150,7 @@ ${F(9, "/anamorph/figures/phase5_pairs.jpg",
 </section>
 
 <section>
-<h2>11 — Against this study</h2>
+<h2><span class="num">11</span>Objections</h2>
 <p>Four objections, in descending order of how much they threaten the result.</p>
 <ul>
 <li><b>The judge is a network.</b> Resemblance is scored by CLIP, which carries its own biases and was trained on the same kind of internet imagery as the model under test. A network is being asked whether another network's output looks like a skull. This was accepted because a human judge is the thing under test — but it means every score in §05 and §07 compares two priors, not a perceptual fact.</li>
@@ -159,7 +162,7 @@ ${F(9, "/anamorph/figures/phase5_pairs.jpg",
 </section>
 
 <section>
-<h2>12 — Reading the instrument</h2>
+<h2><span class="num">12</span>The Instrument</h2>
 <p>The interface is not an illustration of this study; it is the apparatus the measurements were taken with, and every figure above can be reproduced from it. It holds one painting, several reconstructions of it, and three coordinate frames kept deliberately separate. <b>Lab</b> is the instrument, <b>Log</b> is its record, <b>Report</b> is its running summary.</p>
 
 <h3>The three frames</h3>

@@ -809,7 +809,7 @@ def lab_report_version(body):
     now = _dt.datetime.now()
     d = reports / f"v{n:03d}_{now.strftime('%Y%m%d-%H%M%S')}"; d.mkdir()
     html = f"""<!DOCTYPE html><html><head><meta charset='utf-8'><title>{d.name} · report</title>
-<link rel='stylesheet' href='/ui/shadcn.css'><link rel='stylesheet' href='/lab.css'><style>body{{padding:24px 32px}}</style></head>
+<link rel='stylesheet' href='/ui/components.css'><link rel='stylesheet' href='/lab.css'><style>body{{padding:24px 32px}}</style></head>
 <body><h1 class='text-lg'>Report · {d.name}</h1><p class='text-muted text-sm'>{body.get('note','')} · saved {now.isoformat(timespec='seconds')}</p>
 <div class='reports'>{body.get('html','')}</div></body></html>"""
     (d / "report.html").write_text(html)

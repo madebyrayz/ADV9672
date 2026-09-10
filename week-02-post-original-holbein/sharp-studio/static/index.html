@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <title>The Post-Original Holbein</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="/ui/shadcn.css" />
+<link rel="stylesheet" href="/ui/components.css" />
 <link rel="stylesheet" href="/ui/tokens.css" />
 <link rel="stylesheet" href="lab.css" />
 </head>
@@ -102,15 +102,15 @@
         <label class="switch-row"><span class="switch-label">Shortcut hints</span><span class="switch"><input type="checkbox" data-hud="br" checked /><span class="track"></span></span></label>
       </div>
     </details>
-    <button id="sidebar-toggle" class="panel-collapse" data-tip="Hide panel ([)" aria-label="Hide left panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg><span>Hide panel</span></button>
+    <div class="panel-foot"><button id="sidebar-toggle" class="panel-collapse" data-tip="Collapse panel ([)" aria-label="Collapse left panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button></div>
   </aside>
 
   <section class="stage card">
     <div id="stage-body" class="stage-body">
       <canvas id="canvas"></canvas>
       <div id="split-handle" class="split-handle" hidden><span></span></div>
-      <button id="reveal-left" class="stage-reveal left" data-tip="Show panel ([)" aria-label="Show left panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
-      <button id="reveal-right" class="stage-reveal right" data-tip="Show panel (])" aria-label="Show right panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button id="reveal-left" class="stage-reveal left" data-tip="Expand panel ([)" aria-label="Show left panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button id="reveal-right" class="stage-reveal right" data-tip="Expand panel (])" aria-label="Show right panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
       <div id="stage-loading" class="stage-loading"><div class="progress indeterminate" style="width:220px"><div class="bar"></div></div><div id="stage-loading-text" class="text-sm text-muted">loading…</div></div>
 
       <div class="float float-tl" data-float>
@@ -170,7 +170,7 @@
       <summary><span>Scene details</span></summary>
       <div class="side-body"><dl class="kv" id="scene-kv"></dl></div>
     </details>
-    <button id="inspector-toggle" class="panel-collapse" data-tip="Hide panel (])" aria-label="Hide right panel"><span>Hide panel</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    <div class="panel-foot"><button id="inspector-toggle" class="panel-collapse" data-tip="Collapse panel (])" aria-label="Collapse right panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></div>
   </aside>
 </main>
 
