@@ -342,12 +342,34 @@ class Handler(BaseHTTPRequestHandler):
             LOG.debug(fmt, *args)
 
     # ---- helpers
+    # The published copy on github.io has no reconstructions behind it. When this server is
+    # running on the same machine the page can borrow it, which needs CORS. The allowance is
+    # limited to the published origin and to localhost: a wildcard would let any site the
+    # browser visits read this machine's research data for as long as the server is up.
+    ALLOWED_ORIGINS = {"https://madebyrayz.github.io", "http://localhost:8765", "http://127.0.0.1:8765"}
+
+    def _cors(self):
+        origin = self.headers.get("Origin")
+        if origin in self.ALLOWED_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+            self.send_header("Access-Control-Allow-Private-Network", "true")
+
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self._cors()
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Max-Age", "600")
+        self.end_headers()
+
     def _json(self, obj, status=200):
         body = json.dumps(obj).encode()
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
+        self._cors()
         self.end_headers()
         self.wfile.write(body)
 
@@ -371,6 +393,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(size))
         self.send_header("Cache-Control", "no-cache")
+        self._cors()
         if path.suffix in (".splat", ".ply"):
             self.send_header("Content-Disposition", f'inline; filename="{path.name}"')
         self.end_headers()

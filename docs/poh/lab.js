@@ -199,11 +199,12 @@ async function loadScene(id) {
   if (scene.depth_grid) viewer.setDepthMesh(scene.depth_grid, scene.f_px, scene.width, scene.height);
   buildOverlays(); renderViewpoints(); renderTrajectories();
   if (prevPose) { if (prevPose.fov == null) photoView(); else setPoseMM(prevPose.mm.dx, prevPose.mm.dy, prevPose.mm.dz, { target: prevPose.target === "free" ? "centre" : prevPose.target, fov: prevPose.fov }); }
-  if (STATIC_BUILD) {
+  if (STATIC_BUILD && !bridged) {
     $("stage-loading").hidden = false;
-    $("stage-loading").innerHTML = `<div class="stage-note"><b>The Lab needs the local server.</b>
-      <span>Reconstructions are around a gigabyte each, so they are not published. Method, Log and Report are complete here.
-      To run the Lab, clone the repository and start <code>sharp-studio/server.py</code>.</span></div>`;
+    $("stage-loading").innerHTML = `<div class="stage-note"><b>The Lab needs a local server.</b>
+      <span>Reconstructions run to about a gigabyte each, so they are not published. Method, Log and Report are complete here.
+      Start <code>sharp-studio/server.py</code> on this machine and reload: the page will find it on
+      <code>localhost:8765</code> and the Lab will work from this URL.</span></div>`;
   } else if (state.loadedSplat !== scene.splat) {
     state.loadedSplat = scene.splat; $("stage-loading").hidden = false; $("stage-loading-text").textContent = "loading " + scene.label;
     try { await viewer.loadUrl(scene.splat); $("stage-loading-text").textContent = "sorting…"; } catch (e) { toast("Could not load scene", e.message, "error"); $("stage-loading").hidden = true; }
@@ -828,6 +829,27 @@ async function runDocSet(items, folder = "docs") {
 // A published copy has no server behind it, so the Lab's Gaussian files and every
 // write route are absent. Say so plainly rather than leaving the stage spinning.
 const STATIC_BUILD = document.querySelector('meta[name="build"]')?.content === "static";
+// A published copy can borrow a local server when one happens to be running on the same
+// machine, which is the only way the Lab has reconstructions to draw. Everything else on
+// the page keeps coming from the published files.
+const LOCAL_ORIGIN = "http://localhost:8765";
+let bridged = false;
+async function findLocalServer() {
+  if (!STATIC_BUILD) return false;
+  try {
+    const stop = new AbortController();
+    const timer = setTimeout(() => stop.abort(), 1500);
+    const r = await fetch(`${LOCAL_ORIGIN}/api/lab/scenes`, { signal: stop.signal, mode: "cors" });
+    clearTimeout(timer);
+    return r.ok;
+  } catch { return false; }
+}
+// The local server returns absolute paths; from a published page those would resolve
+// against github.io, so they are re-pointed at the machine that served them.
+const rebase = (v) => typeof v === "string" ? (v.startsWith("anamorph/") ? LOCAL_ORIGIN + v : v)
+  : Array.isArray(v) ? v.map(rebase)
+  : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, rebase(x)]))
+  : v;
 if (STATIC_BUILD) {
   document.body.classList.add("static-build");
   for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record"]) {
@@ -836,7 +858,14 @@ if (STATIC_BUILD) {
 }
 
 (async () => {
-  M = await api("api/lab/scenes");
+  bridged = await findLocalServer();
+  M = bridged ? rebase(await (await fetch(`${LOCAL_ORIGIN}/api/lab/scenes`)).json()) : await api("api/lab/scenes");
+  if (bridged) {
+    document.body.classList.remove("static-build");
+    for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record"]) {
+      const el = $(id); if (el) { el.disabled = false; delete el.dataset.tip; }
+    }
+  }
   let hudTick = 0;
   viewer = new SplatViewer($("canvas"), { onFps: (fps, n) => { if (n > 0 && !$("stage-loading").hidden) $("stage-loading").hidden = true; const t = performance.now(); if (t - hudTick > 100) { hudTick = t; $("fps").textContent = `${Math.round(fps)} fps · ${(n / 1e6).toFixed(2)}M`; updateHUD(); } }, onInteract: () => { stopTraj(); state.targetMode = "free"; syncSeg("target-tabs", "target", "free"); } });
   viewer.set("wobble", false);
