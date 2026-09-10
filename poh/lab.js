@@ -195,19 +195,21 @@ async function loadScene(id) {
   if (scene.derived_from) rows.push(["Derived from", scene.derived_from], ["Source", scene.source_image_is_view ? "rendered view" : "photograph"]);
   $("scene-kv").innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
   viewer.setScene({ fx: scene.f_px, width: scene.width, height: scene.height });
-  viewer.setPanelQuad([wall(0, 0), wall(LX, 0), wall(LX, LY), wall(0, LY)], M.painting.image);
+  viewer.setPanelQuad([wall(0, 0), wall(LX, 0), wall(LX, LY), wall(0, LY)], assetUrl(M.painting.image));
   if (scene.depth_grid) viewer.setDepthMesh(scene.depth_grid, scene.f_px, scene.width, scene.height);
   buildOverlays(); renderViewpoints(); renderTrajectories();
   if (prevPose) { if (prevPose.fov == null) photoView(); else setPoseMM(prevPose.mm.dx, prevPose.mm.dy, prevPose.mm.dz, { target: prevPose.target === "free" ? "centre" : prevPose.target, fov: prevPose.fov }); }
   if (STATIC_BUILD && !bridged) {
-    $("stage-loading").hidden = false;
-    $("stage-loading").innerHTML = `<div class="stage-note"><b>The Lab needs a local server.</b>
-      <span>Reconstructions run to about a gigabyte each, so they are not published. Method, Log and Report are complete here.
-      Start <code>sharp-studio/server.py</code> on this machine and reload: the page will find it on
-      <code>localhost:8765</code> and the Lab will work from this URL.</span></div>`;
+    showLabNotice();
   } else if (state.loadedSplat !== scene.splat) {
     state.loadedSplat = scene.splat; $("stage-loading").hidden = false; $("stage-loading-text").textContent = "loading " + scene.label;
-    try { await viewer.loadUrl(scene.splat); $("stage-loading-text").textContent = "sorting…"; } catch (e) { toast("Could not load scene", e.message, "error"); $("stage-loading").hidden = true; }
+    try {
+      await viewer.loadUrl(assetUrl(scene.splat));
+      $("stage-loading-text").textContent = "sorting…";
+    } catch (e) {
+      state.loadedSplat = null;                       // let a later attempt retry this scene
+      if (STATIC_BUILD) { showLabNotice(); } else { toast("Could not load scene", e.message, "error"); $("stage-loading").hidden = true; }
+    }
   }
   if (state.view === "lab") writeUrl("lab", false);
 }
@@ -526,6 +528,14 @@ for (const cb of document.querySelectorAll("[data-hud]")) {
   });
 }
 
+function showLabNotice() {
+  $("stage-loading").hidden = false;
+  $("stage-loading").innerHTML = `<div class="stage-note"><b>The Lab needs a local server.</b>
+    <span>Reconstructions run to about a gigabyte each, so they are not published. Method, Log and Report are complete here.
+    Start <code>sharp-studio/server.py</code> on this machine and reload: the page will find it on
+    <code>localhost:8765</code> and the Lab will work from this URL.</span></div>`;
+}
+
 // Essay figures open in the viewer; the reading column caps their width.
 function wireFigures() {
   for (const fig of document.querySelectorAll("#method .mfig")) {
@@ -842,7 +852,7 @@ async function findLocalServer() {
   for (const origin of LOCAL_CANDIDATES) {
     try {
       const stop = new AbortController();
-      const timer = setTimeout(() => stop.abort(), 1500);
+      const timer = setTimeout(() => stop.abort(), 4000);   // first probe pays for the CORS preflight
       const r = await fetch(`${origin}/api/lab/scenes`, { signal: stop.signal, mode: "cors" });
       clearTimeout(timer);
       if (r.ok) { LOCAL_ORIGIN = origin; return true; }
@@ -854,6 +864,9 @@ async function findLocalServer() {
 // against the published host, so they are re-pointed at the machine that served them.
 // The test is for a leading slash rather than a named prefix: the static build rewrites
 // absolute asset prefixes to relative ones, and a literal here would be rewritten too.
+// Applied at the point of use as well as to the manifest, so a path that slipped
+// through rebase cannot be requested against the published host by mistake.
+const assetUrl = (p) => (bridged && typeof p === "string" && p.startsWith("/")) ? LOCAL_ORIGIN + p : p;
 const rebase = (v) => typeof v === "string" ? (v.startsWith("/") ? LOCAL_ORIGIN + v : v)
   : Array.isArray(v) ? v.map(rebase)
   : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, rebase(x)]))
