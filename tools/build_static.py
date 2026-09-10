@@ -10,6 +10,7 @@ The Lab needs the Gaussian files, which are far too large to publish, so the bui
 marks itself and the app degrades that one tab instead of hanging on a dead fetch.
 """
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -115,6 +116,10 @@ def main() -> None:
     html = html.replace('<link rel="stylesheet" href="/ui/', '<link rel="stylesheet" href="ui/')
     stamp = __import__("datetime").datetime.now().strftime("%Y%m%d%H%M%S")
     html = html.replace("<head>", f'<head>\n<meta name="build" content="static" />\n<meta name="build-id" content="{stamp}" />')
+    # Version the app's own scripts and styles. Without this the browser keeps the previous
+    # lab.js, which is the code that does the cache-busting, so a deploy could not take
+    # effect until the old copy expired on its own.
+    html = re.sub(r'(src|href)="((?:ui/)?[a-z0-9._-]+\.(?:js|css))"', rf'\1="\2?v={stamp}"', html)
     index.write_text(html)
     for js in DOCS.glob("*.js"):
         t = js.read_text()
