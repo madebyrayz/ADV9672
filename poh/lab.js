@@ -832,17 +832,23 @@ const STATIC_BUILD = document.querySelector('meta[name="build"]')?.content === "
 // A published copy can borrow a local server when one happens to be running on the same
 // machine, which is the only way the Lab has reconstructions to draw. Everything else on
 // the page keeps coming from the published files.
-const LOCAL_ORIGIN = "http://localhost:8765";
+// Both spellings are tried: some browser policies treat the loopback name and the
+// literal address differently when the page itself came from a remote origin.
+const LOCAL_CANDIDATES = ["http://localhost:8765", "http://127.0.0.1:8765"];
+let LOCAL_ORIGIN = LOCAL_CANDIDATES[0];
 let bridged = false;
 async function findLocalServer() {
   if (!STATIC_BUILD) return false;
-  try {
-    const stop = new AbortController();
-    const timer = setTimeout(() => stop.abort(), 1500);
-    const r = await fetch(`${LOCAL_ORIGIN}/api/lab/scenes`, { signal: stop.signal, mode: "cors" });
-    clearTimeout(timer);
-    return r.ok;
-  } catch { return false; }
+  for (const origin of LOCAL_CANDIDATES) {
+    try {
+      const stop = new AbortController();
+      const timer = setTimeout(() => stop.abort(), 1500);
+      const r = await fetch(`${origin}/api/lab/scenes`, { signal: stop.signal, mode: "cors" });
+      clearTimeout(timer);
+      if (r.ok) { LOCAL_ORIGIN = origin; return true; }
+    } catch { /* try the next spelling */ }
+  }
+  return false;
 }
 // The local server returns absolute paths; from a published page those would resolve
 // against the published host, so they are re-pointed at the machine that served them.
