@@ -25,9 +25,14 @@ import server  # noqa: E402  — reused so the snapshot cannot drift from the li
 
 
 def write(rel: str, payload) -> None:
+    """Snapshot one API response. A project site is served from a subdirectory, so an
+    absolute asset path inside the payload would resolve against the domain root."""
     p = DOCS / rel
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(payload))
+    text = json.dumps(payload)
+    for prefix in ("anamorph", "ui", "api"):
+        text = text.replace(f'"/{prefix}/', f'"{prefix}/')
+    p.write_text(text)
 
 
 def copy_tree(src: Path, dst: Path, suffixes=None) -> int:
@@ -86,7 +91,15 @@ def main() -> None:
     for sub in ("figures", "captures", "lab", "boxer_repro", "reports"):
         if (ANAMORPH / sub).exists():
             total += copy_tree(ANAMORPH / sub, DOCS / "anamorph" / sub, media)
-    total += copy_tree(ANAMORPH / "data", DOCS / "anamorph" / "data", {".jpg", ".png"})
+    (DOCS / "anamorph" / "data").mkdir(parents=True, exist_ok=True)
+    # Boxer's own figures stay out of the published copy; they are his images, and the
+    # study cites his essay rather than reproducing it.
+    for f in (ANAMORPH / "data").glob("*"):
+        if f.is_file() and f.suffix.lower() in {".jpg", ".png"}:
+            shutil.copy2(f, DOCS / "anamorph" / "data" / f.name)
+            total += 1
+    (DOCS / "anamorph" / "data").mkdir(parents=True, exist_ok=True)
+    total += copy_tree(ANAMORPH / "data" / "gigapixel", DOCS / "anamorph" / "data" / "gigapixel", {".jpg", ".png"})
     for runs in ("runs", "runs_user"):
         if (ANAMORPH / runs).exists():
             for f in (ANAMORPH / runs).rglob("*"):
