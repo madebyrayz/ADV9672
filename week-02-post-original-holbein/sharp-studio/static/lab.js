@@ -192,11 +192,16 @@ async function loadScene(id) {
   if (scene.depth_grid) viewer.setDepthMesh(scene.depth_grid, scene.f_px, scene.width, scene.height);
   buildOverlays(); renderViewpoints(); renderTrajectories();
   if (prevPose) { if (prevPose.fov == null) photoView(); else setPoseMM(prevPose.mm.dx, prevPose.mm.dy, prevPose.mm.dz, { target: prevPose.target === "free" ? "centre" : prevPose.target, fov: prevPose.fov }); }
-  if (state.loadedSplat !== scene.splat) {
+  if (STATIC_BUILD) {
+    $("stage-loading").hidden = false;
+    $("stage-loading").innerHTML = `<div class="stage-note"><b>The Lab needs the local server.</b>
+      <span>Reconstructions are around a gigabyte each, so they are not published. Method, Log and Report are complete here.
+      To run the Lab, clone the repository and start <code>sharp-studio/server.py</code>.</span></div>`;
+  } else if (state.loadedSplat !== scene.splat) {
     state.loadedSplat = scene.splat; $("stage-loading").hidden = false; $("stage-loading-text").textContent = "loading " + scene.label;
     try { await viewer.loadUrl(scene.splat); $("stage-loading-text").textContent = "sorting…"; } catch (e) { toast("Could not load scene", e.message, "error"); $("stage-loading").hidden = true; }
   }
-  const u = new URL(location.href); u.searchParams.set("scene", scene.id); history.replaceState(null, "", u);
+  if (state.view === "lab") writeUrl("lab", false);
 }
 $("scene-select").addEventListener("change", () => loadScene($("scene-select").value));
 $("btn-scene-details").onclick = () => { labEl().classList.remove("no-right"); $("details-section").open = true; $("details-section").scrollIntoView({ behavior: "smooth" }); viewer.resize(); };
@@ -755,8 +760,18 @@ $("report-save").onclick = async () => { if (!reportData) await renderReports();
 
 // ---------------------------------------------------------------- views + keys + boot
 let reportsDirty = true, logDirty = true, methodRendered = false;
-function showView(v) {
-  if (state.view === v) return;                      // re-clicking the active tab rebuilt the page for nothing
+const VIEW_SLUG = { lab: "lab", log: "log", reports: "report", method: "method" };
+const SLUG_VIEW = Object.fromEntries(Object.entries(VIEW_SLUG).map(([k, v]) => [v, k]));
+function writeUrl(v, push) {
+  const u = new URL(location.href);
+  u.searchParams.set("view", VIEW_SLUG[v] || v);
+  if (v !== "lab") u.searchParams.delete("scene");
+  else if (scene) u.searchParams.set("scene", scene.id);
+  u.hash = "";
+  history[push ? "pushState" : "replaceState"]({ view: v }, "", u);
+}
+function showView(v, opts = {}) {
+  if (state.view === v) { if (!opts.silent) writeUrl(v, false); return; }
   state.view = v; for (const id of ["lab", "log", "reports", "method"]) $("view-" + id).hidden = id !== v;
   for (const a of document.querySelectorAll("[data-view]")) a.setAttribute("aria-current", a.dataset.view === v ? "page" : "false");
   viewer.paused = v !== "lab";                       // stops the frame loop outright, not just the drawing
@@ -766,7 +781,12 @@ function showView(v) {
   if (v === "reports" && reportsDirty) requestAnimationFrame(() => renderReports().then(() => (reportsDirty = false)));
   if (v === "method" && !methodRendered) { renderMethod(); wireFigures(); methodRendered = true; }
   if (v === "lab") viewer.resize();                  // cheap now: no-ops unless the stage actually changed size
+  if (!opts.silent) writeUrl(v, opts.push !== false);
 }
+addEventListener("popstate", () => {
+  const slug = new URLSearchParams(location.search).get("view");
+  showView(SLUG_VIEW[slug] || "lab", { silent: true });
+});
 document.querySelectorAll("[data-view]").forEach((a) => (a.onclick = (e) => { e.preventDefault(); showView(a.dataset.view); }));
 const applyTheme = (t) => { document.documentElement.dataset.theme = t; try { localStorage.setItem("theme", t); } catch {} };
 try { if (localStorage.getItem("theme")) applyTheme(localStorage.getItem("theme")); } catch {}
@@ -798,6 +818,16 @@ async function runDocSet(items, folder = "docs") {
   return out;
 }
 
+// A published copy has no server behind it, so the Lab's Gaussian files and every
+// write route are absent. Say so plainly rather than leaving the stage spinning.
+const STATIC_BUILD = document.querySelector('meta[name="build"]')?.content === "static";
+if (STATIC_BUILD) {
+  document.body.classList.add("static-build");
+  for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record"]) {
+    const el = $(id); if (el) { el.disabled = true; el.dataset.tip = "Needs the local server"; }
+  }
+}
+
 (async () => {
   M = await api("/api/lab/scenes");
   let hudTick = 0;
@@ -806,8 +836,11 @@ async function runDocSet(items, folder = "docs") {
   state.savedViewpoints = (await api("/api/lab/viewpoints")).viewpoints || []; state.savedTrajs = (await api("/api/lab/trajectories")).trajectories || []; state.userRuns = M.user_runs || [];
   sceneOptions(); renderUserRuns();
   $("engine-pill").dataset.state = "ready"; $("engine-text").textContent = `${M.scenes.length} scenes`;
+  // read the requested view before loadScene, which rewrites the query string itself
+  const wanted = SLUG_VIEW[new URLSearchParams(location.search).get("view")];
   await loadScene(new URLSearchParams(location.search).get("scene") || "sharp_wiki_f30");
   photoView(); setMode("sharp");
+  if (wanted && wanted !== "lab") showView(wanted, { push: false }); else writeUrl("lab", false);
   state.captures = (await api("/api/lab/captures")).captures; renderRecent();
   if (state.userRuns.some((r) => r.status === "queued" || r.status === "running")) pollUserRuns();
   window.lab = { state, viewer, setPoseMM, capture, loadScene, trajectories, applyTraj, selectTraj, currentPoseMM, setMode, setFov, runDocSet, recordTraj, photoView, runSharpFromHere, goToViewpoint, refreshManifest };

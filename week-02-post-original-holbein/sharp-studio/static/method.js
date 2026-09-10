@@ -44,7 +44,7 @@ function renderMethod() {
 <header class="mhead">
   <div class="tags"><span class="badge badge-outline">Design research</span><span class="badge badge-outline">Computer vision</span><span class="badge badge-outline">Media theory</span></div>
   <h1>The Post-Original Holbein</h1>
-  <h2 class="msub">A hallucinative fascite of the Ambassador</h2>
+  <h2 class="msub">A hallucinative facsimile of The Ambassadors</h2>
   <div class="mmeta">
     <span>10 September 2026</span>
     <a class="mtag" href="https://github.com/madebyrayz/ADV9672/tree/main/week-02-post-original-holbein" target="_blank" rel="noopener">ADV9672 · Week 02 · reflection artifact</a>
@@ -90,7 +90,7 @@ ${F(1, "/anamorph/figures/method/resolution_ladder.png",
 ${F(2, "/anamorph/figures/method/tiepoints_plate.png",
   "Tie points. Boxer's five marked skull points on the source photograph, the jaw line at 25.1° whose extension meets eye level at S, the central axis, and the 8 × 8 grid that places S three units right of the panel edge.")}
 <p>A Python port of Boxer's two <a href="https://idolsofthecave.com/cabinet/anamorphic-ambassadors-may-2012/" target="_blank" rel="noopener">MATLAB scripts</a> returns every published number to within 0.2 mm. The port also exposes how little the construction needs. The horizontal-jaw condition means only that the jaw line passes through S, which fixes D = ${b.D.toFixed(2)} mm in a single line; the square condition is a ratio, which fixes d = ${b.d.toFixed(2)} mm.</p>
-<p>That transparency cuts both ways. The whole result rests on one judgement — that a painted jawbone is a straight line — and Boxer says so himself. The method is exact about a premise that is not, and nothing in the panel can settle it.</p>
+<p>That transparency cuts both ways. The whole result rests on one judgement, that a painted jawbone is a straight line, and Boxer says so himself. The method is exact about a premise that is not, and nothing in the panel can settle it.</p>
 <p>The port corrected this study's own brief rather than Boxer's. His two transforms are not approximations of one another; they are the same function. Perspective projection at distance R and angle α equals the inverse trapezoid with D = R / sin α and d = R cot α, identically. The 36 mm between his two published points is the orientation of the screen the image is thrown on, not an error. "The" viewing point is already a convention at the millimetre scale, before any model is involved.</p>
 ${F(3, "/anamorph/figures/method/two_eyes.png",
   "The same image, two eyes. Boxer's trapezoid construction (S, O, D, d) beside the exact-perspective eye whose screen sits perpendicular to the line of sight. Both produce identical restored skulls.")}
@@ -98,7 +98,7 @@ ${F(3, "/anamorph/figures/method/two_eyes.png",
 
 <section>
 <h2><span class="num">05</span>How wide is “it looks like a skull”?</h2>
-<p>Before asking a model for the position, the flat painting was projected from 13 700 eye positions on a 10 × 5 mm grid at eye height, and each skull crop scored with CLIP, a network that rates how well an image matches a phrase${cite(10)}. "A human skull" scores above 0.99 almost everywhere. A skull stretched to twice its length is still a skull to the network, and the region within 5 % of the best score covers ${ratioP} times the area of Boxer's ellipse. A stricter score — image-to-image similarity against the resolved skull itself — still leaves a basin ${ratio} times that ellipse.</p>
+<p>Before asking a model for the position, the flat painting was projected from 13 700 eye positions on a 10 × 5 mm grid at eye height, and each skull crop scored with CLIP, a network that rates how well an image matches a phrase${cite(10)}. "A human skull" scores above 0.99 almost everywhere. A skull stretched to twice its length is still a skull to the network, and the region within 5 % of the best score covers ${ratioP} times the area of Boxer's ellipse. A stricter score, image-to-image similarity against the resolved skull itself, still leaves a basin ${ratio} times that ellipse.</p>
 <p>Perception puts the viewer somewhere in a large region of acceptable smears. Geometry puts him inside a few millimetres.</p>
 <p>These are different kinds of answer, and the study keeps them apart rather than splitting the difference. It is also the quantitative form of Boxer's objection to the National Gallery's method: dragging until it looks right cannot be more precise than the tolerance of looking, and that tolerance turns out to be enormous.</p>
 ${F(4, M.phase1.figure,
@@ -111,7 +111,7 @@ ${F(4, M.phase1.figure,
 <p>It did not reconstruct a panel. It reconstructed the room depicted in the painting: the floor advances, the curtain recedes, and 623 mm of relief appear across a surface 2095 mm wide that is physically flat. A plane fitted to the image border tilts twenty degrees, because the bottom border is the depicted floor.</p>
 ${F(5, "/anamorph/captures/20260910/docs/0002__sharp_wiki_f30__sharp__dx-1048_dy+1033_dz+2040__fov54__02-photo-camera-depth-wireframe.jpg",
   "The invented room, made visible. Depth wireframe over the reconstruction from the photograph's own camera: a flat oak panel returned as a floor, a recess and a hanging curtain.")}
-<p>Comparing metres to millimetres therefore requires deciding where the panel is, and that decision is a stated assumption rather than a hidden one. The primary bridge places a plane parallel to the photograph at the reconstructed depth of the skull and sets its width to 2095 mm; a global-median plane and the tilted border fit are carried as bounds. One SHARP metre then equals 1095 mm, the photograph's own camera stands 2.04 m from the wall, and the skull's known 915 mm width returns as 1036 mm per metre — a 6 % check. The bridge is unit-tested against a synthetic plane and written into every render. It is the weakest link in the study, and it is deliberately kept visible.</p>
+<p>Comparing metres to millimetres therefore requires deciding where the panel is, and that decision is a stated assumption rather than a hidden one. The primary bridge places a plane parallel to the photograph at the reconstructed depth of the skull and sets its width to 2095 mm; a global-median plane and the tilted border fit are carried as bounds. One SHARP metre then equals 1095 mm, the photograph's own camera stands 2.04 m from the wall, and the skull's known 915 mm width returns as 1036 mm per metre, a 6 % check. The bridge is unit-tested against a synthetic plane and written into every render. It is the weakest link in the study, and it is deliberately kept visible.</p>
 ${F(6, "/anamorph/figures/method/section_plate.png",
   "Section at the skull's column: eye level, the skull box on the panel, the published eyes, and the reconstructed surface at the default lens. Rays from Boxer's O to the skull box cross the reconstructed floor before they reach the wall.")}
 </section>
@@ -119,8 +119,8 @@ ${F(6, "/anamorph/figures/method/section_plate.png",
 <section>
 <h2><span class="num">07</span>Resection</h2>
 <p>In photogrammetry, resection means recovering a camera's position from what it saw. The model's scene was photographed from 1421 positions on the same grid as the perceptual sweep, looking horizontally at the panel's centre as in Boxer's script, and from a 532-position orbit around the skull.</p>
-<p>The scoring crop cannot be placed where the flat panel puts the skull, because that box comes back empty — the model's skull is not on the wall. The crop instead follows the projected 3D bounding box of the Gaussians belonging to the skull in the photograph${cite(11)}. At Boxer's O that box is 87 % empty.</p>
-<p>Resemblance across the whole grid stays between 0.30 and 0.61, below what the flat panel scores even at the National Gallery's point, and its maximum sits 141 mm from Boxer's O, at (675, 1035, 160). Measured against the disagreement between the two human estimates — 13 mm along the wall, 138 mm out from it — that is eight units off along the wall and less than one unit out from it. The number is not a station point. It is the least bad view of a streak lying on a receding floor.</p>
+<p>The scoring crop cannot be placed where the flat panel puts the skull, because that box comes back empty: the model's skull is not on the wall. The crop instead follows the projected 3D bounding box of the Gaussians belonging to the skull in the photograph${cite(11)}. At Boxer's O that box is 87 % empty.</p>
+<p>Resemblance across the whole grid stays between 0.30 and 0.61, below what the flat panel scores even at the National Gallery's point, and its maximum sits 141 mm from Boxer's O, at (675, 1035, 160). Measured against the disagreement between the two human estimates (13 mm along the wall, 138 mm out from it), that is eight units off along the wall and less than one unit out from it. The number is not a station point. It is the least bad view of a streak lying on a receding floor.</p>
 ${F(7, "/anamorph/figures/method/resection_plate.png",
   "Resection plate. The photograph as picture plane; below it in plan, Boxer's construction with S and O, rays from O through the skull's extent, the published points with the 2σ ellipse, the reconstructed surface along three image rows, the grid and orbit maxima, and the camera position the model assigns to the photograph itself.")}
 </section>
@@ -135,17 +135,17 @@ ${F(8, "/anamorph/figures/depth_strip.png",
 
 <section>
 <h2><span class="num">09</span>Idolmorphosis</h2>
-<p>Boxer ends by running his procedure backwards: a square image placed in the 142 mm box of the restored painting and forward-transformed with the same D and d lands exactly where Holbein's skull lies. The same was done here with the model's output — its best crop, its torn render from O, and its depth map of the skull region. Each becomes a 914 × 532 mm streak, saved at four pixels per millimetre for a 36-inch print, that resolves only from the exact-perspective point.</p>
+<p>Boxer ends by running his procedure backwards: a square image placed in the 142 mm box of the restored painting and forward-transformed with the same D and d lands exactly where Holbein's skull lies. The same was done here with the model's output: its best crop, its torn render from O, and its depth map of the skull region. Each becomes a 914 × 532 mm streak, saved at four pixels per millimetre for a 36-inch print, that resolves only from the exact-perspective point.</p>
 <p>The depth map reads best from O: a machine's belief about where the skull is, stretched across the floor exactly where Holbein stretched the skull. Whether that is an artifact or a diagram is the question the print puts to a visitor who has to walk to it.</p>
 ${F(9, "/anamorph/figures/phase5_pairs.jpg",
   "Idolmorphosis. Left, the streak composited into the painting; right, the same streak seen from Boxer's O, where it resolves back into its square. Sources top to bottom: best-pose crop, torn render from O, depth map of the skull region.")}
 </section>
 
 <section>
-<h2><span class="num">10</span>What Held</h2>
+<h2><span class="num">10</span>The Outside</h2>
 <p>The geometer's answer is the viewpoint saved in this instrument as the resolved skull: (740.5, 1035, 255.3) mm, R = 1806 mm, 81.9° from the wall normal, where the flat panel scores ${flat} and Boxer's construction reproduces to a hundredth of a millimetre. The model's answer is not slightly wrong. It answers a different question. Given a photograph with no lens it fills in a room, and once there is a room the floor carries the smear away from the wall the construction lives on.</p>
-<p>This is the useful result, and it cuts against the theory it was meant to illustrate. Baudrillard's model does not pretend to see a skull; it produces the symptoms of a scene, and the symptoms are coherent enough to be measured. But they <i>were</i> measured, and they were found wanting at a specific coordinate. The hyperreal is supposed to have absorbed its outside. Here the outside held — not because the model is weak, but because the object was chosen so that a physical fact stayed recoverable.</p>
-<p>The precession of simulacra is not a property of models. It is a property of situations in which nothing survives to check them — and those situations are made, not given.</p>
+<p>This is the useful result, and it cuts against the theory it was meant to illustrate. Baudrillard's model does not pretend to see a skull; it produces the symptoms of a scene, and the symptoms are coherent enough to be measured. But they <i>were</i> measured, and they were found wanting at a specific coordinate. The hyperreal is supposed to have absorbed its outside. Here the outside held, not because the model is weak, but because the object was chosen so that a physical fact stayed recoverable.</p>
+<p>The precession of simulacra is not a property of models. It is a property of situations in which nothing survives to check them, and those situations are made, not given.</p>
 <p>Benjamin's aura did not stay in the panel and it did not pass to the model. It sits in the bridge: the list of assumptions that permit millimetres to be compared to metres. Davis is right that the moment of seeing survives reproduction, but here it survives as a coordinate someone has to argue for, and the argument is the artifact.</p>
 </section>
 
@@ -153,10 +153,10 @@ ${F(9, "/anamorph/figures/phase5_pairs.jpg",
 <h2><span class="num">11</span>Objections</h2>
 <p>Four objections, in descending order of how much they threaten the result.</p>
 <ul>
-<li><b>The judge is a network.</b> Resemblance is scored by CLIP, which carries its own biases and was trained on the same kind of internet imagery as the model under test. A network is being asked whether another network's output looks like a skull. This was accepted because a human judge is the thing under test — but it means every score in §05 and §07 compares two priors, not a perceptual fact.</li>
+<li><b>The judge is a network.</b> Resemblance is scored by CLIP, which carries its own biases and was trained on the same kind of internet imagery as the model under test. A network is being asked whether another network's output looks like a skull. This was accepted because a human judge is the thing under test, but it means every score in §05 and §07 compares two priors, not a perceptual fact.</li>
 <li><b>The bridge is chosen, not derived.</b> Three defensible bridges disagree by up to 25 % in scale. All three were carried and the conclusion holds under all three, but a reader who rejects the primary bridge is entitled to reject the specific millimetre figures that depend on it.</li>
 <li><b>Boxer's premise is unfalsifiable from the panel.</b> The construction assumes the painted jawbone is a straight line. Nothing in the object can confirm it. The ground truth is a very precise consequence of an imprecise reading.</li>
-<li><b>The comparison is unfair by design, and that is the point.</b> SHARP was not built to solve anamorphosis; it was built to make plausible geometry from one photograph, and by that standard it succeeds. The test is not of competence. It is of what a model does with a question it cannot know it is being asked — and whether the answer arrives marked as a guess. It does not. It arrives in metres.</li>
+<li><b>The comparison is unfair by design, and that is the point.</b> SHARP was not built to solve anamorphosis; it was built to make plausible geometry from one photograph, and by that standard it succeeds. The test is not of competence. It is of what a model does with a question it cannot know it is being asked, and whether the answer arrives marked as a guess. It does not. It arrives in metres.</li>
 </ul>
 <p>None of the four touches the central observation, which depends on no metric at all: at the one position where the geometry resolves the skull, the model has nothing on the wall.</p>
 </section>
@@ -169,31 +169,31 @@ ${F(9, "/anamorph/figures/phase5_pairs.jpg",
 <p>Every number in the app belongs to exactly one of these. Confusing them is the error the bridge exists to prevent.</p>
 <table class="glossary">
 <tr><th>Panel (mm)</th><td>The physical frame, and the one the argument is conducted in. Δx = millimetres right of the panel's right edge, Δy = above its bottom edge, Δz = out from the wall. The panel is 2095 × 2070 mm.</td></tr>
-<tr><th>SHARP (m)</th><td>The model's own frame, in metres, x right, y down, z forward from the photograph's camera. These metres are not measurements — they are consequences of an assumed lens.</td></tr>
+<tr><th>SHARP (m)</th><td>The model's own frame, in metres, x right, y down, z forward from the photograph's camera. These metres are not measurements; they are consequences of an assumed lens.</td></tr>
 <tr><th>Bridge</th><td>The stated conversion between the two, as <i>mm per SHARP unit</i>. It is an assumption, it is recorded in every capture, and it is the single number most able to invalidate a comparison.</td></tr>
 </table>
 
 <h3>The controls</h3>
 <table class="glossary">
-<tr><th>Scene</th><td>One reconstruction — the photograph passed through SHARP at one assumed lens. <i>Reference</i> scenes are the thirteen lenses of the sweep; <i>Tests</i> are reconstructions made from views rendered inside the app. The badge shows the lens.</td></tr>
-<tr><th>View</th><td>How the loaded scene is drawn, camera held fixed so the five are comparable. <i>Splat</i>: the 1.18 million Gaussians. <i>Mesh</i>: the depth map as a textured surface. <i>Wire</i>: the same depth as lines, which makes invented relief legible. <i>Flat</i>: the painting on a flat panel from the same camera — Boxer's model, and the control condition. <i>Split</i>: splats against one of the others.</td></tr>
+<tr><th>Scene</th><td>One reconstruction: the photograph passed through SHARP at one assumed lens. <i>Reference</i> scenes are the thirteen lenses of the sweep; <i>Tests</i> are reconstructions made from views rendered inside the app. The badge shows the lens.</td></tr>
+<tr><th>View</th><td>How the loaded scene is drawn, camera held fixed so the five are comparable. <i>Splat</i>: the 1.18 million Gaussians. <i>Mesh</i>: the depth map as a textured surface. <i>Wire</i>: the same depth as lines, which makes invented relief legible. <i>Flat</i>: the painting on a flat panel from the same camera, which is Boxer's model and the control condition. <i>Split</i>: splats against one of the others.</td></tr>
 <tr><th>Viewpoints</th><td>Named eye positions on keys 0–5: the camera the model assigns to the photograph, the four published estimates, the reconstruction's own scoring maximum, and anything saved in session. Selecting one sets Δx, Δy, Δz and field of view together.</td></tr>
 <tr><th>Trajectories</th><td>Camera paths between positions, so a claim about a region can be shown rather than sampled: the approach to O, sweeps along Δx and Δz, a descent, the orbit, a grazing pass. Record writes every frame plus an mp4 to the Log.</td></tr>
 <tr><th>Overlays</th><td>Construction geometry drawn <i>into</i> the 3D scene rather than painted over it, so it occludes correctly and shows where the reconstruction sits relative to the panel: the 8 × 8 grid, skull box, station points, Boxer's S–O construction, sight lines, depth wireframe.</td></tr>
 <tr><th>Capture</th><td>Writes the frame as a JPEG beside a JSON sidecar holding the pose in <i>both</i> frames, field of view, view mode, active overlays and bridge parameters. The filename repeats scene, view, pose, field and tag, so a capture stays identifiable detached from its sidecar. This is what makes a screenshot admissible as evidence.</td></tr>
-<tr><th>Reconstruct</th><td>Renders the painting from the current camera and runs SHARP on that render, passing the render's true focal length. The result enters as a Test scene, bridged from the render camera rather than assumed — the one way to feed the model an image whose lens is known.</td></tr>
+<tr><th>Reconstruct</th><td>Renders the painting from the current camera and runs SHARP on that render, passing the render's true focal length. The result enters as a Test scene, bridged from the render camera rather than assumed, the one way to feed the model an image whose lens is known.</td></tr>
 </table>
 
 <h3>The numbers</h3>
 <table class="glossary">
 <tr><th>Δx Δy Δz</th><td>Current eye in panel millimetres. Boxer's O is (776.9, 1035, 257.9); the resolved-skull viewpoint is (740.5, 1035, 255.3).</td></tr>
-<tr><th>az · el · d</th><td>Direction from eye to skull: azimuth from the wall normal, elevation, distance in mm. Grazing views — the ones the model prefers — show high azimuth and negative elevation.</td></tr>
+<tr><th>az · el · d</th><td>Direction from eye to skull: azimuth from the wall normal, elevation, distance in mm. Grazing views, the ones the model prefers, show high azimuth and negative elevation.</td></tr>
 <tr><th>fov</th><td>Field of view in degrees. Not cosmetic: it sets how much of the smear is in frame, and the 5 mm result in §08 depends on it.</td></tr>
 <tr><th>R · α</th><td>Boxer's own two parameters, recomputed live: R the distance from eye to panel centre, α the angle from the wall normal. At his solution, R = 1806 mm, α = 81.9°.</td></tr>
-<tr><th>f_px</th><td>The assumed focal length in pixels for this scene — the origin of every metre that follows.</td></tr>
+<tr><th>f_px</th><td>The assumed focal length in pixels for this scene, the origin of every metre that follows.</td></tr>
 <tr><th>Relief</th><td>Depth p95 minus p05 in panel millimetres: how much depth the model invented across a flat board. 623 mm at the 30 mm default.</td></tr>
 <tr><th>mm per unit</th><td>The bridge, stated. 1095 at the default lens.</td></tr>
-<tr><th>Grid peak · Offset</th><td>Best-scoring position on the resection grid, and its distance from Boxer's O. 141 mm at the default lens — the study's headline disagreement.</td></tr>
+<tr><th>Grid peak · Offset</th><td>Best-scoring position on the resection grid, and its distance from Boxer's O. 141 mm at the default lens, the study's headline disagreement.</td></tr>
 </table>
 </section>
 
