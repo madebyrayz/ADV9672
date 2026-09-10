@@ -1,0 +1,78 @@
+{
+ "image": "data/Holbein-ambassadors.jpg",
+ "width": 1084,
+ "height": 1069,
+ "f35_mm": 70.0,
+ "f_px": 2463.1150041165906,
+ "device": "mps",
+ "inference_s": 5.15,
+ "n_gaussians": 1179648,
+ "sharp_internal_shape": [
+  1536,
+  1536
+ ],
+ "depth_m": {
+  "min": 2.643223762512207,
+  "p05": 4.0033063888549805,
+  "median": 4.6601715087890625,
+  "p95": 5.668752670288086,
+  "max": 16.943662643432617,
+  "mean": 4.765502500933727
+ },
+ "scale_size_p50_m": 0.0015465040212269715,
+ "panel": {
+  "scale_mm_per_m": 876.0016181526113,
+  "scale_y_mm_per_m": 644.3910793172187,
+  "plane_rms_border_m": 0.30144180742207644,
+  "plane_rms_all_m": 0.41098878273161976,
+  "plane_rms_border_mm": 264.0635110805868,
+  "plane_rms_all_mm": 360.0268387154709,
+  "relief_p95_minus_p05_mm": 1454.2498538816315,
+  "normal": [
+   -0.006249035943647168,
+   -0.680715217900539,
+   -0.7325214957039803
+  ],
+  "tilt_from_camera_axis_deg": 42.90180145145807,
+  "camera0_mm": [
+   -1021.745837399643,
+   -1350.8235481576983,
+   2982.7528489750334
+  ]
+ },
+ "convention": "SHARP frame x right, y down, z forward, metres; panel frame per lib/bridge.py; (dx,dy,dz) = right of right edge, above bottom edge, off the wall, mm",
+ "panel_variants": {
+  "skull_frontoparallel": {
+   "scale_mm_per_unit": 1095.303665146093,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    4760.356027328651
+   ],
+   "z_ref": 4.346151828765869,
+   "tilt_deg": 0.0
+  },
+  "median_frontoparallel": {
+   "scale_mm_per_unit": 1022.193783220853,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    4760.356027328651
+   ],
+   "z_ref": 4.656999588012695,
+   "tilt_deg": 0.0
+  },
+  "border_plane": {
+   "scale_mm_per_unit": 876.0016181526113,
+   "camera0_mm": [
+    -1021.745837399643,
+    -1350.8235481576983,
+    2982.7528489750334
+   ],
+   "z_ref": null,
+   "tilt_deg": 42.90180145145807
+  }
+ },
+ "skull_lateral_extent_units": 0.8834672960638998,
+ "skull_scale_mm_per_unit_from_915mm": 1035.6919877810842
+}

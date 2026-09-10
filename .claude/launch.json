@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "post-original-holbein",
+      "runtimeExecutable": "/Users/rayzhang/code/260909_ADV9672/ml-sharp/.venv/bin/python",
+      "runtimeArgs": ["/Users/rayzhang/code/260909_ADV9672/week-02-post-original-holbein/sharp-studio/server.py", "--port", "8765"],
+      "port": 8765
+    }
+  ]
+}

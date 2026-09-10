@@ -1,0 +1,69 @@
+/* ---------------------------------------------------------------------------
+   ADV9672 — shared design tokens
+   Loaded after shadcn.css and before any artifact stylesheet, so a week can
+   restyle by overriding tokens rather than by rewriting components.
+
+   Typeface: TWK Lausanne, Nizar Kazan / TYPE.WELTKERN®. Licensed to the author
+   for personal use. local() is tried first so an installed copy is used with no
+   network request; the woff2 files are a fallback for this machine and are not
+   committed. See shared/ui/README.md to restore them.
+   --------------------------------------------------------------------------- */
+
+@font-face { font-family: "TWK Lausanne"; font-style: normal; font-weight: 400; font-display: swap;
+  src: local("TWK Lausanne 400"), local("TWKLausanne-400"), url("fonts/TWKLausanne-400.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-style: italic; font-weight: 400; font-display: swap;
+  src: local("TWK Lausanne 400 Italic"), local("TWKLausanne-400Italic"), url("fonts/TWKLausanne-400Italic.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-style: normal; font-weight: 500; font-display: swap;
+  src: local("TWK Lausanne 500"), local("TWKLausanne-500"), url("fonts/TWKLausanne-500.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-style: normal; font-weight: 600; font-display: swap;
+  src: local("TWK Lausanne 600"), local("TWKLausanne-600"), url("fonts/TWKLausanne-600.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-style: normal; font-weight: 700; font-display: swap;
+  src: local("TWK Lausanne 700"), local("TWKLausanne-700"), url("fonts/TWKLausanne-700.woff2") format("woff2"); }
+
+:root {
+  /* ---- families. One typeface for everything the reader reads; mono only for
+         machine output — filenames, JSON, coordinates. ---- */
+  --font-sans: "TWK Lausanne", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ---- size scale. Minor third off a 15px body, rounded to whole pixels so
+         nothing lands on a half-pixel at 1x. ---- */
+  --text-2xs: 10.5px;
+  --text-xs:  12px;
+  --text-sm:  13px;
+  --text-base: 15px;
+  --text-lg:  18px;
+  --text-xl:  21px;
+  --text-2xl: 26px;
+  --text-3xl: 34px;
+  --text-4xl: 44px;
+
+  /* ---- weight. Lausanne runs 50–1000; four steps is enough to build a
+         hierarchy and keeps the loaded subset small. ---- */
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold: 600;
+  --weight-bold:    700;
+
+  /* ---- leading ---- */
+  --leading-tight:   1.12;
+  --leading-snug:    1.32;
+  --leading-normal:  1.55;
+  --leading-relaxed: 1.7;
+
+  /* ---- tracking. Lausanne is wide at display sizes and wants negative
+         tracking above ~24px; small caps-ish labels want the opposite. ---- */
+  --tracking-tight:  -0.022em;
+  --tracking-snug:   -0.012em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.06em;
+
+  /* ---- rhythm ---- */
+  --measure: 720px;
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 72px;
+}
+
+/* shadcn sets its own family on body; this keeps the token authoritative */
+body { font-family: var(--font-sans); font-size: var(--text-sm); }
+.mono, code, pre, kbd { font-family: var(--font-mono); }

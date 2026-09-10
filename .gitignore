@@ -1,0 +1,34 @@
+# ---- vendored upstream checkouts -------------------------------------------
+# Apple's SHARP and the antimatter15 splat viewer are cloned, not authored here.
+# Both carry their own .git and their own licences; see the week README for the
+# clone commands that restore them.
+/ml-sharp/
+/splat-viewer/
+
+# ---- reconstruction output --------------------------------------------------
+# One SHARP run is ~1 GB of Gaussians plus several GB of scored renders. The
+# metadata beside them (run.json, grid_stats.json, panel_*.json, fine_metrics)
+# is small, is what the app and the figures actually read, and IS committed.
+*.ply
+*.splat
+**/renders_*/
+
+# ---- derived ---------------------------------------------------------------
+**/_thumbs/
+week-*/sharp-studio/data/uploads/
+week-*/sharp-studio/data/scenes/
+week-*/sharp-studio/data/thumbs/
+
+# ---- licensed binaries -----------------------------------------------------
+# TWK Lausanne is licensed to the author, not to this repository.
+shared/ui/fonts/*.woff2
+shared/ui/fonts/*.woff
+shared/ui/fonts/*.otf
+shared/ui/fonts/*.ttf
+
+# ---- environments and noise -------------------------------------------------
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/

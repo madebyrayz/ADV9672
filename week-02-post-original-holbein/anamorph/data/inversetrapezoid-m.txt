@@ -1,0 +1,281 @@
+
+						%————————————————————————–
+
+%  inverseTrapezoid.m
+
+%  Alexander Boxer 2012
+
+%————————————————————————– 
+%—– Load the image
+
+A = imread(‘~/Desktop/Holbein.jpg’);
+%—– Flip the image to an xy coordinate system
+
+A(:,:,1) = flipud(A(:,:,1));
+
+A(:,:,2) = flipud(A(:,:,2));
+
+A(:,:,3) = flipud(A(:,:,3));
+%—– Set the painting size-parameters
+
+Lx = 2095; % the length of the painting in mm
+
+Ly = 2070; % the height of the painting in mm
+
+x0 = Lx/2; % location of painting’s central axis
+
+y0 = Ly/2; % vertical height of viewer’s eye
+
+resolution = 2; 
+%————————————————————————–
+
+%—– Map the image onto an xy mesh-grid and mark key points
+
+%————————————————————————–
+
+xx = linspace(0,Lx,size(A,2));
+
+yy = linspace(0,Ly,size(A,1));
+
+[X1,Y1] = meshgrid(xx,yy);
+%—– Reshape the xy-meshgrid to a 2 1xN arrays
+
+N = numel(X1);
+
+x1 = reshape(X1,1,N);
+
+y1 = reshape(Y1,1,N);
+
+z1 = zeros(1,N);
+
+P0 = [x1;y1;z1];
+%—– Mark the corners of the painting
+
+c1 = [0;0;0]; % lower-left corner of the painting
+
+c2 = [0;Ly;0]; % upper-left corner of the painting
+
+c3 = [Lx;Ly;0]; % upper-right corner of the painting
+
+c4 = [Lx;0;0]; % lower-right corner of the painting
+
+C0 = [c1,c2,c3,c4]; 
+%—– Mark points on the skull
+
+s1 = [661;0;0]; % chin, lower left corner
+
+s2 = [615;58;0]; % left eye-socket, left extremum
+
+s3 = [1083.2;337;0]; % top mid-point
+
+s4 = [1530;472;0]; % right extremum
+
+s5 = [1210;257;0]; % corner of jawbone
+
+S0 = [s1,s2,s3,s4,s5];
+%—– Set parameters D and d
+
+jawTan = (s5(2)-s1(2))/(s5(1)-s1(1));
+
+jawAngle1 = atand(jawTan);
+
+D = s1(1) + y0/jawTan – x0; % endpoint corresponds to point ‘S’
+
+d = 257.88; % endpoint corresponds to point ‘O’
+%————————————————————————–
+
+%—– Convert the 3xN matrices to 4xN matrices
+
+%————————————————————————–
+
+P = cat(1,P0,ones(1,length(P0)));
+
+C = cat(1,C0,ones(1,length(C0)));
+
+S = cat(1,S0,ones(1,length(S0)));
+%————————————————————————–
+
+%—– Transform the Coordinates
+
+%————————————————————————–
+
+disp(‘Transforming Coordinate Grid’)
+%—– 1. Make a matrix for a translation in xy to set the origin at (x0,y0)
+
+Txy = [1,0,0,-x0;
+
+       0,1,0,-y0;
+
+       0,0,1,0;
+
+       0,0,0,1];
+%—– 2. Make the inverse-trapezoid transformation matrix
+
+Mx = @(xy) d*xy(1,:)./(D-xy(1,:));
+
+My = @(xy) D*xy(2,:)./(D-xy(1,:));
+%—– Transform the coordinates
+
+x2 = Mx(Txy*P);
+
+y2 = My(Txy*P);
+cx2 = Mx(Txy*C);
+
+cy2 = My(Txy*C);
+sx2 = Mx(Txy*S);
+
+sy2 = My(Txy*S);
+clear x1 y1 z1 P0 P
+%————————————————————————–
+
+%—– Draw the RGB Interpolation Maps
+
+%————————————————————————–
+%—– Reshape the red, green and blue values to Nx1 arrays
+
+red1 = double(reshape(A(:,:,1),N,1));
+
+green1 = double(reshape(A(:,:,2),N,1));
+
+blue1 = double(reshape(A(:,:,3),N,1));
+%—– Draw the red, green and blue tri-scattered interpolation maps
+
+disp(‘Drawing red map’)
+
+tic
+
+redMap = TriScatteredInterp(x2′,y2′,red1);
+
+tau = toc;
+
+disp([‘Elapsed time: ‘,num2str(floor(tau/60)),’:’,num2str(mod(tau,60),’%02.0f’)])
+disp(‘Drawing green map’)
+
+tic
+
+greenMap = TriScatteredInterp(x2′,y2′,green1);
+
+tau = toc;
+
+disp([‘Elapsed time: ‘,num2str(floor(tau/60)),’:’,num2str(mod(tau,60),’%02.0f’)])
+disp(‘Drawing blue map’)
+
+tic
+
+blueMap = TriScatteredInterp(x2′,y2′,blue1);
+
+tau = toc;
+
+disp([‘Elapsed time: ‘,num2str(floor(tau/60)),’:’,num2str(mod(tau,60),’%02.0f’)])
+%—– Produce an XY mesh grid to contain the transformed image
+
+[X2,Y2] = meshgrid(floor(min(cx2)):resolution:ceil(max(cx2)),floor(min(cy2)):resolution:ceil(max(cy2)));
+
+clear A x2 y2 red1 green1 blue1
+%—– Interpolate the RGB data onto the new mesh grid
+
+disp(‘Interpolating red values’)
+
+tic
+
+red2 = uint8(round(redMap(X2,Y2)));
+
+tau = toc;
+
+disp([‘Elapsed time: ‘,num2str(floor(tau/60)),’:’,num2str(mod(tau,60),’%02.0f’)])
+
+clear redMap
+disp(‘Interpolating green values’)
+
+tic
+
+green2 = uint8(round(greenMap(X2,Y2)));
+
+tau = toc;
+
+disp([‘Elapsed time: ‘,num2str(floor(tau/60)),’:’,num2str(mod(tau,60),’%02.0f’)])
+
+clear greenMap
+disp(‘Interpolating blue values’)
+
+tic
+
+blue2 = uint8(round(blueMap(X2,Y2)));
+
+tau = toc;
+
+disp([‘Elapsed time: ‘,num2str(floor(tau/60)),’:’,num2str(mod(tau,60),’%02.0f’)])
+
+clear blueMap
+clear X2 Y2
+%————————————————————————–
+
+%—– Form the new RGB image
+
+%————————————————————————–
+
+B = uint8(zeros(size(red2,1),size(red2,2),3));
+
+B(:,:,1) = red2;
+
+B(:,:,2) = green2;
+
+B(:,:,3) = blue2;
+%————————————————————————–
+
+%—– Display and save the image
+
+%————————————————————————–
+%—– Initialize Figure Window and Axes —–
+
+close
+
+scrsz = get(0,’ScreenSize’);
+
+hMainFigure = figure(‘Position’,scrsz,’Color’,[1,1,1]);
+%—– Display the image
+
+xx = floor(min(cx2)):resolution:ceil(max(cx2));
+
+yy = floor(min(cy2)):resolution:ceil(max(cy2));
+
+image(xx,yy,B)
+
+axis xy
+
+axis image
+
+set(gca,’Visible’,’off’)
+%—– Display output values
+
+jawAngle = atand((sy2(5)-sy2(1))/(sx2(5)-sx2(1)));
+disp(‘ ‘)
+
+disp([‘D: ‘,num2str(D)]);
+
+disp([‘d: ‘,num2str(d)]);
+
+disp([‘jaw angle: ‘,num2str(jawAngle,’%3.4f’)])
+
+disp([‘skull width: ‘,num2str(max(sx2)-min(sx2))])
+
+disp([‘skull height: ‘,num2str(max(sy2)-min(sy2))])
+
+disp([‘delta_x: ‘,num2str(D+x0-Lx)]);
+
+disp([‘delta_y: ‘,num2str(y0)])
+
+disp([‘delta_z: ‘,num2str(d)])
+%—– Write the image to a file
+
+B(:,:,1) = flipud(B(:,:,1));
+
+B(:,:,2) = flipud(B(:,:,2));
+
+B(:,:,3) = flipud(B(:,:,3));
+str = [‘~/Desktop/I’,num2str(d),’.jpg’];
+
+imwrite(B,str,’jpg’)
+
+
+																	
