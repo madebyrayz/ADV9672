@@ -8,6 +8,9 @@ subdirectory rather than the domain root.
 
 The Lab needs the Gaussian files, which are far too large to publish, so the build
 marks itself and the app degrades that one tab instead of hanging on a dead fetch.
+
+Pages does not read docs/ from this repo, which is private; commit the build and run
+tools/deploy_site.sh to push it to the public site repo.
 """
 import json
 import re
