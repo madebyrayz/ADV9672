@@ -307,7 +307,7 @@ function createWorker(self) {
         console.timeEnd("sort");
 
         lastProj = viewProj;
-        self.forceSort = false;
+        forceSort = false;
         postMessage({ depthIndex, viewProj, vertexCount }, [
             depthIndex.buffer,
         ]);
@@ -488,6 +488,10 @@ function createWorker(self) {
         } else if (e.data.buffer) {
             buffer = e.data.buffer;
             vertexCount = e.data.vertexCount;
+            // runSort takes an unchanged count to mean unchanged data and keeps the old
+            // texture, but every SHARP run has the same number of splats, so a new
+            // buffer must say so itself.
+            lastVertexCount = -1;
         } else if (e.data.vertexCount) {
             vertexCount = e.data.vertexCount;
         } else if (e.data.view) {
