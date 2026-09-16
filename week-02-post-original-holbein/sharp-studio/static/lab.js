@@ -27,6 +27,11 @@ function toast(title, desc, kind = "") {
 // per deploy while still allowing caching in between.
 const BUILD_ID = document.querySelector('meta[name="build-id"]')?.content || "";
 const api = (path, body) => {
+  if (body && STATIC_BUILD && !bridged) {
+    // Pages serves files and nothing else; a POST would come back as an error page.
+    toast("Read-only copy", "Saving needs the local server.", "error");
+    return Promise.reject(new Error("read-only build"));
+  }
   const url = !body && BUILD_ID ? `${path}${path.includes("?") ? "&" : "?"}v=${BUILD_ID}` : path;
   return fetch(url, body ? { method: "POST", body: JSON.stringify(body) } : {}).then((r) => r.json());
 };
@@ -199,7 +204,7 @@ async function loadScene(id) {
   if (scene.depth_grid) viewer.setDepthMesh(scene.depth_grid, scene.f_px, scene.width, scene.height);
   buildOverlays(); renderViewpoints(); renderTrajectories();
   if (prevPose) { if (prevPose.fov == null) photoView(); else setPoseMM(prevPose.mm.dx, prevPose.mm.dy, prevPose.mm.dz, { target: prevPose.target === "free" ? "centre" : prevPose.target, fov: prevPose.fov }); }
-  if (STATIC_BUILD && !bridged) {
+  if (!scene.splat) {
     showLabNotice();
   } else if (state.loadedSplat !== scene.splat) {
     state.loadedSplat = scene.splat; $("stage-loading").hidden = false; $("stage-loading-text").textContent = "loading " + scene.label;
@@ -208,7 +213,7 @@ async function loadScene(id) {
       $("stage-loading-text").textContent = "sorting…";
     } catch (e) {
       state.loadedSplat = null;                       // let a later attempt retry this scene
-      if (STATIC_BUILD) { showLabNotice(); } else { toast("Could not load scene", e.message, "error"); $("stage-loading").hidden = true; }
+      if (STATIC_BUILD) { showLabNotice(e); } else { toast("Could not load scene", e.message, "error"); $("stage-loading").hidden = true; }
     }
   }
   if (state.view === "lab") writeUrl("lab", false);
@@ -233,6 +238,7 @@ function renderViewpoints() {
   if (state.savedViewpoints.length) { const h = document.createElement("div"); h.className = "row-between text-xs text-muted"; h.style.margin = "6px 0 2px"; h.innerHTML = `<span>Saved</span>`; el.appendChild(h); }
   for (const p of state.savedViewpoints) el.appendChild(vpRow({ color: p.color || "#f472b6", name: p.name, sub: `${p.dx.toFixed(0)}, ${p.dy.toFixed(0)}, ${p.dz.toFixed(0)}`, onclick: () => goToViewpoint(p), onremove: async () => { state.savedViewpoints = state.savedViewpoints.filter((q) => q !== p); await api("/api/lab/viewpoints", { viewpoints: state.savedViewpoints }); renderViewpoints(); buildOverlays(); } }));
   const add = document.createElement("button"); add.className = "btn btn-outline btn-xs"; add.textContent = "+ save current view"; add.style.marginTop = "4px";
+  if (STATIC_BUILD && !bridged) { add.disabled = true; add.dataset.tip = "Needs the local server"; }
   add.onclick = async () => { const name = prompt("Name for this viewpoint"); if (!name) return; const cur = currentPoseMM();
     state.savedViewpoints.push({ id: "vp-" + Date.now(), name, dx: +cur.dx.toFixed(1), dy: +cur.dy.toFixed(1), dz: +cur.dz.toFixed(1), target: state.targetMode, fov: +effectiveFovDeg().toFixed(1), mode: state.mode, scene: scene.id, saved: new Date().toISOString().slice(0, 10), color: "#f472b6" });
     await api("/api/lab/viewpoints", { viewpoints: state.savedViewpoints }); renderViewpoints(); buildOverlays(); toast("Viewpoint saved", name); };
@@ -528,12 +534,11 @@ for (const cb of document.querySelectorAll("[data-hud]")) {
   });
 }
 
-function showLabNotice() {
+function showLabNotice(err) {
   $("stage-loading").hidden = false;
-  $("stage-loading").innerHTML = `<div class="stage-note"><b>The Lab needs a local server.</b>
-    <span>Reconstructions run to about a gigabyte each, so they are not published. Method, Log and Report are complete here.
-    Start <code>sharp-studio/server.py</code> on this machine and reload: the page will find it on
-    <code>localhost:8765</code> and the Lab will work from this URL.</span></div>`;
+  $("stage-loading").innerHTML = `<div class="stage-note"><b>This reconstruction could not be loaded.</b>
+    <span>${err ? `${err.message}. ` : ""}Each scene is about 36 MB; check the connection and pick the scene again.
+    Method, Log and Report do not depend on it.</span></div>`;
 }
 
 // Essay figures open in the viewer; the reading column caps their width.
@@ -836,11 +841,11 @@ async function runDocSet(items, folder = "docs") {
   return out;
 }
 
-// A published copy has no server behind it, so the Lab's Gaussian files and every
-// write route are absent. Say so plainly rather than leaving the stage spinning.
+// A published copy has no server behind it: the Gaussian files are published beside
+// the page, but every write route is absent, so the Lab is read-only there.
 const STATIC_BUILD = document.querySelector('meta[name="build"]')?.content === "static";
 // A published copy can borrow a local server when one happens to be running on the same
-// machine, which is the only way the Lab has reconstructions to draw. Everything else on
+// machine, which brings back capture, recording and reconstruction. Everything else on
 // the page keeps coming from the published files.
 // Both spellings are tried: some browser policies treat the loopback name and the
 // literal address differently when the page itself came from a remote origin.
@@ -873,7 +878,7 @@ const rebase = (v) => typeof v === "string" ? (v.startsWith("/") ? LOCAL_ORIGIN 
   : v;
 if (STATIC_BUILD) {
   document.body.classList.add("static-build");
-  for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record"]) {
+  for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record", "kf-save", "log-snapshot", "report-save", "btn-delete-run"]) {
     const el = $(id); if (el) { el.disabled = true; el.dataset.tip = "Needs the local server"; }
   }
 }
@@ -883,7 +888,7 @@ if (STATIC_BUILD) {
   M = bridged ? rebase(await (await fetch(`${LOCAL_ORIGIN}/api/lab/scenes`)).json()) : await api("/api/lab/scenes");
   if (bridged) {
     document.body.classList.remove("static-build");
-    for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record"]) {
+    for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record", "kf-save", "log-snapshot", "report-save", "btn-delete-run"]) {
       const el = $(id); if (el) { el.disabled = false; delete el.dataset.tip; }
     }
   }

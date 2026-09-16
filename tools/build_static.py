@@ -6,11 +6,14 @@ snapshots every read-only API response to a file at the same path and rewrites t
 app's absolute URLs to relative ones, since a project site is served from a
 subdirectory rather than the domain root.
 
-The Lab needs the Gaussian files, which are far too large to publish, so the build
-marks itself and the app degrades that one tab instead of hanging on a dead fetch.
+The Lab's Gaussian files, about 36 MB a scene, are copied in under splats/ so the
+published Lab can draw every scene. They match this repo's *.splat ignore rule, so they
+never enter its history; tools/deploy_site.sh copies docs/ whole, ignored files
+included, into the public site repo. The write routes have no static equivalent, and
+the build marks itself so the app runs read-only.
 
 Pages does not read docs/ from this repo, which is private; commit the build and run
-tools/deploy_site.sh to push it to the public site repo.
+tools/deploy_site.sh to publish it.
 """
 import json
 import re
@@ -108,6 +111,21 @@ def main() -> None:
         sc["group"] = "Reference"
     manifest["scenes"] += server.user_run_scenes()
     manifest["user_runs"] = server.user_runs_status()
+    # The server names each scene's Gaussians by where the run left them; the site keeps
+    # one flat folder named by scene id. The .ply beside each is not read by the client.
+    splat_bytes = 0
+    (DOCS / "splats").mkdir(parents=True)
+    for sc in manifest["scenes"]:
+        src = ANAMORPH / sc["splat"].removeprefix("/anamorph/")
+        if not src.exists():
+            print(f"  no splat for {sc['id']}: {src}", file=sys.stderr)
+            sc["splat"] = None
+            continue
+        dst = DOCS / "splats" / f"{sc['id']}.splat"
+        shutil.copy2(src, dst)
+        splat_bytes += dst.stat().st_size
+        sc["splat"] = f"splats/{dst.name}"
+        sc["ply"] = None
     write("api/lab/scenes", manifest)
     write("api/lab/captures", {"captures": server.lab_index()})
     write("api/lab/user_runs", {"runs": server.user_runs_status()})
@@ -174,7 +192,8 @@ def main() -> None:
 
     (ROOT / SITE / ".nojekyll").touch()   # otherwise Pages hides paths beginning with an underscore
     write_index(ROOT / SITE)
-    print(f"docs/ built: {total} assets, {sum(f.stat().st_size for f in DOCS.rglob('*') if f.is_file()) / 1e6:.0f} MB")
+    size = sum(f.stat().st_size for f in DOCS.rglob("*") if f.is_file())
+    print(f"docs/ built: {total} assets, {(size - splat_bytes) / 1e6:.0f} MB, plus {len(manifest['scenes'])} splats, {splat_bytes / 1e6:.0f} MB")
 
 
 if __name__ == "__main__":

@@ -47,7 +47,7 @@ function renderMethod() {
   <h2 class="msub">A hallucinative facsimile of The Ambassadors</h2>
   <div class="mmeta">
     <span>10 September 2026</span>
-    <a class="mtag" href="https://github.com/madebyrayz/ADV9672/tree/main/week-02-post-original-holbein" target="_blank" rel="noopener">ADV9672 · Week 02 · reflection artifact</a>
+    <span class="mtag">ADV9672 · Week 02 · reflection artifact</span>
   </div>
   <figure class="mhead-fig">
     <img src="${HERO}" alt="Holbein's anamorphic skull seen from the viewing point that resolves it." />
@@ -203,7 +203,7 @@ ${F(9, "anamorph/figures/phase5_pairs.jpg",
 <li>Source image: <code>Holbein-ambassadors.jpg</code>, 1084 × 1069 px, the Wikimedia file Boxer worked from. Panel dimensions after the 1996 restoration${cite(8)}.</li>
 <li>All measurements, including those that failed, are recorded in <code>anamorph/findings.md</code>. Figures are drawn by <code>method_figures.py</code>; their drawing conventions follow the retroactive-photogrammetry plates in ${cite(12)}. The reproduction of Boxer's scripts is in <code>anamorph/boxer_repro/</code>.</li>
 <li>Model weights and inference code: <a href="https://github.com/apple/ml-sharp" target="_blank" rel="noopener">github.com/apple/ml-sharp</a>. Every run in this study used the released checkpoint with no fine-tuning.</li>
-<li>Source, measurements and this prototype: <a href="https://github.com/madebyrayz/ADV9672/tree/main/week-02-post-original-holbein" target="_blank" rel="noopener">github.com/madebyrayz/ADV9672</a>. Method, Log and Report run with no model installed; the Lab needs the SHARP checkpoint.</li>
+<li>Method, Log, Report and the Lab run from published files with no model installed; reconstructing a new view needs the SHARP checkpoint on a local machine.</li>
 </ol>
 </section>
 
