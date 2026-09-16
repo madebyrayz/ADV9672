@@ -323,25 +323,32 @@
       this.vertexCount = 0;
       const req = await fetch(url);
       if (!req.ok) throw new Error(`${req.status} unable to load ${url}`);
-      const total = +req.headers.get("content-length") || 0;
-      const chunks = [];
+      // content-length counts bytes on the wire. A host that compresses the transfer
+      // (GitHub Pages gzips .splat) reports the smaller number while the browser hands
+      // over the decoded body, so the header sizes the first allocation and the
+      // progress bar, and the buffer grows if the body outruns it.
+      const hint = +req.headers.get("content-length") || 0;
+      let data = new Uint8Array(hint || 1 << 24);
       let read = 0, lastPost = 0;
       const reader = req.body.getReader();
-      const data = total ? new Uint8Array(total) : null;
       while (true) {
         const { done, value } = await reader.read();
         if (done || token !== this.loadToken) break;
-        if (data) data.set(value, read); else chunks.push(value);
+        if (read + value.length > data.length) {
+          const grown = new Uint8Array(Math.max(data.length * 2, read + value.length));
+          grown.set(data.subarray(0, read));
+          data = grown;
+        }
+        data.set(value, read);
         read += value.length;
-        this.onProgress(total ? read / total : 0);
-        if (data && read - lastPost > 6e6) {
+        this.onProgress(hint ? Math.min(read / hint, 0.99) : 0);
+        if (read - lastPost > 6e6) {
           this.worker.postMessage({ buffer: data.buffer, vertexCount: Math.floor(read / 32) });
           lastPost = read;
         }
       }
       if (token !== this.loadToken) return false;
-      let buf = data ? data.buffer : new Blob(chunks).arrayBuffer && (await new Blob(chunks).arrayBuffer());
-      this.worker.postMessage({ buffer: buf, vertexCount: Math.floor(read / 32) });
+      this.worker.postMessage({ buffer: data.buffer, vertexCount: Math.floor(read / 32) });
       this.onProgress(1);
       return true;
     }
