@@ -467,13 +467,18 @@ function createWorker(self) {
         if (!sortRunning) {
             sortRunning = true;
             let lastView = viewProj;
-            runSort(lastView);
-            setTimeout(() => {
-                sortRunning = false;
-                if (lastView !== viewProj) {
-                    throttledSort();
-                }
-            }, 0);
+            try {
+                runSort(lastView);
+            } finally {
+                // A sort that throws would otherwise leave sortRunning set and the
+                // scene frozen at whatever was last drawn.
+                setTimeout(() => {
+                    sortRunning = false;
+                    if (lastView !== viewProj) {
+                        throttledSort();
+                    }
+                }, 0);
+            }
         }
     };
 

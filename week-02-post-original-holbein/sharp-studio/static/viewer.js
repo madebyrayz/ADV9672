@@ -327,15 +327,18 @@
       // (GitHub Pages gzips .splat) reports the smaller number while the browser hands
       // over the decoded body, so the header sizes the first allocation and the
       // progress bar, and the buffer grows if the body outruns it.
+      // Sized in whole 32-byte rows: the worker reads whatever it is handed as
+      // Float32Array, which rejects a byte length that is not a multiple of 4.
+      const rows = (n) => Math.ceil(n / 32) * 32;
       const hint = +req.headers.get("content-length") || 0;
-      let data = new Uint8Array(hint || 1 << 24);
+      let data = new Uint8Array(rows(hint || 1 << 24));
       let read = 0, lastPost = 0;
       const reader = req.body.getReader();
       while (true) {
         const { done, value } = await reader.read();
         if (done || token !== this.loadToken) break;
         if (read + value.length > data.length) {
-          const grown = new Uint8Array(Math.max(data.length * 2, read + value.length));
+          const grown = new Uint8Array(rows(Math.max(data.length * 2, read + value.length)));
           grown.set(data.subarray(0, read));
           data = grown;
         }
