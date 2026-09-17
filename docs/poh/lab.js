@@ -219,6 +219,8 @@ async function loadScene(id) {
   if (prevPose) { if (prevPose.fov == null) photoView(); else setPoseMM(prevPose.mm.dx, prevPose.mm.dy, prevPose.mm.dz, { target: prevPose.target === "free" ? "centre" : prevPose.target, fov: prevPose.fov }); }
   if (!scene.splat) {
     showLabNotice();
+  } else if (state.view !== "lab") {
+    state.pendingSplat = true;                       // fetched when the Lab is next shown
   } else if (state.loadedSplat !== scene.splat) {
     state.loadedSplat = scene.splat; $("stage-loading").hidden = false; $("stage-loading-text").textContent = "loading " + scene.label;
     try {
@@ -575,13 +577,25 @@ function showLightbox({ src, title = "", caption = "", meta = "" }) {
   $("lightbox-cap").textContent = caption; $("lightbox-cap").hidden = !caption;
   $("lightbox-open").href = src;
   const m = $("lightbox-meta"); m.textContent = meta; m.hidden = !meta;
-  $("lightbox").hidden = false;
+  present($("lightbox"));
   $("lightbox-close").focus();          // the close control takes focus, so Enter and Esc both dismiss
 }
+// A dialog plays its exit before it is hidden; reduced-motion users get the cut.
+function dismiss(box, then) {
+  if (box.hidden || box.classList.contains("closing")) return;
+  box.classList.add("closing");
+  // Runs once: from animationend, from the fallback timer, or not at all if the dialog was
+  // reopened in the meantime (opening clears the class).
+  const finish = () => { if (!box.classList.contains("closing")) return; box.classList.remove("closing"); box.hidden = true; then && then(); };
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { finish(); return; }
+  box.addEventListener("animationend", finish, { once: true });
+  setTimeout(finish, 260);
+}
+const present = (box) => { box.classList.remove("closing"); box.hidden = false; };
 function closeLightbox() {
   const box = $("lightbox");
   if (box.hidden) return;
-  box.hidden = true; $("lightbox-img").src = "";   // drop the decoded bitmap
+  dismiss(box, () => { $("lightbox-img").src = ""; });   // drop the decoded bitmap
   if (lightboxReturn && lightboxReturn.focus) lightboxReturn.focus();
   lightboxReturn = null;
 }
@@ -609,7 +623,7 @@ async function renderLog() {
     const card = document.createElement("div"); card.className = "card log-card";
     const pose = c.pose_mm ? `Δx ${Math.round(c.pose_mm.dx)} · Δy ${Math.round(c.pose_mm.dy)} · Δz ${Math.round(c.pose_mm.dz)}` : "";
     const kindBadge = c.kind === "recording" ? `recording · ${c.frames} fr` : c.kind === "user_run" ? `reconstruction · ${c.mode}` : c.mode;
-    card.innerHTML = `${c.kind === "recording" ? `<video src="anamorph/${c.file}" poster="anamorph/${c.thumb || ""}" controls muted loop></video>` : `<img alt="" />`}
+    card.innerHTML = `${c.kind === "recording" ? `<video src="anamorph/${c.file}" poster="anamorph/${c.thumb || ""}" controls muted loop preload="none"></video>` : `<img alt="" loading="lazy" decoding="async" />`}
       <div class="body"><div class="row-between"><span class="badge badge-outline">${c.scene || ""}</span><span class="badge badge-muted">${kindBadge}</span></div>
       <div>${pose}${c.fov_deg ? ` · fov ${Math.round(c.fov_deg)}°` : ""}</div><div class="text-muted">${c.tag || ""} · ${c.time}</div><div class="name">${c.file}</div>
       ${c.kind === "user_run" ? `<button class="btn btn-outline btn-xs open-run">Open</button>` : ""}
@@ -656,14 +670,14 @@ async function renderReports() {
   const f30 = sorted.find((r) => r.run.f35_mm === 30) || sorted[0];
 
   // ---- 1 ground truth
-  let g = section("1", "Ground truth and reproduction", "Establishes the reference answer. Boxer derived the viewing position from the panel by geometry; a Python port of his two MATLAB scripts reproduces every published figure to within 0.2 mm, which is what licenses the rest of the study to treat his coordinate as ground truth. Read the offsets between the four published points as the width of expert disagreement, not as error.");
+  let g = section("1", "Ground truth and reproduction", "This section establishes the reference answer. Boxer derived the viewing position from the panel by geometry, and a Python port of his two MATLAB scripts reproduces every published figure to within 0.2 mm, which is why the rest of the study treats his coordinate as ground truth. The offsets between the four published points show the range of expert disagreement rather than error.");
   const b = M.boxer;
   card(g, "Published viewing points (Δx, Δy, Δz mm)").innerHTML += `<table><tr><th>source</th><th>Δx</th><th>Δy</th><th>Δz</th></tr>${M.published_points.map((p) => `<tr><td>${p.name}</td><td>${p.dx}</td><td>${p.dy}</td><td>${p.dz}</td></tr>`).join("")}</table><p class="text-xs text-muted" style="margin-top:6px">1σ = 20 mm (Δx), 4 mm (Δz). Expert disagreement Boxer vs National Gallery: 13 mm, 138 mm.</p>`;
   card(g, "Boxer's construction (reproduced)").innerHTML += kvTable([["D (jaw through S)", `${b.D.toFixed(3)} mm`], ["d (aspect = 1)", `${b.d.toFixed(3)} mm`], ["S", `(${b.S_mm[0].toFixed(1)}, ${b.S_mm[1].toFixed(0)})`], ["O", `(${b.O_mm[0].toFixed(1)}, ${b.O_mm[1].toFixed(0)}, ${b.O_mm[2].toFixed(1)})`], ["Exact-perspective R, α", `${b.R_perspective} mm, ${b.alpha_perspective_deg}°`], ["Restored skull box", `${b.restored_box.size_mm} mm at (${b.restored_box.centre.join(", ")})`], ["Identity", "D = R / sin α, d = R cot α"]]);
   fig(g, "Restored skull: port beside Boxer's", "anamorph/boxer_repro/comparison_restored_skull.jpg", "", "Inverse trapezoid, exact perspective, and Boxer's OptimalSkull.jpg.");
 
   // ---- 2 flat model basin
-  g = section("2", "Perceptual basin of the flat model (Phase 1)", "Establishes how much positional error looking can absorb. The flat painting is projected from 13 700 eye positions and each skull crop scored four ways. The ratio column is the decisive one: it gives the area scoring within 5 % of the best, in multiples of Boxer's 2σ ellipse. Large ratios mean perception cannot localise the viewer even where geometry can.");
+  g = section("2", "Perceptual basin of the flat model (Phase 1)", "This section measures how much positional error looking can absorb. The flat painting is projected from 13 700 eye positions and each skull crop is scored four ways. The ratio column matters most: it gives the area scoring within 5 % of the best, in multiples of Boxer's 2σ ellipse. A large ratio means that perception cannot locate the viewer even where geometry can.");
   if (p1) { const rows = ["clip_skull", "clip_sim", "resemblance", "symmetry"].map((k) => [k, `${p1[k].peak.dx}, ${p1[k].peak.dz}`, p1[k].peak.value.toFixed(3), p1[k].above_95pct.area_mm2.toLocaleString(), Math.round(p1[k].above_95pct.area_mm2 / p1.ellipse_area_mm2)]);
     card(g, "Basins against Boxer's 2σ ellipse (1005 mm²)").innerHTML += `<table><tr><th>metric</th><th>peak Δx, Δz</th><th>value</th><th>area ≥95 % mm²</th><th>× ellipse</th></tr>${rows.map((r) => `<tr>${r.map((v) => `<td>${v}</td>`).join("")}</tr>`).join("")}</table>`;
     card(g, "Scores at the published points (flat model)").innerHTML += `<table><tr><th>point</th><th>resemblance</th><th>P(skull)</th><th>aspect</th><th>jaw °</th></tr>${Object.entries(p1.scores_at_published).map(([n, v]) => `<tr><td>${n}</td><td>${v.resemblance.toFixed(3)}</td><td>${v.clip_skull.toFixed(3)}</td><td>${v.aspect.toFixed(2)}</td><td>${v.jaw_deg.toFixed(1)}</td></tr>`).join("")}</table>`; }
@@ -678,7 +692,7 @@ async function renderReports() {
   fig(g, "Skull crops along Δz (top) and Δx (bottom)", M.phase1.contact_sheet, "span3");
 
   // ---- 3 SHARP reference runs
-  g = section("3", "Reference reconstructions (Phases 2–3)", "Tests whether the model recovers the same coordinate. SHARP reconstructs the photograph at thirteen assumed focal lengths; each reconstruction is then rendered across the Phase 1 grid and scored with a crop that follows the skull Gaussians rather than the panel position, since the model does not place the skull on the wall. \u0022Offset from O\u0022 is the residual against ground truth; \u0022empty at O\u0022 is the fraction of the tracked crop containing no geometry at Boxer's point.");
+  g = section("3", "Reference reconstructions (Phases 2–3)", "This section tests whether the model recovers the same coordinate. SHARP reconstructs the photograph at thirteen assumed focal lengths; each reconstruction is then rendered across the Phase 1 grid and scored with a crop that follows the skull Gaussians rather than the panel position, because the model does not place the skull on the wall. \u0022Offset from O\u0022 is the residual against ground truth; \u0022empty at O\u0022 is the fraction of the tracked crop that contains no geometry at Boxer's point.");
   const t = card(g, "Assumed lens → reconstruction → station point", "span3");
   let html = `<div class="scroll"><table><tr><th>lens mm</th><th>f_px</th><th>depth median m</th><th>relief mm</th><th>mm/unit</th><th>photo cam Δz</th><th>peak Δx</th><th>peak Δz</th><th>resemblance</th><th>offset from O mm</th><th>Δx/13</th><th>Δz/138</th><th>in 2σ</th><th>resemblance at O</th><th>empty at O</th></tr>`;
   for (const r of sorted) { const j = r.run, gs = r.grid_stats; const pv = j.panel_variants ? j.panel_variants.skull_frontoparallel : null; const rs = gs && gs.resemblance; const pk = rs ? rs.peak : null, dd = rs ? rs.displacement_from_boxer_mm : null, du = rs ? rs.displacement_in_expert_disagreement_units : null; const atO = gs && gs.scores_at_published["Boxer inverseTrapezoid.m"];
@@ -701,7 +715,7 @@ async function renderReports() {
   for (const s of M.scenes) if (s.id !== "sharp_wiki_f30" && s.figures && s.figures["sharp_basin.png"]) fig(det.querySelector(".rgrid"), `${s.f35_mm} mm`, s.figures["sharp_basin.png"]);
 
   // ---- 4 lens sweep
-  g = section("4", "The assumed lens (Phase 4)", "Isolates the one free parameter. With no EXIF the model assumes a 30 mm lens, so every metric depth it reports descends from that default. Sweeping the default from 5 to 200 mm shows depth is exactly linear in focal length while lateral scale is invariant — the metric output is a depth guess only. No setting moves the station point inside Boxer's ellipse.");
+  g = section("4", "The assumed lens (Phase 4)", "This section isolates the one free parameter. With no EXIF data the model assumes a 30 mm lens, so every metric depth it reports follows from that default. Sweeping the default from 5 to 200 mm shows that depth is exactly linear in focal length while lateral scale does not change: the metric output is a depth guess only. No setting moves the station point inside Boxer's ellipse.");
   const c2 = card(g, "Metric depth against assumed focal length");
   const pts = sorted.map((r) => ({ f: r.run.f35_mm, med: r.run.depth_m.median, p05: r.run.depth_m.p05, p95: r.run.depth_m.p95, relief: r.run.panel.relief_p95_minus_p05_mm / 1000 }));
   c2.appendChild(svgChart(560, 300, (add) => { const X = (f) => 60 + (Math.log10(f) - 0.6) * 460 / 1.75, Y = (v) => 260 - (Math.log10(v) + 0.6) * 220 / 1.9;
@@ -717,14 +731,14 @@ async function renderReports() {
   fig(g, "Depth maps per lens", "anamorph/figures/depth_strip.png", "span3", "Bright = near. The picture is the same; only the depth scale changes.");
 
   // ---- 5 orbits
-  g = section("5", "Orbits around SHARP's skull (30 mm)", "Checks whether any viewpoint at all resolves the reconstruction, not just those on Boxer's plane. 532 coarse poses plus a 440-pose refinement in the azimuth 50°–90° sector, scored on the same tracked crop. Collapse fraction counts poses where the crop is more than 15 % empty or its Laplacian variance falls below 30 % of the frontal view.");
+  g = section("5", "Orbits around SHARP's skull (30 mm)", "This section checks whether any viewpoint at all resolves the reconstruction, not only those on Boxer's plane. 532 coarse poses plus a 440-pose refinement in the azimuth 50°–90° sector are scored on the same tracked crop. The collapse fraction counts poses where the crop is more than 15 % empty or its Laplacian variance falls below 30 % of the frontal view.");
   if (f30s) { for (const k of ["orbit_contact_sheet_d700.jpg", "orbit_contact_sheet_d1400.jpg", "orbit_contact_sheet_d2000.jpg", "orbit_contact_sheet_d2800.jpg"]) if (f30s.figures[k]) fig(g, `Orbit contact sheet, ${k.match(/d(\d+)/)[1]} mm from the skull`, f30s.figures[k], "span3"); }
   fig(g, "Top 12 orbit poses by resemblance", "anamorph/runs/sharp_wiki_f30/orbit_top12.jpg", "span3", "Red box: the tracked skull crop.");
   fig(g, "Fine orbit surface", "anamorph/runs/sharp_wiki_f30/fine_surface.png", "span2");
   fig(g, "Fine orbit, top 12", "anamorph/runs/sharp_wiki_f30/fine_top12.jpg", "span3");
 
   // ---- 6 idolmorphosis
-  g = section("6", "Idolmorphosis (Phase 5)", "Runs the construction backwards as a control on the port. Model output is forward-transformed into the restored painting's 142 mm skull box using the same D = 1824.45 and d = 257.88, then composited into the panel. If the port is correct the streak lands exactly on Holbein's footprint and resolves only from the exact-perspective point — which is what the lower image of each pair shows.");
+  g = section("6", "Idolmorphosis (Phase 5)", "This section runs the construction backwards as a check on the port. Model output is forward-transformed into the restored painting's 142 mm skull box using the same D = 1824.45 and d = 257.88, then composited into the panel. If the port is correct, the streak lands exactly on Holbein's footprint and resolves only from the exact-perspective point, which is what the lower image of each pair shows.");
   // One column per source; each holds the streak in the painting above the same
   // streak seen from Boxer's O, where it resolves back into its square.
   for (const [title, stem] of [["Best pose", "sharp_best"], ["Torn render from O", "torn_from_O"], ["Depth map", "depth_skull"]]) {
@@ -733,7 +747,7 @@ async function renderReports() {
       const src = `anamorph/figures/${file}`, f = document.createElement("figure");
       const im = document.createElement("img"); im.src = src; im.alt = `${title}, ${label}`; im.loading = "lazy"; im.decoding = "async"; im.className = "zoomable";
       im.setAttribute("role", "button"); im.tabIndex = 0;
-      const open = () => showLightbox({ src, title: `${title} — ${label}`, caption: "Print files at 4 px/mm in figures/." });
+      const open = () => showLightbox({ src, title: `${title} · ${label}`, caption: "Print files at 4 px/mm in figures/." });
       im.onclick = open; im.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } };
       const cap = document.createElement("figcaption"); cap.className = "text-xs text-muted"; cap.textContent = label;
       f.append(im, cap); pair.appendChild(f);
@@ -742,13 +756,13 @@ async function renderReports() {
   }
 
   // ---- 7 test reconstructions
-  g = section("7", "Test reconstructions", "Removes the lens assumption. Each run feeds SHARP an image rendered inside the Lab, whose focal length is therefore known exactly rather than defaulted, and bridges the result from the render camera instead of an assumed plane. Column k is the scale ratio between the test bridge and the reference bridge.");
+  g = section("7", "Test reconstructions", "This section removes the lens assumption. Each run gives SHARP an image rendered inside the Lab, so the focal length is known exactly rather than assumed, and the result is bridged from the render camera instead of an assumed plane. Column k is the scale ratio between the test bridge and the reference bridge.");
   if (state.userRuns.length) { const u = card(g, "Runs", "span3"); u.innerHTML += `<div class="scroll"><table><tr><th>id</th><th>status</th><th>source</th><th>from (Δx, Δy, Δz)</th><th>fov</th><th>f_px</th><th>depth median m</th><th>relief mm</th><th>mm/unit</th><th>k</th><th>tag</th></tr>` +
     state.userRuns.map((r) => `<tr><td>${r.id}</td><td>${r.status}</td><td>${r.source}</td><td>${r.source_pose_mm ? `${r.source_pose_mm.dx.toFixed(0)}, ${r.source_pose_mm.dy.toFixed(0)}, ${r.source_pose_mm.dz.toFixed(0)}` : ""}</td><td>${r.fov_deg ? r.fov_deg.toFixed(0) : ""}</td><td>${r.f_px ? r.f_px.toFixed(0) : ""}</td><td>${r.depth_m ? r.depth_m.median.toFixed(2) : ""}</td><td>${r.relief_mm ? r.relief_mm.toFixed(0) : ""}</td><td>${r.panel ? r.panel.scale_mm_per_unit.toFixed(0) : ""}</td><td>${r.bridge ? r.bridge.k_sharp_per_ref.toFixed(2) : ""}</td><td>${r.tag || ""}</td></tr>`).join("") + "</table></div>"; }
   else card(g, "Runs").innerHTML += `<p class="text-xs text-muted">None yet.</p>`;
 
   // ---- 8 captures
-  g = section("8", "Captures and recordings", `Provenance for every frame reproduced in the essay. ${caps.length} entries, each a JPEG beside a JSON sidecar recording pose in both coordinate frames, field of view, view mode, active overlays and bridge parameters. The plan below shows where each was taken relative to the panel and the published points.`);
+  g = section("8", "Captures and recordings", `This section records the provenance of every frame reproduced in the essay. ${caps.length} entries, each a JPEG beside a JSON sidecar that records the pose in both coordinate frames, the field of view, the view mode, the active overlays and the bridge parameters. The plan below shows where each was taken relative to the panel and the published points.`);
   const c4 = card(g, "Where captures were taken", "span2");
   c4.appendChild(svgChart(760, 430, (add) => {
     // plan of the room: Δx along the wall, Δz out from it. Axes are drawn because the
@@ -830,7 +844,7 @@ function showView(v, opts = {}) {
   if (v === "log" && logDirty) requestAnimationFrame(() => renderLog().then(() => (logDirty = false)));
   if (v === "reports" && reportsDirty) requestAnimationFrame(() => renderReports().then(() => (reportsDirty = false)));
   if (v === "method" && !methodRendered) { renderMethod(); wireFigures(); methodRendered = true; }
-  if (v === "lab") viewer.resize();                  // cheap now: no-ops unless the stage actually changed size
+  if (v === "lab") { viewer.resize(); if (state.pendingSplat) { state.pendingSplat = false; loadScene(scene.id); } }
   if (!opts.silent) writeUrl(v, opts.push !== false);
 }
 addEventListener("popstate", () => {
@@ -842,8 +856,8 @@ const applyTheme = (t) => { document.documentElement.dataset.theme = t; try { lo
 try { if (localStorage.getItem("theme")) applyTheme(localStorage.getItem("theme")); } catch {}
 // A first visit gets the introduction, whichever page it lands on; the header's ? brings it back.
 const INTRO_KEY = "poh.intro.seen";
-const showIntro = () => { $("intro").hidden = false; $("intro-card").scrollTop = 0; $("intro-close").focus({ preventScroll: true }); };
-const hideIntro = () => { $("intro").hidden = true; try { localStorage.setItem(INTRO_KEY, "1"); } catch {} };
+const showIntro = () => { present($("intro")); $("intro-card").scrollTop = 0; $("intro-close").focus({ preventScroll: true }); };
+const hideIntro = () => { dismiss($("intro")); try { localStorage.setItem(INTRO_KEY, "1"); } catch {} };
 $("btn-help").onclick = showIntro;
 $("intro-close").onclick = hideIntro; $("intro-x").onclick = hideIntro;
 $("intro").addEventListener("click", (e) => { if (e.target.id === "intro") hideIntro(); });
@@ -919,8 +933,10 @@ if (STATIC_BUILD) {
 }
 
 (async () => {
-  bridged = await findLocalServer();
-  M = bridged ? rebase(await (await fetch(`${LOCAL_ORIGIN}/api/lab/scenes`)).json()) : await api("api/lab/scenes");
+  // The probe and the published manifest run side by side; the probe only decides which manifest is used.
+  const [found, published] = await Promise.all([findLocalServer(), api("api/lab/scenes")]);
+  bridged = found;
+  M = bridged ? rebase(await (await fetch(`${LOCAL_ORIGIN}/api/lab/scenes`)).json()) : published;
   if (bridged) {
     document.body.classList.remove("static-build");
     for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record", "kf-save", "log-snapshot", "report-save", "btn-delete-run"]) {
@@ -933,11 +949,13 @@ if (STATIC_BUILD) {
   state.savedViewpoints = (await api("api/lab/viewpoints")).viewpoints || []; state.savedTrajs = (await api("api/lab/trajectories")).trajectories || []; state.userRuns = M.user_runs || [];
   sceneOptions(); renderUserRuns();
   $("engine-pill").dataset.state = "ready"; $("engine-text").textContent = `${M.scenes.length} scenes`;
-  // read the requested view before loadScene, which rewrites the query string itself
+  // The requested page is shown before the scene loads, so the essay paints at once and its
+  // reader is not charged 36 MB for a Lab they have not opened.
   const wanted = SLUG_VIEW[new URLSearchParams(location.search).get("view")];
+  if (wanted && wanted !== "lab") showView(wanted, { push: false });
   await loadScene(new URLSearchParams(location.search).get("scene") || "sharp_wiki_f30");
   photoView(); setMode("sharp");
-  if (wanted && wanted !== "lab") showView(wanted, { push: false }); else writeUrl("lab", false);
+  if (!wanted || wanted === "lab") writeUrl("lab", false);
   let seen = false; try { seen = !!localStorage.getItem(INTRO_KEY); } catch {}
   if (!seen) showIntro();
   state.captures = (await api("api/lab/captures")).captures; renderRecent();

@@ -400,3 +400,18 @@ body.static-build #btn-capture, body.static-build #btn-run-sharp-top { display: 
   .toaster { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); }
   .toast { width: auto; }
 }
+
+/* ================= motion ================= */
+/* Pages fade up as they arrive; dialogs fade and settle in, and play the same in reverse on the way out. */
+@keyframes page-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes pop-out { to { opacity: 0; transform: scale(.97); } }
+.page:not([hidden]) { animation: page-in .22s ease; }
+.dialog-backdrop.closing { animation: fade-out .18s ease forwards; pointer-events: none; }
+.dialog-backdrop.closing > * { animation: pop-out .18s ease forwards; }
+.lightbox-panel { animation: pop .18s ease; }
+.toast { animation: slidein .22s cubic-bezier(.2, .8, .2, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .page:not([hidden]), .dialog-backdrop, .dialog-backdrop.closing, .dialog-backdrop.closing > *, .lightbox-panel, .intro-card, .toast { animation: none; }
+  #sidebar, #inspector, .drawer-scrim { transition: none; }
+}
