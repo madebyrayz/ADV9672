@@ -840,13 +840,14 @@ addEventListener("popstate", () => {
 document.querySelectorAll("[data-view]").forEach((a) => (a.onclick = (e) => { e.preventDefault(); showView(a.dataset.view); }));
 const applyTheme = (t) => { document.documentElement.dataset.theme = t; try { localStorage.setItem("theme", t); } catch {} };
 try { if (localStorage.getItem("theme")) applyTheme(localStorage.getItem("theme")); } catch {}
-// A first visit to the Lab gets the card in the corner of the stage; the header's ? brings it back.
+// A first visit gets the introduction, whichever page it lands on; the header's ? brings it back.
 const INTRO_KEY = "poh.intro.seen";
 const showIntro = () => { $("intro").hidden = false; $("intro-card").scrollTop = 0; $("intro-close").focus({ preventScroll: true }); };
 const hideIntro = () => { $("intro").hidden = true; try { localStorage.setItem(INTRO_KEY, "1"); } catch {} };
 $("btn-help").onclick = showIntro;
 $("intro-close").onclick = hideIntro; $("intro-x").onclick = hideIntro;
-$("intro").addEventListener("keydown", (e) => { if (e.key === "Escape") hideIntro(); });
+$("intro").addEventListener("click", (e) => { if (e.target.id === "intro") hideIntro(); });
+$("intro").addEventListener("keydown", (e) => { if (e.key === "Escape") { e.stopPropagation(); hideIntro(); } });
 $("btn-theme").onclick = () => applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
 window.addEventListener("keydown", (e) => {
   if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) { if (e.key === "Escape") closeLightbox(); return; }
@@ -938,7 +939,7 @@ if (STATIC_BUILD) {
   photoView(); setMode("sharp");
   if (wanted && wanted !== "lab") showView(wanted, { push: false }); else writeUrl("lab", false);
   let seen = false; try { seen = !!localStorage.getItem(INTRO_KEY); } catch {}
-  if (!seen && state.view === "lab") showIntro();
+  if (!seen) showIntro();
   state.captures = (await api("api/lab/captures")).captures; renderRecent();
   if (state.userRuns.some((r) => r.status === "queued" || r.status === "running")) pollUserRuns();
   window.lab = { state, viewer, setPoseMM, capture, loadScene, trajectories, applyTraj, selectTraj, currentPoseMM, setMode, setFov, runDocSet, recordTraj, photoView, runSharpFromHere, goToViewpoint, refreshManifest };

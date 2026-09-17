@@ -129,20 +129,11 @@
       <div class="float float-bl" data-float>
         <div class="minimap-wrap"><canvas id="minimap" width="280" height="210"></canvas><button id="minimap-toggle" class="btn btn-ghost btn-xs" data-tip="Collapse map">▾ plan view</button></div>
       </div>
-      <div id="intro" class="intro" hidden>
-        <div id="intro-card" class="intro-card" role="dialog" aria-labelledby="intro-title">
-          <div class="intro-head"><span id="intro-title" class="intro-label">The Post-Original Holbein &middot; Lab</span><button id="intro-x" class="btn btn-ghost btn-icon btn-xs" aria-label="Close">&#x2715;</button></div>
-          <p>To observe the skull depicted by Holbein, one must stand at a specific vantage point within the Renaissance collection at the National Gallery. This optimal viewing position can be accurately reconstructed from the panel through precise geometrical analysis, achieving millimeter-level accuracy as demonstrated by <i>Idols of the Cave</i>. However, the objective of this study is to utilize a predictive regression model to perform reverse engineering of the position that most closely approximates the &ldquo;imaginary position&rdquo; from which Holbein was situated during the creation of the painting.</p>
-          <p>The model is SHARP, Apple&rsquo;s single-image reconstruction network. Given one photograph of the painting and nothing else, it returns the depicted room as about 1.2 million Gaussian splats: small coloured ellipsoids that, drawn together, form a surface the camera can move through. The photograph carries no camera data, so the model assumes a 30 mm lens and derives every metre from that assumption; the study sweeps the assumed lens from 5 to 200 mm and keeps each result as a scene. A stated bridge converts the model&rsquo;s metres into panel millimetres, which places the reconstruction in the same room as Boxer&rsquo;s geometry and lets the position it favours be compared with the published one.</p>
-          <p>Drag to orbit; scroll or pinch to move closer; <i>Photo</i> returns to the camera the model assigned to the photograph. The viewpoints on the left (the <i>Scene</i> button on a phone) set the eye to each published position, and <i>Boxer anamorphic.m</i> is the one from which the skull should resolve. The scene menu switches between assumed lenses, and the view modes set the reconstruction beside the flat panel. <i>Method</i> holds the essay, <i>Log</i> the captures, <i>Report</i> the measurements.</p>
-          <div class="intro-foot"><span class="text-xs text-muted">Viewing copy: nothing done here is saved.</span><button id="intro-close" class="btn btn-sm">Got it</button></div>
-        </div>
-      </div>
       <div class="drawer-scrim" data-drawer="close"></div>
       <div class="stage-bar" data-float>
-        <button class="btn btn-secondary btn-sm" data-drawer="left">Scene</button>
-        <button class="btn btn-secondary btn-sm" data-drawer="right">Camera</button>
-        <button id="btn-reset-m" class="btn btn-secondary btn-sm">Photo</button>
+        <button class="bar-btn" data-drawer="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg><span>Scene</span></button>
+        <button class="bar-btn" data-drawer="right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M4 16v2a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v2M16 20h2a2 2 0 0 0 2-2v-2"/><circle cx="12" cy="12" r="3"/></svg><span>Camera</span></button>
+        <button id="btn-reset-m" class="bar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Photo</span></button>
       </div>
       <div class="float float-br" data-float><span class="hud-hint text-xs text-muted"><span class="kbd">S</span> capture · <span class="kbd">H</span> clean · <span class="kbd">C</span> view · <span class="kbd">R</span> photo · drag orbit · ⇧ pan · wheel dolly · <span class="kbd">W A S D Q E</span></span></div>
     </div>
@@ -228,6 +219,19 @@
 </main>
 
 <div id="toaster" class="toaster" aria-live="polite"></div>
+<div id="intro" class="dialog-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
+  <div id="intro-card" class="intro-card">
+    <div class="intro-head"><span id="intro-title" class="intro-label">The Post-Original Holbein</span><button id="intro-x" class="btn btn-ghost btn-icon btn-xs" aria-label="Close">&#x2715;</button></div>
+    <p>To observe the skull depicted by Holbein, one must stand at a specific vantage point within the Renaissance collection at the National Gallery. This optimal viewing position can be accurately reconstructed from the panel through precise geometrical analysis, achieving millimeter-level accuracy as demonstrated by <i>Idols of the Cave</i>. However, the objective of this study is to utilize a predictive regression model to perform reverse engineering of the position that most closely approximates the &ldquo;imaginary position&rdquo; from which Holbein was situated during the creation of the painting.</p>
+    <p>The model is SHARP, Apple&rsquo;s single-image reconstruction network. From one photograph it builds the room in the painting as about 1.2 million Gaussian splats, a cloud of small coloured ellipsoids the camera can move through. The photograph carries no camera data, so the model assumes a 30 mm lens, and every metre it reports follows from that guess. The study repeats the reconstruction at lenses from 5 to 200 mm and converts each into panel millimetres, so the position the model favours can be set beside the one geometry gives.</p>
+    <ul>
+      <li><b>Look around.</b> Drag to turn, scroll or pinch to move closer. <i>Photo</i> returns to where the photograph was taken.</li>
+      <li><b>Jump to a spot.</b> Pick a viewpoint from the list on the left (the <i>Scene</i> button on a phone). <i>Boxer anamorphic.m</i> is where the skull should resolve.</li>
+      <li><b>Read the rest.</b> <i>Method</i> is the essay. <i>Log</i> and <i>Report</i> are the measurements behind it.</li>
+    </ul>
+    <div class="intro-foot"><button id="intro-close" class="btn btn-sm">Got it</button></div>
+  </div>
+</div>
 <div id="lightbox" class="dialog-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
   <div class="lightbox-panel">
     <div class="lightbox-head">
