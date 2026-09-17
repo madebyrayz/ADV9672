@@ -840,13 +840,12 @@ addEventListener("popstate", () => {
 document.querySelectorAll("[data-view]").forEach((a) => (a.onclick = (e) => { e.preventDefault(); showView(a.dataset.view); }));
 const applyTheme = (t) => { document.documentElement.dataset.theme = t; try { localStorage.setItem("theme", t); } catch {} };
 try { if (localStorage.getItem("theme")) applyTheme(localStorage.getItem("theme")); } catch {}
-// First visit to the Lab gets the card; the header's ? brings it back.
+// A first visit to the Lab gets the card in the corner of the stage; the header's ? brings it back.
 const INTRO_KEY = "poh.intro.seen";
-const showIntro = () => { $("intro").hidden = false; $("intro-close").focus(); };
+const showIntro = () => { $("intro").hidden = false; $("intro-card").scrollTop = 0; $("intro-close").focus({ preventScroll: true }); };
 const hideIntro = () => { $("intro").hidden = true; try { localStorage.setItem(INTRO_KEY, "1"); } catch {} };
 $("btn-help").onclick = showIntro;
-$("intro-close").onclick = hideIntro;
-$("intro").addEventListener("click", (e) => { if (e.target === $("intro")) hideIntro(); });
+$("intro-close").onclick = hideIntro; $("intro-x").onclick = hideIntro;
 $("intro").addEventListener("keydown", (e) => { if (e.key === "Escape") hideIntro(); });
 $("btn-theme").onclick = () => applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
 window.addEventListener("keydown", (e) => {

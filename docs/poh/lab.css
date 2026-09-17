@@ -252,20 +252,22 @@ body.clean .stage { border: 0; border-radius: 0; }
 .rpair figure { margin: 0; }
 .rpair figcaption { margin-top: 4px; }
 
-/* the intro card, over the stage */
-.intro { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; padding: 16px;
-  background: rgb(0 0 0 / .45); backdrop-filter: blur(2px); }
+/* the intro card, in the corner of the stage; the stage stays live behind it */
+.intro { position: absolute; right: 10px; bottom: 10px; z-index: 8; width: min(480px, calc(100% - 20px)); max-height: calc(100% - 20px); display: flex; }
 .intro[hidden] { display: none; }
-.intro-card { width: min(460px, 100%); max-height: 100%; overflow: auto; padding: 20px 22px 18px; border: 1px solid hsl(var(--border));
-  border-radius: var(--radius); background: hsl(var(--card)); box-shadow: var(--shadow-lg);
-  font-size: var(--text-sm); line-height: var(--leading-normal); color: hsl(var(--muted-foreground)); }
-.intro-card h2 { font-size: var(--text-base); font-weight: var(--weight-semibold); color: hsl(var(--foreground)); margin: 0 0 8px; }
-.intro-card p { margin: 0 0 12px; }
-.intro-card ul { margin: 0 0 14px; padding-left: 18px; }
-.intro-card li { margin-bottom: 6px; }
-.intro-card b { color: hsl(var(--foreground)); font-weight: var(--weight-semibold); }
-.intro-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-@media (max-width: 768px) { .intro-card { padding: 16px; } .intro-foot { flex-direction: column; align-items: stretch; } }
+.intro-card { flex: 1; min-height: 0; overflow: auto; padding: 14px 18px 14px; border: 1px solid hsl(var(--border));
+  border-radius: var(--radius); background: hsl(var(--card) / .96); backdrop-filter: blur(8px); box-shadow: var(--shadow-lg);
+  font-size: var(--text-sm); line-height: var(--leading-normal); color: hsl(var(--foreground)); }
+.intro-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 -6px 8px 0; }
+.intro-label { font-size: var(--text-xs); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.intro-card p { margin: 0 0 10px; }
+.intro-card i { font-style: italic; }
+.intro-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+@media (max-width: 768px) {
+  .intro { left: 10px; right: 10px; bottom: calc(54px + env(safe-area-inset-bottom)); width: auto; max-height: 62%; }
+  .intro-card { padding: 12px 14px; }
+  .intro-foot { flex-direction: column; align-items: stretch; }
+}
 
 /* published copy: read-only, so the controls that write are replaced by a line saying where they run */
 .static-note { display: none; }
