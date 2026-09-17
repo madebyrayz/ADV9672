@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
 <meta name="build" content="static" />
-<meta name="build-id" content="20260916211134" />
+<meta name="build-id" content="20260916215414" />
 <meta charset="utf-8" />
 <title>The Post-Original Holbein</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<link rel="stylesheet" href="ui/components.css?v=20260916211134" />
-<link rel="stylesheet" href="ui/tokens.css?v=20260916211134" />
-<link rel="stylesheet" href="lab.css?v=20260916211134" />
+<link rel="icon" href="ui/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="ui/favicon.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="ui/apple-touch-icon.png" />
+<link rel="stylesheet" href="ui/components.css?v=20260916215414" />
+<link rel="stylesheet" href="ui/tokens.css?v=20260916215414" />
+<link rel="stylesheet" href="lab.css?v=20260916215414" />
 </head>
 <body>
 
@@ -31,6 +34,7 @@
       <button id="btn-capture" class="btn btn-sm" data-tip="Capture (S)">Capture</button>
     </div>
     <!-- Global -->
+    <button id="btn-help" class="btn btn-ghost btn-icon btn-sm" data-tip="What is this?" aria-label="What is this?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></button>
     <button id="btn-theme" class="btn btn-ghost btn-icon btn-sm" data-tip="Theme" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg></button>
   </div>
 </header>
@@ -126,6 +130,19 @@
       <div class="float float-tr" data-float><span id="fps" class="badge badge-muted mono">— fps</span></div>
       <div class="float float-bl" data-float>
         <div class="minimap-wrap"><canvas id="minimap" width="280" height="210"></canvas><button id="minimap-toggle" class="btn btn-ghost btn-xs" data-tip="Collapse map">▾ plan view</button></div>
+      </div>
+      <div id="intro" class="intro" hidden>
+        <div class="intro-card" role="dialog" aria-labelledby="intro-title">
+          <h2 id="intro-title">Welcome to the Lab</h2>
+          <p>A computer model has guessed the 3D shape of Holbein's painting <i>The Ambassadors</i> from a single photograph.
+            The smear across the bottom is a skull that only looks right from one spot in the room. Here you can stand anywhere and check.</p>
+          <ul>
+            <li><b>Look around.</b> Drag to turn, scroll or pinch to move closer. <i>Photo</i> takes you back to where the photograph was taken.</li>
+            <li><b>Jump to a spot.</b> Pick a viewpoint from the list on the left (the <i>Scene</i> button on a phone). <i>Boxer anamorphic.m</i> is where the skull should snap into shape.</li>
+            <li><b>Read the rest.</b> <i>Method</i> is the essay. <i>Log</i> and <i>Report</i> are the measurements behind it.</li>
+          </ul>
+          <div class="intro-foot"><span class="text-xs text-muted">This is a viewing copy: look all you like, nothing is saved.</span><button id="intro-close" class="btn btn-sm">Got it</button></div>
+        </div>
       </div>
       <div class="drawer-scrim" data-drawer="close"></div>
       <div class="stage-bar" data-float>
@@ -233,9 +250,9 @@
 </div>
 </div>
 
-<script src="splat-core.js?v=20260916211134"></script>
-<script src="viewer.js?v=20260916211134"></script>
-<script src="method.js?v=20260916211134"></script>
-<script src="lab.js?v=20260916211134"></script>
+<script src="splat-core.js?v=20260916215414"></script>
+<script src="viewer.js?v=20260916215414"></script>
+<script src="method.js?v=20260916215414"></script>
+<script src="lab.js?v=20260916215414"></script>
 </body>
 </html>

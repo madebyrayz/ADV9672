@@ -67,6 +67,9 @@ def write_index(site: pathlib_Path) -> None:
 <html lang="en"><head><meta charset="utf-8" />
 <title>ADV9672</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="poh/ui/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="poh/ui/favicon.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="poh/ui/apple-touch-icon.png" />
 <style>
   :root { color-scheme: light dark; --ink:#111; --dim:#6b6b6b; --line:#e2e0dc; --bg:#f4f2ed; }
   @media (prefers-color-scheme: dark) { :root { --ink:#f2f2f2; --dim:#8d8d8d; --line:#262626; --bg:#0a0a0a; } }
@@ -175,7 +178,7 @@ def main() -> None:
     # --- absolute URLs become relative, and the build marks itself
     index = DOCS / "index.html"
     html = index.read_text()
-    html = html.replace('<link rel="stylesheet" href="/ui/', '<link rel="stylesheet" href="ui/')
+    html = re.sub(r'(<link[^>]*href=")/ui/', r'\1ui/', html)
     stamp = __import__("datetime").datetime.now().strftime("%Y%m%d%H%M%S")
     html = html.replace("<head>", f'<head>\n<meta name="build" content="static" />\n<meta name="build-id" content="{stamp}" />')
     # Version the app's own scripts and styles. Without this the browser keeps the previous

@@ -724,8 +724,22 @@ async function renderReports() {
   fig(g, "Fine orbit, top 12", "/anamorph/runs/sharp_wiki_f30/fine_top12.jpg", "span3");
 
   // ---- 6 idolmorphosis
-  g = section("6", "Idolmorphosis (Phase 5)", "Runs the construction backwards as a control on the port. Model output is forward-transformed into the restored painting's 142 mm skull box using the same D = 1824.45 and d = 257.88, then composited into the panel. If the port is correct the streak lands exactly on Holbein's footprint and resolves only from the exact-perspective point — which is what the right-hand column shows.");
-  fig(g, "Three sources: best pose, the torn render from O, the depth map", "/anamorph/figures/phase5_pairs.jpg", "span3", "Left: the streak in the painting. Right: seen from Boxer's O, where it resolves back into its square. Print files at 4 px/mm in figures/.");
+  g = section("6", "Idolmorphosis (Phase 5)", "Runs the construction backwards as a control on the port. Model output is forward-transformed into the restored painting's 142 mm skull box using the same D = 1824.45 and d = 257.88, then composited into the panel. If the port is correct the streak lands exactly on Holbein's footprint and resolves only from the exact-perspective point — which is what the lower image of each pair shows.");
+  // One column per source; each holds the streak in the painting above the same
+  // streak seen from Boxer's O, where it resolves back into its square.
+  for (const [title, stem] of [["Best pose", "sharp_best"], ["Torn render from O", "torn_from_O"], ["Depth map", "depth_skull"]]) {
+    const c = card(g, title); const pair = document.createElement("div"); pair.className = "rpair";
+    for (const [label, file] of [["in the painting", `phase5_${stem}_in_painting.jpg`], ["from Boxer's O", `phase5_${stem}_from_O.jpg`]]) {
+      const src = `/anamorph/figures/${file}`, f = document.createElement("figure");
+      const im = document.createElement("img"); im.src = src; im.alt = `${title}, ${label}`; im.loading = "lazy"; im.decoding = "async"; im.className = "zoomable";
+      im.setAttribute("role", "button"); im.tabIndex = 0;
+      const open = () => showLightbox({ src, title: `${title} — ${label}`, caption: "Print files at 4 px/mm in figures/." });
+      im.onclick = open; im.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } };
+      const cap = document.createElement("figcaption"); cap.className = "text-xs text-muted"; cap.textContent = label;
+      f.append(im, cap); pair.appendChild(f);
+    }
+    c.appendChild(pair);
+  }
 
   // ---- 7 test reconstructions
   g = section("7", "Test reconstructions", "Removes the lens assumption. Each run feeds SHARP an image rendered inside the Lab, whose focal length is therefore known exactly rather than defaulted, and bridges the result from the render camera instead of an assumed plane. Column k is the scale ratio between the test bridge and the reference bridge.");
@@ -826,6 +840,14 @@ addEventListener("popstate", () => {
 document.querySelectorAll("[data-view]").forEach((a) => (a.onclick = (e) => { e.preventDefault(); showView(a.dataset.view); }));
 const applyTheme = (t) => { document.documentElement.dataset.theme = t; try { localStorage.setItem("theme", t); } catch {} };
 try { if (localStorage.getItem("theme")) applyTheme(localStorage.getItem("theme")); } catch {}
+// First visit to the Lab gets the card; the header's ? brings it back.
+const INTRO_KEY = "poh.intro.seen";
+const showIntro = () => { $("intro").hidden = false; $("intro-close").focus(); };
+const hideIntro = () => { $("intro").hidden = true; try { localStorage.setItem(INTRO_KEY, "1"); } catch {} };
+$("btn-help").onclick = showIntro;
+$("intro-close").onclick = hideIntro;
+$("intro").addEventListener("click", (e) => { if (e.target === $("intro")) hideIntro(); });
+$("intro").addEventListener("keydown", (e) => { if (e.key === "Escape") hideIntro(); });
 $("btn-theme").onclick = () => applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
 window.addEventListener("keydown", (e) => {
   if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) { if (e.key === "Escape") closeLightbox(); return; }
@@ -916,6 +938,8 @@ if (STATIC_BUILD) {
   await loadScene(new URLSearchParams(location.search).get("scene") || "sharp_wiki_f30");
   photoView(); setMode("sharp");
   if (wanted && wanted !== "lab") showView(wanted, { push: false }); else writeUrl("lab", false);
+  let seen = false; try { seen = !!localStorage.getItem(INTRO_KEY); } catch {}
+  if (!seen && state.view === "lab") showIntro();
   state.captures = (await api("/api/lab/captures")).captures; renderRecent();
   if (state.userRuns.some((r) => r.status === "queued" || r.status === "running")) pollUserRuns();
   window.lab = { state, viewer, setPoseMM, capture, loadScene, trajectories, applyTraj, selectTraj, currentPoseMM, setMode, setFov, runDocSet, recordTraj, photoView, runSharpFromHere, goToViewpoint, refreshManifest };

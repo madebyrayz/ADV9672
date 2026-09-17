@@ -247,6 +247,26 @@ body.clean .stage { border: 0; border-radius: 0; }
 .prose .glossary td { padding: 7px 0; line-height: 1.6; vertical-align: top; }
 
 
+/* report, phase 5: a figure's two views stacked inside one column */
+.rpair { display: grid; gap: 10px; }
+.rpair figure { margin: 0; }
+.rpair figcaption { margin-top: 4px; }
+
+/* the intro card, over the stage */
+.intro { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; padding: 16px;
+  background: rgb(0 0 0 / .45); backdrop-filter: blur(2px); }
+.intro[hidden] { display: none; }
+.intro-card { width: min(460px, 100%); max-height: 100%; overflow: auto; padding: 20px 22px 18px; border: 1px solid hsl(var(--border));
+  border-radius: var(--radius); background: hsl(var(--card)); box-shadow: var(--shadow-lg);
+  font-size: var(--text-sm); line-height: var(--leading-normal); color: hsl(var(--muted-foreground)); }
+.intro-card h2 { font-size: var(--text-base); font-weight: var(--weight-semibold); color: hsl(var(--foreground)); margin: 0 0 8px; }
+.intro-card p { margin: 0 0 12px; }
+.intro-card ul { margin: 0 0 14px; padding-left: 18px; }
+.intro-card li { margin-bottom: 6px; }
+.intro-card b { color: hsl(var(--foreground)); font-weight: var(--weight-semibold); }
+.intro-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+@media (max-width: 768px) { .intro-card { padding: 16px; } .intro-foot { flex-direction: column; align-items: stretch; } }
+
 /* published copy: read-only, so the controls that write are replaced by a line saying where they run */
 .static-note { display: none; }
 body.static-build .static-note { display: block; }
