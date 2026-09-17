@@ -29,7 +29,7 @@ const BUILD_ID = document.querySelector('meta[name="build-id"]')?.content || "";
 const api = (path, body) => {
   if (body && STATIC_BUILD && !bridged) {
     // Pages serves files and nothing else; a POST would come back as an error page.
-    toast("Read-only copy", "Saving needs the local server.", "error");
+    toast("Viewing copy", "Capture, saving and reconstruction run locally from the project repo.", "error");
     return Promise.reject(new Error("read-only build"));
   }
   const url = !body && BUILD_ID ? `${path}${path.includes("?") ? "&" : "?"}v=${BUILD_ID}` : path;
@@ -172,11 +172,24 @@ $("overlay-toggles").addEventListener("change", (e) => { const i = e.target.clos
 
 // ---------------------------------------------------------------- layout: collapsible panels, clean view
 const labEl = () => $("view-lab");
-const togglePanel = (side) => { labEl().classList.toggle("no-" + side); viewer.resize(); };
+// On a phone the panels are drawers over the stage (see lab.css); one open at a time.
+const narrow = matchMedia("(max-width: 768px)");
+const openDrawer = (side) => { labEl().classList.toggle("open-left", side === "left"); labEl().classList.toggle("open-right", side === "right"); };
+const closeDrawers = () => openDrawer(null);
+const togglePanel = (side) => {
+  if (narrow.matches) { labEl().classList.contains("open-" + side) ? closeDrawers() : openDrawer(side); return; }
+  labEl().classList.toggle("no-" + side); viewer.resize();
+};
 $("sidebar-toggle").onclick = () => togglePanel("left");
 $("inspector-toggle").onclick = () => togglePanel("right");
 $("reveal-left").onclick = () => togglePanel("left");
 $("reveal-right").onclick = () => togglePanel("right");
+for (const el of document.querySelectorAll("[data-drawer]")) el.addEventListener("click", () => (el.dataset.drawer === "close" ? closeDrawers() : togglePanel(el.dataset.drawer)));
+$("btn-reset-m").onclick = () => $("btn-reset").click();
+// Choosing a view from a drawer is the point of opening it, so the drawer gets out of the way.
+for (const [id, sel] of [["sidebar", ".vp"], ["inspector", "#btn-fit-skull, #btn-fit-panel, #btn-reset"]])
+  $(id).addEventListener("click", (e) => { if (narrow.matches && e.target.closest(sel)) closeDrawers(); });
+narrow.addEventListener("change", () => { closeDrawers(); viewer.resize(); });
 $("btn-clean").onclick = () => { document.body.classList.toggle("clean"); $("btn-clean").setAttribute("aria-pressed", document.body.classList.contains("clean")); viewer.resize(); };
 
 // ---------------------------------------------------------------- scenes
@@ -219,7 +232,7 @@ async function loadScene(id) {
   if (state.view === "lab") writeUrl("lab", false);
 }
 $("scene-select").addEventListener("change", () => loadScene($("scene-select").value));
-$("btn-scene-details").onclick = () => { labEl().classList.remove("no-right"); $("details-section").open = true; $("details-section").scrollIntoView({ behavior: "smooth" }); viewer.resize(); };
+$("btn-scene-details").onclick = () => { if (narrow.matches) openDrawer("right"); labEl().classList.remove("no-right"); $("details-section").open = true; $("details-section").scrollIntoView({ behavior: "smooth" }); viewer.resize(); };
 $("btn-delete-run").onclick = async () => { if (scene.group !== "Tests" || !confirm(`Delete ${scene.id}? Removes its files from runs_user/.`)) return; await fetch(`/api/lab/user_runs/${scene.id}`, { method: "DELETE" }); toast("Run deleted", scene.id); await refreshManifest(); loadScene(M.scenes[0].id); };
 
 // ---------------------------------------------------------------- viewpoints (published + saved)
@@ -238,7 +251,7 @@ function renderViewpoints() {
   if (state.savedViewpoints.length) { const h = document.createElement("div"); h.className = "row-between text-xs text-muted"; h.style.margin = "6px 0 2px"; h.innerHTML = `<span>Saved</span>`; el.appendChild(h); }
   for (const p of state.savedViewpoints) el.appendChild(vpRow({ color: p.color || "#f472b6", name: p.name, sub: `${p.dx.toFixed(0)}, ${p.dy.toFixed(0)}, ${p.dz.toFixed(0)}`, onclick: () => goToViewpoint(p), onremove: async () => { state.savedViewpoints = state.savedViewpoints.filter((q) => q !== p); await api("/api/lab/viewpoints", { viewpoints: state.savedViewpoints }); renderViewpoints(); buildOverlays(); } }));
   const add = document.createElement("button"); add.className = "btn btn-outline btn-xs"; add.textContent = "+ save current view"; add.style.marginTop = "4px";
-  if (STATIC_BUILD && !bridged) { add.disabled = true; add.dataset.tip = "Needs the local server"; }
+  if (STATIC_BUILD && !bridged) { add.disabled = true; add.dataset.tip = "Runs locally from the project repo"; }
   add.onclick = async () => { const name = prompt("Name for this viewpoint"); if (!name) return; const cur = currentPoseMM();
     state.savedViewpoints.push({ id: "vp-" + Date.now(), name, dx: +cur.dx.toFixed(1), dy: +cur.dy.toFixed(1), dz: +cur.dz.toFixed(1), target: state.targetMode, fov: +effectiveFovDeg().toFixed(1), mode: state.mode, scene: scene.id, saved: new Date().toISOString().slice(0, 10), color: "#f472b6" });
     await api("/api/lab/viewpoints", { viewpoints: state.savedViewpoints }); renderViewpoints(); buildOverlays(); toast("Viewpoint saved", name); };
@@ -879,7 +892,7 @@ const rebase = (v) => typeof v === "string" ? (v.startsWith("/") ? LOCAL_ORIGIN 
 if (STATIC_BUILD) {
   document.body.classList.add("static-build");
   for (const id of ["btn-capture", "btn-run-sharp-top", "btn-capture-2", "btn-capture-set", "btn-run-sharp", "traj-record", "kf-save", "log-snapshot", "report-save", "btn-delete-run"]) {
-    const el = $(id); if (el) { el.disabled = true; el.dataset.tip = "Needs the local server"; }
+    const el = $(id); if (el) { el.disabled = true; el.dataset.tip = "Runs locally from the project repo"; }
   }
 }
 

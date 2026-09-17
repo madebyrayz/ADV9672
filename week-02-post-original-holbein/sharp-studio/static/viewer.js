@@ -409,37 +409,69 @@
 
     _bindInput() {
       const c = this.canvas;
-      let drag = null;
+      // One pointer orbits (right button or shift pans); two pointers pinch to dolly and
+      // pan with their midpoint, which is what touch has instead of a wheel and a second button.
+      const pointers = new Map();
+      let drag = null, pinch = null;
       const interact = () => { if (this.params.wobble) { this.params.wobble = false; this.onInteract(); } };
+      const frame = () => { const c2w = lookAt(this.pos, this.target); return { right: [c2w[0], c2w[1], c2w[2]], down: [c2w[4], c2w[5], c2w[6]] }; };
+      const pan = (dx, dy) => {
+        const { right, down } = frame();
+        const dist = vlen(vsub(this.target, this.pos));
+        const mv = vadd(vscale(right, (-dx / this.height) * dist), vscale(down, (-dy / this.height) * dist));
+        this.pos = vadd(this.pos, mv); this.target = vadd(this.target, mv);
+      };
+      const dolly = (factor) => {
+        const rel = vsub(this.target, this.pos);
+        this.pos = vsub(this.target, vscale(rel, factor));
+      };
+      const pinchState = () => {
+        const [a, b] = [...pointers.values()];
+        return { d: Math.hypot(a.x - b.x, a.y - b.y), x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      };
       c.addEventListener("pointerdown", (e) => {
-        drag = { x: e.clientX, y: e.clientY, button: e.button, shift: e.shiftKey };
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
         c.setPointerCapture(e.pointerId);
         interact();
+        if (pointers.size === 2) { drag = null; pinch = pinchState(); }
+        else if (pointers.size === 1) drag = { x: e.clientX, y: e.clientY, button: e.button, shift: e.shiftKey };
       });
       c.addEventListener("contextmenu", (e) => e.preventDefault());
       c.addEventListener("pointermove", (e) => {
+        if (!pointers.has(e.pointerId)) return;
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pinch && pointers.size >= 2) {
+          const now = pinchState();
+          if (pinch.d > 0 && now.d > 0) dolly(pinch.d / now.d);
+          pan(now.x - pinch.x, now.y - pinch.y);
+          pinch = now;
+          return;
+        }
         if (!drag) return;
         const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
         drag.x = e.clientX; drag.y = e.clientY;
-        const c2w = lookAt(this.pos, this.target);
-        const right = [c2w[0], c2w[1], c2w[2]], down = [c2w[4], c2w[5], c2w[6]];
         if (drag.button === 2 || drag.shift) {
-          const dist = vlen(vsub(this.target, this.pos));
-          const mv = vadd(vscale(right, (-dx / this.height) * dist), vscale(down, (-dy / this.height) * dist));
-          this.pos = vadd(this.pos, mv); this.target = vadd(this.target, mv);
+          pan(dx, dy);
         } else {
+          const { right } = frame();
           let rel = vsub(this.pos, this.target);
           rel = rotateVec(rel, [0, 1, 0], (-dx / this.height) * 2.5);
           rel = rotateVec(rel, right, (dy / this.height) * 2.5);
           this.pos = vadd(this.target, rel);
         }
       });
-      c.addEventListener("pointerup", () => { drag = null; });
+      const release = (e) => {
+        pointers.delete(e.pointerId);
+        pinch = null; drag = null;
+        // the finger left behind continues as a plain drag from where it is now
+        if (pointers.size === 1) { const [p] = pointers.values(); drag = { x: p.x, y: p.y, button: 0, shift: false }; }
+      };
+      c.addEventListener("pointerup", release);
+      c.addEventListener("pointercancel", release);
       c.addEventListener("wheel", (e) => {
         e.preventDefault();
         interact();
-        const rel = vsub(this.target, this.pos);
-        this.pos = vsub(this.pos, vscale(vnorm(rel), Math.sign(e.deltaY) * 0.06 * vlen(rel)));
+        dolly(1 + Math.sign(e.deltaY) * 0.06);
       }, { passive: false });
       window.addEventListener("keydown", (e) => {
         if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;

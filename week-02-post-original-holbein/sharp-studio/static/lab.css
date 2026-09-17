@@ -101,6 +101,7 @@ body.clean .stage { border: 0; border-radius: 0; }
 /* stage */
 .stage { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
 .stage-body { position: relative; flex: 1; min-height: 0; background: #000; }
+#canvas { touch-action: none; }
 #canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
 .split-handle { position: absolute; top: 0; bottom: 0; left: var(--split, 50%); width: 0; pointer-events: none; }
 .split-handle span { position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: hsl(0 0% 98%); box-shadow: 0 0 0 1px rgb(0 0 0 / .5); }
@@ -153,7 +154,7 @@ body.clean .stage { border: 0; border-radius: 0; }
 .lightbox-inner { display: flex; gap: 16px; max-width: 92vw; max-height: 90vh; }
 .lightbox-inner img { max-width: 65vw; max-height: 88vh; border-radius: 8px; }
 .lightbox-inner #lightbox-meta { width: 320px; max-height: 88vh; white-space: pre-wrap; padding: 12px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; }
-@media (max-width: 1100px) { .lab { grid-template-columns: 240px minmax(0, 1fr) 0; } #inspector, #reveal-right { display: none !important; } }
+@media (min-width: 769px) and (max-width: 1100px) { .lab { grid-template-columns: 240px minmax(0, 1fr) 0; } #inspector, #reveal-right { display: none !important; } }
 
 /* Header: shed the optional controls before the bar can push the page sideways. */
 .topbar [data-tip]:hover::after { top: calc(100% + 8px); bottom: auto; }
@@ -246,12 +247,17 @@ body.clean .stage { border: 0; border-radius: 0; }
 .prose .glossary td { padding: 7px 0; line-height: 1.6; vertical-align: top; }
 
 
-/* published copy: the Lab has no reconstruction to draw */
+/* published copy: read-only, so the controls that write are replaced by a line saying where they run */
+.static-note { display: none; }
+body.static-build .static-note { display: block; }
+body.static-build .static-hide { display: none; }
+body.static-build .side-body:has(> #btn-run-sharp) > :not(.static-note) { display: none; }
+body.static-build .side-body:has(> #cap-tag) > :not(.static-note, #cap-recent) { display: none; }
 .stage-note { max-width: 420px; display: grid; gap: 8px; padding: 20px 22px; text-align: left;
   border: 1px solid hsl(var(--border)); border-radius: var(--radius); background: hsl(var(--card));
   font-size: var(--text-sm); line-height: var(--leading-normal); color: hsl(var(--muted-foreground)); }
 .stage-note b { color: hsl(var(--foreground)); font-weight: var(--weight-semibold); }
-body.static-build #btn-capture, body.static-build #btn-run-sharp-top { opacity: .45; pointer-events: none; }
+body.static-build #btn-capture, body.static-build #btn-run-sharp-top { display: none; }
 
 /* ---------- tooltips ----------
    The stock [data-tip]::after is laid out inside the trigger and cannot leave a
@@ -303,3 +309,67 @@ body.static-build #btn-capture, body.static-build #btn-run-sharp-top { opacity: 
 .lightbox-meta { margin: 0; max-height: 160px; font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1.5;
   white-space: pre-wrap; padding: 10px; border-radius: calc(var(--radius) - 2px); background: hsl(var(--muted));
   color: hsl(var(--muted-foreground)); overflow: auto; }
+
+/* ================= phones: the stage is the page, the panels are drawers ================= */
+.drawer-head, .drawer-scrim, .stage-bar { display: none; }
+@media (max-width: 768px) {
+  :root { --topbar-h: 48px; }
+  /* header: the tabs take the width; the title lives on the Method page */
+  .topbar { height: calc(var(--topbar-h) + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 8px 0 12px; gap: 8px; }
+  .brand { display: none; }
+  .topnav { flex: 1; margin-left: 0; }
+  .topnav .tabs-trigger { flex: 1; justify-content: center; padding: 0 4px; height: 30px; }
+  #lab-actions { display: none !important; }
+
+  /* the lab: one stage, edge to edge */
+  /* overflow hidden: an off-canvas drawer's transformed box would otherwise widen the
+     scrollable area, and a phone browser answers that by zooming the whole page out */
+  .lab, .lab.no-left, .lab.no-right, .lab.no-left.no-right { display: block; position: relative; padding: 0; gap: 0; overflow: hidden; }
+  .lab[hidden] { display: block !important; inset: calc(var(--topbar-h) + env(safe-area-inset-top)) 0 0 0; }
+  .lab > .stage { position: absolute; inset: 0; border: 0; border-radius: 0; }
+  .panel-foot, .stage-reveal { display: none !important; }
+
+  /* the two panels slide in over the stage */
+  #sidebar, #inspector, .lab.no-left #sidebar, .lab.no-right #inspector {
+    display: flex; position: absolute; top: 0; bottom: 0; width: min(86vw, 360px); z-index: 6; margin: 0;
+    border-radius: 0; overflow-y: auto; background: hsl(var(--card)); box-shadow: var(--shadow-lg);
+    transition: transform .22s ease; padding-bottom: env(safe-area-inset-bottom); }
+  #sidebar { left: 0; transform: translateX(-102%); border-right: 1px solid hsl(var(--border)); }
+  #inspector { right: 0; transform: translateX(102%); border-left: 1px solid hsl(var(--border)); padding: 0 8px 8px; gap: 8px; }
+  .lab.open-left #sidebar, .lab.open-right #inspector { transform: none; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; flex: none; padding: 10px 6px 4px 12px;
+    font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+  #inspector .drawer-head { padding-left: 6px; }
+  .drawer-scrim { display: block; position: absolute; inset: 0; z-index: 5; background: rgb(0 0 0 / .5);
+    opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .lab.open-left .drawer-scrim, .lab.open-right .drawer-scrim { opacity: 1; pointer-events: auto; }
+
+  /* what stays on the stage: a small pose readout, the plan, and a bar of three controls */
+  .stage-bar { display: flex; position: absolute; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 3; gap: 6px; }
+  .stage-bar .btn { flex: 1; backdrop-filter: blur(6px); background: hsl(var(--background) / .8); }
+  .float-tl { top: 8px; left: 8px; max-width: calc(100% - 16px); }
+  .hud-pose { padding: 5px 8px; font-size: var(--text-2xs); }
+  .hud-row b { min-width: 34px; }
+  .float-tr, .float-br { display: none; }
+  .float-bl { bottom: calc(54px + env(safe-area-inset-bottom)); left: 8px; }
+  #minimap { width: 150px; height: auto; }
+  .stage-note { max-width: calc(100% - 32px); padding: 16px; }
+  .stage-loading .progress { max-width: calc(100% - 48px); }
+
+  /* pages */
+  .page { padding: 16px 16px 48px; }
+  .page-article { padding: 0 16px calc(64px + env(safe-area-inset-bottom)); }
+  .mhead { padding: 22px 0 8px; }
+  .mhead h1 { font-size: 30px; }
+  .mhead .msub { font-size: var(--text-lg); }
+  .prose .lede, .pull { font-size: var(--text-base); }
+  .prose .glossary th { width: 96px; padding-right: 10px; }
+  .rgrid { grid-template-columns: minmax(0, 1fr); }
+  .rgrid .span2 { grid-column: auto; }
+  .rcard { overflow-x: auto; }
+  .versions a { max-width: 100%; white-space: normal; height: auto; padding-top: 4px; padding-bottom: 4px; }
+  .lightbox-panel { width: calc(100vw - 16px); }
+  .lightbox-body img { max-height: calc(100vh - 150px); }
+  .toaster { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .toast { width: auto; }
+}
