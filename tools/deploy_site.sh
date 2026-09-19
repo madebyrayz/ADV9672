@@ -2,7 +2,7 @@
 # Publish docs/ to the public site repo, which GitHub Pages serves at
 # https://madebyrayz.github.io/ADV9672/.
 #
-# The source repo (madebyrayz/ADV9672-source) is private, and Pages on a free plan
+# The source repo (madebyrayz/adv9672-source) is private, and Pages on a free plan
 # only serves public repos, so the built site lives in a second, public repo
 # (madebyrayz/ADV9672) that holds nothing but the contents of docs/.
 #
