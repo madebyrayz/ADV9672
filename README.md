@@ -7,6 +7,6 @@
 Each week is a folder. `shared/` holds what the weeks have in common.
 
 This repo is private and holds the source. The built site is public at
-[madebyrayz.github.io/ADV9672](https://madebyrayz.github.io/ADV9672/), served from a
-separate repo that contains only `docs/`; `tools/build_static.py` regenerates `docs/`
+[madebyrayz.github.io/adv9672](https://madebyrayz.github.io/adv9672/), served from the
+public hub repo `madebyrayz/madebyrayz.github.io` under `adv9672/`; `tools/build_static.py` regenerates `docs/`
 and `tools/deploy_site.sh` pushes it there.
