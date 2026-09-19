@@ -1,0 +1,38 @@
+[
+ {
+  "id": "best-match",
+  "name": "Resolved skull: Boxer exact-perspective point, flat panel",
+  "dx": 740.5,
+  "dy": 1035,
+  "dz": 255.3,
+  "target": "skull",
+  "fov": 22,
+  "mode": "flat",
+  "color": "#f472b6",
+  "saved": "2026-09-09"
+ },
+ {
+  "id": "best-match-sharp-view",
+  "name": "Same eye on the 30 mm reconstruction (split)",
+  "dx": 740.5,
+  "dy": 1035,
+  "dz": 255.3,
+  "target": "skull",
+  "fov": 22,
+  "mode": "split",
+  "color": "#f472b6",
+  "saved": "2026-09-09"
+ },
+ {
+  "id": "sharp-grid-peak-f30",
+  "name": "Reconstruction grid maximum, 30 mm (675, 1035, 160)",
+  "dx": 675,
+  "dy": 1035,
+  "dz": 160,
+  "target": "centre",
+  "fov": 50,
+  "mode": "sharp",
+  "color": "#f87171",
+  "saved": "2026-09-09"
+ }
+]

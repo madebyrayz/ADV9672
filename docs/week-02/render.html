@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SHARP headless render</title>
+<style>
+  body { margin: 0; background: #000; color: #ccc; font: 12px monospace; }
+  #wrap { width: 768px; height: 768px; position: relative; }
+  #canvas { width: 100%; height: 100%; display: block; }
+  #log { padding: 8px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="canvas"></canvas></div>
+<div id="log"></div>
+<script src="splat-core.js"></script>
+<script src="viewer.js"></script>
+<script>
+// Batch renderer. Open as render.html?job=/anamorph/runs/<run>/jobs.json
+// jobs.json: { splat, fx, width, height, size, fratio, out, jobs: [{name, pos:[x,y,z], target:[x,y,z], fratio?}] }
+// Each render is PUT to /anamorph/save?path=<out>/<name>.png ; a DONE.json is written at the end.
+const log = (t) => { document.getElementById("log").textContent = t; };
+async function main() {
+  const q = new URLSearchParams(location.search);
+  const jobList = (q.get("jobs") || q.get("job") || "").split(",").filter(Boolean);
+  if (!jobList.length) { log("no ?job="); return; }
+  const results = [];
+  for (const jobUrl of jobList) { results.push(await runJob(jobUrl, q)); }
+  window.renderDone = results; log("ALL DONE " + JSON.stringify(results));
+}
+async function runJob(jobUrl, q) {
+  const cfg = await (await fetch(jobUrl, { cache: "no-store" })).json();
+  const size = cfg.size || 768;
+  const wrap = document.getElementById("wrap");
+  wrap.style.width = size + "px"; wrap.style.height = size + "px";
+  const old = document.getElementById("canvas"); const cv = document.createElement("canvas"); cv.id = "canvas"; old.replaceWith(cv);
+  const viewer = new SplatViewer(cv);   // loop keeps running so the worker sorts (and reports vertexCount)
+  viewer.setScene({ fx: cfg.fx, width: cfg.width, height: cfg.height });
+  viewer.fRatioOverride = cfg.fratio || null;
+  viewer.resize();
+  log("loading " + cfg.splat);
+  await viewer.loadUrl(cfg.splat);
+  await viewer.waitForSplats();
+  await new Promise((r) => setTimeout(r, 300));
+  viewer.paused = true;
+  const t0 = performance.now();
+  const start = parseInt(q.get("start") || "0");
+  let done = 0, failed = [];
+  for (let i = start; i < cfg.jobs.length; i++) {
+    const j = cfg.jobs[i];
+    if (j.fratio && j.fratio !== viewer.fRatioOverride) { viewer.fRatioOverride = j.fratio; viewer.resize(); }
+    try {
+      await viewer.renderPose(j.pos, j.target);
+      // JPEG via toDataURL -> bytes: no Blob objects, so long batches cannot exhaust Chrome's blob storage
+      const url = viewer.canvas.toDataURL("image/jpeg", cfg.jpeg_quality || 0.95);
+      const bin = atob(url.split(",", 2)[1]); const bytes = new Uint8Array(bin.length); for (let k = 0; k < bin.length; k++) bytes[k] = bin.charCodeAt(k);
+      let ok = false, err = "";
+      for (let attempt = 0; attempt < 4 && !ok; attempt++) {
+        try {
+          const r = await fetch(`/anamorph/save?path=${encodeURIComponent((j.out || cfg.out) + "/" + j.name + ".jpg")}`, { method: "PUT", body: bytes, keepalive: false });
+          ok = r.ok; if (!ok) err = "http " + r.status;
+        } catch (e) { err = e.message; }
+        if (!ok) await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+      }
+      if (!ok) failed.push(j.name + ":" + err);
+    } catch (e) { failed.push(j.name + ":" + e.message); }
+    done++;
+    if (done % 10 === 0) log(`${i + 1}/${cfg.jobs.length}  ${((performance.now() - t0) / 1000).toFixed(1)}s  failed=${failed.length}`);
+  }
+  const summary = { done, failed, seconds: (performance.now() - t0) / 1000, splats: viewer.vertexCount, size, fratio: cfg.fratio };
+  await fetch(`/anamorph/save?path=${encodeURIComponent(cfg.out + "/DONE.json")}`, { method: "PUT", body: JSON.stringify(summary) });
+  log("DONE " + JSON.stringify(summary));
+  return { job: jobUrl, ...summary };
+}
+main().catch((e) => log("ERROR " + e.message));
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+{
+ "image": "data/Holbein-ambassadors.jpg",
+ "width": 1084,
+ "height": 1069,
+ "f35_mm": 30.0,
+ "f_px": 1055.6207160499673,
+ "device": "mps",
+ "inference_s": 4.96,
+ "n_gaussians": 1179648,
+ "sharp_internal_shape": [
+  1536,
+  1536
+ ],
+ "depth_m": {
+  "min": 1.1328009366989136,
+  "p05": 1.715686309337616,
+  "median": 1.9971964359283447,
+  "p95": 2.4294793605804443,
+  "max": 7.271187782287598,
+  "mean": 2.0423626947201075
+ },
+ "scale_size_p50_m": 0.0015373857628205763,
+ "panel": {
+  "scale_mm_per_m": 876.0442412082983,
+  "scale_y_mm_per_m": 946.1524393177168,
+  "plane_rms_border_m": 0.16096147770443506,
+  "plane_rms_all_m": 0.22046543458512358,
+  "plane_rms_border_mm": 141.00937559934823,
+  "plane_rms_all_mm": 193.13747435378232,
+  "relief_p95_minus_p05_mm": 623.2891243081871,
+  "normal": [
+   -0.00376436997547401,
+   -0.3364997670151183,
+   -0.9416760251368084
+  ],
+  "tilt_from_camera_axis_deg": 19.66504491101623,
+  "camera0_mm": [
+   -1034.2288373698284,
+   199.651054408926,
+   1650.6925001226252
+  ]
+ },
+ "convention": "SHARP frame x right, y down, z forward, metres; panel frame per lib/bridge.py; (dx,dy,dz) = right of right edge, above bottom edge, off the wall, mm",
+ "panel_variants": {
+  "skull_frontoparallel": {
+   "scale_mm_per_unit": 1095.281158578438,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    2040.15258314085
+   ],
+   "z_ref": 1.8626747727394104,
+   "tilt_deg": 0.0
+  },
+  "median_frontoparallel": {
+   "scale_mm_per_unit": 1022.1932162914304,
+   "camera0_mm": [
+    -1047.5,
+    1033.005073800738,
+    2040.1525831408503
+   ],
+   "z_ref": 1.995858073234558,
+   "tilt_deg": 0.0
+  },
+  "border_plane": {
+   "scale_mm_per_unit": 876.0442412082983,
+   "camera0_mm": [
+    -1034.2288373698284,
+    199.651054408926,
+    1650.6925001226252
+   ],
+   "z_ref": null,
+   "tilt_deg": 19.66504491101623
+  }
+ },
+ "skull_lateral_extent_units": 0.8834136843681335,
+ "skull_scale_mm_per_unit_from_915mm": 1035.754840784993
+}

@@ -1,34 +1,63 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8" />
-<title>ADV9672</title>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ADV 9672</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="poh/ui/favicon.svg" type="image/svg+xml" />
-<link rel="icon" href="poh/ui/favicon.png" sizes="32x32" />
-<link rel="apple-touch-icon" href="poh/ui/apple-touch-icon.png" />
+<link rel="icon" href="week-02/ui/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="week-02/ui/favicon.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="week-02/ui/apple-touch-icon.png" />
 <style>
   :root { color-scheme: light dark; --ink:#111; --dim:#6b6b6b; --line:#e2e0dc; --bg:#f4f2ed; }
   @media (prefers-color-scheme: dark) { :root { --ink:#f2f2f2; --dim:#8d8d8d; --line:#262626; --bg:#0a0a0a; } }
-  body { margin:0; background:var(--bg); color:var(--ink);
+  body { margin:0; background:var(--bg); color:var(--ink); line-height:1.5;
          font-family:"TWK Lausanne", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
-  main { max-width:720px; margin:0 auto; padding:96px 24px 96px; }
-  h1 { font-size:15px; font-weight:600; letter-spacing:-0.01em; margin:0 0 40px; }
+  main { max-width:720px; margin:0 auto; padding:80px 24px 96px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-bottom:56px; font-size:14px; }
+  header b { font-weight:600; }
+  nav a { color:var(--dim); text-decoration:none; margin-left:18px; }
+  nav a:hover, nav a[aria-current] { color:var(--ink); }
+  h1 { font-size:22px; font-weight:500; letter-spacing:-0.015em; margin:0 0 8px; }
+  .sub { color:var(--dim); font-size:14px; margin:0 0 48px; }
   ul { list-style:none; padding:0; margin:0; }
   li { border-top:1px solid var(--line); }
   li:last-child { border-bottom:1px solid var(--line); }
-  a { display:grid; grid-template-columns:44px 1fr; gap:20px; padding:22px 2px;
-      text-decoration:none; color:inherit; }
-  a:hover { background:color-mix(in srgb, var(--ink) 4%, transparent); }
-  .n { color:var(--dim); font-size:13px; padding-top:2px; }
-  .t { font-size:19px; font-weight:500; letter-spacing:-0.015em; margin-bottom:6px; }
-  .d { color:var(--dim); font-size:14px; line-height:1.5; }
-  @media (max-width: 600px) { main { padding:48px 20px 64px; } a { grid-template-columns:36px 1fr; gap:14px; } }
-</style></head><body><main>
-<h1>ADV9672</h1>
-<ul>
-  <li><a href="poh/"><span class="n">02</span><span>
-    <span class="t">The Post-Original Holbein</span>
-    <span class="d">Where must you stand for the skull in Holbein's <i>The Ambassadors</i> to resolve,
-    and does a monocular reconstruction model put its best viewpoint anywhere near the geometric answer?</span>
-  </span></a></li>
-</ul>
-</main></body></html>
+  li a { display:grid; grid-template-columns:120px 1fr; gap:24px; padding:22px 2px; text-decoration:none; color:inherit; }
+  li a:hover { background:color-mix(in srgb, var(--ink) 4%, transparent); }
+  li img { width:120px; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--line); }
+  .n { color:var(--dim); font-size:13px; display:block; margin-bottom:4px; }
+  .t { font-size:18px; font-weight:500; letter-spacing:-0.01em; display:block; margin-bottom:6px; }
+  .d { color:var(--dim); font-size:14px; display:block; }
+  footer { margin-top:72px; color:var(--dim); font-size:13px; }
+  @media (max-width: 600px) { main { padding:48px 20px 64px; } li a { grid-template-columns:88px 1fr; gap:14px; } li img { width:88px; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <b>Ray Zhang</b>
+    <nav>
+      <a href="./" aria-current="page">Index</a>
+      <a href="https://rayzlz.com/">About</a>
+      <a href="https://github.com/madebyrayz/adv9672">Source</a>
+    </nav>
+  </header>
+
+  <h1>ADV 9672</h1>
+  <p class="sub">Harvard Graduate School of Design, fall 2026. One page per week; the code and writing behind each page are in the repo.</p>
+
+  <ul>
+    <li><a href="week-02/">
+      <img src="week-02/anamorph/figures/phase5_sharp_best_from_O.jpg" alt="" loading="lazy" />
+      <span>
+        <span class="n">Week 2</span>
+        <span class="t">The Post-Original Holbein</span>
+        <span class="d">Where you have to stand for the skull in Holbein's <i>The Ambassadors</i> to resolve, and whether a single-image reconstruction model puts its best viewpoint anywhere near that spot.</span>
+      </span>
+    </a></li>
+  </ul>
+
+  <footer>2026</footer>
+</main>
+</body>
+</html>

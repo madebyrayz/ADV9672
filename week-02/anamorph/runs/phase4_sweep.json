@@ -1,0 +1,561 @@
+[
+ {
+  "run": "sharp_wiki_f5",
+  "f35_mm": 5.0,
+  "f_px": 175.93678600832789,
+  "depth_median_m": 0.33286595344543457,
+  "depth_p05_m": 0.28594772815704345,
+  "depth_p95_m": 0.4049133062362671,
+  "relief_mm": 103.88316942245658,
+  "scale_mm_per_unit": 1095.2812987722145,
+  "camera0_dz_mm": 340.025430523475,
+  "border_tilt_deg": 3.2788401043019384,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 850.0,
+   "dz": 560.0,
+   "value": 0.5690232515335083
+  },
+  "resemblance_offset_mm": 310.8183070541374,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 750.0,
+   "dz": 520.0,
+   "value": 0.2538202404975891
+  },
+  "clip_sim_offset_mm": 263.47679214686065,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1100.0,
+   "dz": 600.0,
+   "value": 0.5446983575820923
+  },
+  "clip_skull_offset_mm": 470.5592630052032,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.4058493971824646,
+   "clip_sim": 0.2137213796377182,
+   "resemblance": 0.25299522280693054
+  },
+  "hole_at_boxer_O": 1.0
+ },
+ {
+  "run": "sharp_wiki_f8",
+  "f35_mm": 8.0,
+  "f_px": 281.4988576133246,
+  "depth_median_m": 0.5315335392951965,
+  "depth_p05_m": 0.45674398094415664,
+  "depth_p95_m": 0.6465964913368225,
+  "relief_mm": 165.96074331634614,
+  "scale_mm_per_unit": 1097.0618415454264,
+  "camera0_dz_mm": 544.0406888375601,
+  "border_tilt_deg": 5.241514844265345,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 850.0,
+   "dz": 520.0,
+   "value": 0.5658146142959595
+  },
+  "resemblance_offset_mm": 272.1029584550672,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 850.0,
+   "dz": 360.0,
+   "value": 0.2572072148323059
+  },
+  "clip_sim_offset_mm": 125.57077685512664,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 850.0,
+   "dz": 360.0,
+   "value": 0.470810204744339
+  },
+  "clip_skull_offset_mm": 125.57077685512664,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.4058493971824646,
+   "clip_sim": 0.2137213796377182,
+   "resemblance": 0.25299522280693054
+  },
+  "hole_at_boxer_O": 1.0
+ },
+ {
+  "run": "sharp_wiki_f10",
+  "f35_mm": 10.0,
+  "f_px": 351.87357201665577,
+  "depth_median_m": 0.6657318472862244,
+  "depth_p05_m": 0.5718954563140869,
+  "depth_p95_m": 0.8098265111446381,
+  "relief_mm": 207.76642748755492,
+  "scale_mm_per_unit": 1095.2811936268788,
+  "camera0_dz_mm": 680.0508610469501,
+  "border_tilt_deg": 6.559902941195461,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 850.0,
+   "dz": 600.0,
+   "value": 0.581235945224762
+  },
+  "resemblance_offset_mm": 349.82284087806505,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 900.0,
+   "dz": 400.0,
+   "value": 0.26312142610549927
+  },
+  "clip_sim_offset_mm": 188.005372263667,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1100.0,
+   "dz": 600.0,
+   "value": 0.4168267846107483
+  },
+  "clip_skull_offset_mm": 470.5592630052032,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.40606868267059326,
+   "clip_sim": 0.21377408504486084,
+   "resemblance": 0.2530789077281952
+  },
+  "hole_at_boxer_O": 1.0
+ },
+ {
+  "run": "sharp_wiki_f14",
+  "f35_mm": 14.0,
+  "f_px": 492.6230008233181,
+  "depth_median_m": 0.9320256114006042,
+  "depth_p05_m": 0.8006544411182404,
+  "depth_p95_m": 1.1337571144104004,
+  "relief_mm": 290.87186043805025,
+  "scale_mm_per_unit": 1095.2813663656555,
+  "camera0_dz_mm": 952.07120546573,
+  "border_tilt_deg": 9.186826932494704,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 900.0,
+   "dz": 600.0,
+   "value": 0.5654367804527283
+  },
+  "resemblance_offset_mm": 363.5739539626017,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 950.0,
+   "dz": 400.0,
+   "value": 0.26382169127464294
+  },
+  "clip_sim_offset_mm": 223.9553973450964,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1000.0,
+   "dz": 480.0,
+   "value": 0.8338141441345215
+  },
+  "clip_skull_offset_mm": 314.8047331283315,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.40605035424232483,
+   "clip_sim": 0.213741734623909,
+   "resemblance": 0.25297993421554565
+  },
+  "hole_at_boxer_O": 1.0
+ },
+ {
+  "run": "sharp_wiki_f18",
+  "f35_mm": 18.0,
+  "f_px": 633.3724296299805,
+  "depth_median_m": 1.1983184814453125,
+  "depth_p05_m": 1.0294129729270936,
+  "depth_p95_m": 1.4576879739761353,
+  "relief_mm": 373.97762113733216,
+  "scale_mm_per_unit": 1095.2812870893986,
+  "camera0_dz_mm": 1224.0915498845102,
+  "border_tilt_deg": 11.814502124965237,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 1000.0,
+   "dz": 560.0,
+   "value": 0.5791796445846558
+  },
+  "resemblance_offset_mm": 375.55028957517794,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 450.0,
+   "dz": 560.0,
+   "value": 0.2698003947734833
+  },
+  "clip_sim_offset_mm": 445.11573775817004,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1250.0,
+   "dz": 600.0,
+   "value": 0.9008111357688904
+  },
+  "clip_skull_offset_mm": 583.8287591408974,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.006613561883568764,
+   "clip_sim": 0.20190072059631348,
+   "resemblance": 0.5309162139892578
+  },
+  "hole_at_boxer_O": 0.9643853635204082
+ },
+ {
+  "run": "sharp_wiki_f24",
+  "f35_mm": 24.0,
+  "f_px": 844.496572839974,
+  "depth_median_m": 1.5977580547332764,
+  "depth_p05_m": 1.3725491762161255,
+  "depth_p95_m": 1.943583607673645,
+  "relief_mm": 498.63174692488155,
+  "scale_mm_per_unit": 1095.281228675322,
+  "camera0_dz_mm": 1632.1220665126802,
+  "border_tilt_deg": 15.750887776918372,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 650.0,
+   "dz": 120.0,
+   "value": 0.5818002223968506
+  },
+  "resemblance_offset_mm": 187.40336176280294,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 600.0,
+   "dz": 80.0,
+   "value": 0.2915666103363037
+  },
+  "clip_sim_offset_mm": 250.88248244945277,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1100.0,
+   "dz": 280.0,
+   "value": 0.9302018880844116
+  },
+  "clip_skull_offset_mm": 323.8549366614627,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.015576807782053947,
+   "clip_sim": 0.19995363056659698,
+   "resemblance": 0.5019322037696838
+  },
+  "hole_at_boxer_O": 0.8779496173469388
+ },
+ {
+  "run": "sharp_wiki_f30",
+  "f35_mm": 30.0,
+  "f_px": 1055.6207160499673,
+  "depth_median_m": 1.9971964359283447,
+  "depth_p05_m": 1.715686309337616,
+  "depth_p95_m": 2.4294793605804443,
+  "relief_mm": 623.2891243081871,
+  "scale_mm_per_unit": 1095.281158578438,
+  "camera0_dz_mm": 2040.15258314085,
+  "border_tilt_deg": 19.66504491101623,
+  "grid_step": [
+   25.0,
+   20.0
+  ],
+  "resemblance_peak": {
+   "dx": 675.0,
+   "dz": 160.0,
+   "value": 0.6063064336776733
+  },
+  "resemblance_offset_mm": 141.30824462854244,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 650.0,
+   "dz": 380.0,
+   "value": 0.28317201137542725
+  },
+  "clip_sim_offset_mm": 176.10229981462479,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 975.0,
+   "dz": 60.0,
+   "value": 0.9788689613342285
+  },
+  "clip_skull_offset_mm": 280.01432106233426,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.020745646208524704,
+   "clip_sim": 0.21210061013698578,
+   "resemblance": 0.5376377701759338
+  },
+  "hole_at_boxer_O": 0.8695392219387755
+ },
+ {
+  "run": "sharp_wiki_f35",
+  "f35_mm": 35.0,
+  "f_px": 1231.5575020582953,
+  "depth_median_m": 2.3305068016052246,
+  "depth_p05_m": 2.0019700169563293,
+  "depth_p95_m": 2.8342318534851074,
+  "relief_mm": 726.756950725586,
+  "scale_mm_per_unit": 1096.1763809425668,
+  "camera0_dz_mm": 2380.178013664325,
+  "border_tilt_deg": 22.93512154081869,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 650.0,
+   "dz": 160.0,
+   "value": 0.602792501449585
+  },
+  "resemblance_offset_mm": 160.2748264700355,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 650.0,
+   "dz": 160.0,
+   "value": 0.29340022802352905
+  },
+  "clip_sim_offset_mm": 160.2748264700355,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1450.0,
+   "dz": 120.0,
+   "value": 0.9688702821731567
+  },
+  "clip_skull_offset_mm": 687.0807958311744,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.1253105103969574,
+   "clip_sim": 0.20546434819698334,
+   "resemblance": 0.5268392562866211
+  },
+  "hole_at_boxer_O": 0.8928770727040817
+ },
+ {
+  "run": "sharp_wiki_f50",
+  "f35_mm": 50.0,
+  "f_px": 1759.3678600832789,
+  "depth_median_m": 3.3302347660064697,
+  "depth_p05_m": 2.860234498977661,
+  "depth_p95_m": 4.049449443817139,
+  "relief_mm": 1038.7017119074849,
+  "scale_mm_per_unit": 1097.5535042385707,
+  "camera0_dz_mm": 3400.2543052347505,
+  "border_tilt_deg": 32.274830965858406,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 900.0,
+   "dz": 600.0,
+   "value": 0.5808678865432739
+  },
+  "resemblance_offset_mm": 363.5739539626017,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 800.0,
+   "dz": 520.0,
+   "value": 0.26279109716415405
+  },
+  "clip_sim_offset_mm": 263.11598203073873,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1050.0,
+   "dz": 40.0,
+   "value": 0.8889938592910767
+  },
+  "clip_skull_offset_mm": 349.3766162753312,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.06137574464082718,
+   "clip_sim": 0.2049054652452469,
+   "resemblance": 0.5336847305297852
+  },
+  "hole_at_boxer_O": 0.9248644770408163
+ },
+ {
+  "run": "sharp_wiki_f70",
+  "f35_mm": 70.0,
+  "f_px": 2463.1150041165906,
+  "depth_median_m": 4.6601715087890625,
+  "depth_p05_m": 4.0033063888549805,
+  "depth_p95_m": 5.668752670288086,
+  "relief_mm": 1454.2498538816315,
+  "scale_mm_per_unit": 1095.303665146093,
+  "camera0_dz_mm": 4760.356027328651,
+  "border_tilt_deg": 42.90180145145807,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 1350.0,
+   "dz": 280.0,
+   "value": 0.5509174466133118
+  },
+  "resemblance_offset_mm": 573.5259540770584,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 1400.0,
+   "dz": 600.0,
+   "value": 0.2823476195335388
+  },
+  "clip_sim_offset_mm": 710.8347346605962,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1450.0,
+   "dz": 600.0,
+   "value": 0.9516050219535828
+  },
+  "clip_skull_offset_mm": 755.0470316476981,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.031750939786434174,
+   "clip_sim": 0.2269216775894165,
+   "resemblance": 0.45914527773857117
+  },
+  "hole_at_boxer_O": 0.99609375
+ },
+ {
+  "run": "sharp_wiki_f100",
+  "f35_mm": 100.0,
+  "f_px": 3518.7357201665577,
+  "depth_median_m": 6.6573216915130615,
+  "depth_p05_m": 5.718960452079773,
+  "depth_p95_m": 8.098264694213867,
+  "relief_mm": 2077.486757187399,
+  "scale_mm_per_unit": 1095.2811936268788,
+  "camera0_dz_mm": 6800.5086104695,
+  "border_tilt_deg": 54.63362581900324,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 1300.0,
+   "dz": 80.0,
+   "value": 0.5062829256057739
+  },
+  "resemblance_offset_mm": 552.5233207747887,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 600.0,
+   "dz": 40.0,
+   "value": 0.2451438307762146
+  },
+  "clip_sim_offset_mm": 280.66709817860726,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1400.0,
+   "dz": 440.0,
+   "value": 0.5095257759094238
+  },
+  "clip_skull_offset_mm": 649.1640932768848,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.4058493971824646,
+   "clip_sim": 0.2137213796377182,
+   "resemblance": 0.25299522280693054
+  },
+  "hole_at_boxer_O": 1.0
+ },
+ {
+  "run": "sharp_wiki_f135",
+  "f35_mm": 135.0,
+  "f_px": 4750.293222224853,
+  "depth_median_m": 8.991070747375488,
+  "depth_p05_m": 7.722681045532227,
+  "depth_p95_m": 10.93336009979248,
+  "relief_mm": 2804.484717550336,
+  "scale_mm_per_unit": 1097.9315837775441,
+  "camera0_dz_mm": 9180.686624133825,
+  "border_tilt_deg": 63.27932900473328,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 1500.0,
+   "dz": 40.0,
+   "value": 0.5346955060958862
+  },
+  "resemblance_offset_mm": 755.2178626065462,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 1250.0,
+   "dz": 160.0,
+   "value": 0.23982015252113342
+  },
+  "clip_sim_offset_mm": 483.1231933989508,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 300.0,
+   "dz": 240.0,
+   "value": 0.697995126247406
+  },
+  "clip_skull_offset_mm": 477.23581173252285,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 0.4058493971824646,
+   "clip_sim": 0.2137213796377182,
+   "resemblance": 0.25299522280693054
+  },
+  "hole_at_boxer_O": 1.0
+ },
+ {
+  "run": "sharp_wiki_f200",
+  "f35_mm": 200.0,
+  "f_px": 7037.471440333115,
+  "depth_median_m": 13.24741506576538,
+  "depth_p05_m": 11.24764142036438,
+  "depth_p95_m": 16.18947353363037,
+  "relief_mm": 4123.914411221242,
+  "scale_mm_per_unit": 1075.4268644188148,
+  "camera0_dz_mm": 13601.017220939,
+  "border_tilt_deg": 71.76336697771274,
+  "grid_step": [
+   50.0,
+   40.0
+  ],
+  "resemblance_peak": {
+   "dx": 1100.0,
+   "dz": 480.0,
+   "value": 0.5126651525497437
+  },
+  "resemblance_offset_mm": 392.0739981177023,
+  "resemblance_inside_2sigma": false,
+  "clip_sim_peak": {
+   "dx": 450.0,
+   "dz": 120.0,
+   "value": 0.2450661063194275
+  },
+  "clip_sim_offset_mm": 354.7957440556467,
+  "clip_sim_inside_2sigma": false,
+  "clip_skull_peak": {
+   "dx": 1400.0,
+   "dz": 40.0,
+   "value": 0.035878218710422516
+  },
+  "clip_skull_offset_mm": 660.1015224948356,
+  "clip_skull_inside_2sigma": false,
+  "at_boxer_O": {
+   "clip_skull": 1.7156219200842315e-07,
+   "clip_sim": 0.1804620325565338,
+   "resemblance": 0.4540848135948181
+  },
+  "hole_at_boxer_O": 0.022520727040816327
+ }
+]

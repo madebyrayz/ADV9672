@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="build" content="static" />
+<meta name="build-id" content="20260919082115" />
+<meta charset="utf-8" />
+<title>The Post-Original Holbein</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="icon" href="ui/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="ui/favicon.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="ui/apple-touch-icon.png" />
+<link rel="stylesheet" href="ui/components.css?v=20260919082115" />
+<link rel="stylesheet" href="ui/tokens.css?v=20260919082115" />
+<link rel="stylesheet" href="lab.css?v=20260919082115" />
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#" data-view="lab" aria-label="The Post-Original Holbein — back to the lab">
+    <span class="brand-name">The Post-Original Holbein</span>
+  </a>
+  <nav class="topnav tabs-list" aria-label="Primary">
+    <a class="tabs-trigger" href="#" data-view="lab" aria-current="page">Lab</a>
+    <a class="tabs-trigger" href="#" data-view="log">Log</a>
+    <a class="tabs-trigger" href="#" data-view="reports">Report</a>
+    <a class="tabs-trigger" href="#" data-view="method">Method</a>
+  </nav>
+  <div class="top-actions">
+    <!-- Lab-only: hidden on every other page by showView() -->
+    <div id="lab-actions" class="top-group">
+      <span id="engine-pill" class="badge badge-muted"><span class="dot"></span><span id="engine-text">loading</span></span>
+      <button id="btn-clean" class="btn btn-ghost btn-sm" data-tip="Hide panels and floating elements (H)">Clean view</button>
+      <button id="btn-run-sharp-top" class="btn btn-outline btn-sm" data-tip="Reconstruct the painting from this camera">Reconstruct</button>
+      <button id="btn-capture" class="btn btn-sm" data-tip="Capture (S)">Capture</button>
+    </div>
+    <!-- Global -->
+    <button id="btn-help" class="btn btn-ghost btn-icon btn-sm" data-tip="What is this?" aria-label="What is this?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></button>
+    <button id="btn-theme" class="btn btn-ghost btn-icon btn-sm" data-tip="Theme" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg></button>
+  </div>
+</header>
+
+<!-- ================= LAB ================= -->
+<main id="view-lab" class="lab">
+  <aside id="sidebar" class="sidebar card scroll">
+    <div class="drawer-head"><span>Scene &amp; viewpoints</span><button class="btn btn-ghost btn-icon btn-sm drawer-close" data-drawer="left" aria-label="Close panel">&#x2715;</button></div>
+    <details class="side-section" open>
+      <summary><span>Scene</span><span id="scene-badge" class="badge badge-muted text-xs">—</span></summary>
+      <div class="side-body">
+        <select id="scene-select" class="select input-sm"></select>
+        <div id="scene-info" class="text-xs text-muted"></div>
+        <div class="flex gap-2"><button id="btn-scene-details" class="btn btn-outline btn-xs grow">Details</button><button id="btn-delete-run" class="btn btn-outline btn-xs" hidden>Delete run</button></div>
+      </div>
+    </details>
+    <details class="side-section" open>
+      <summary><span>View</span></summary>
+      <div class="side-body">
+        <div class="seg" id="mode-seg" role="tablist">
+          <button data-mode="sharp" aria-selected="true" data-tip="Gaussian splats">Splat</button>
+          <button data-mode="mesh" aria-selected="false" data-tip="Textured depth mesh">Mesh</button>
+          <button data-mode="wire" aria-selected="false" data-tip="Depth wireframe">Wire</button>
+          <button data-mode="flat" aria-selected="false" data-tip="Painting on a flat panel (Boxer's model)">Flat</button>
+          <button data-mode="split" aria-selected="false" data-tip="Splat left, comparison right (alt-drag the divider)">Split</button>
+        </div>
+        <label class="row-between text-xs"><span class="text-muted">Split compares with</span>
+          <select id="compare-select" class="select input-sm" style="width:110px"><option value="flat">Flat</option><option value="mesh">Mesh</option><option value="wire">Wire</option></select></label>
+      </div>
+    </details>
+    <details class="side-section" open>
+      <summary><span>Viewpoints</span><span class="text-xs text-muted">keys 0–5</span></summary>
+      <div class="side-body"><div id="viewpoints" class="vp-list"></div></div>
+    </details>
+    <details class="side-section">
+      <summary><span>Trajectories</span></summary>
+      <div class="side-body">
+        <div id="trajectories" class="vp-list"></div>
+        <p id="traj-desc" class="traj-desc text-xs text-muted"></p>
+        <div class="traj-controls">
+          <button id="traj-play" class="btn btn-secondary btn-xs" disabled>Play</button>
+          <button id="traj-record" class="btn btn-outline btn-xs" disabled data-tip="Save every frame + mp4">Record</button>
+          <input id="traj-scrub" class="slider grow" type="range" min="0" max="1" step="0.002" value="0" disabled />
+          <span id="traj-t" class="text-xs mono">0.00</span>
+        </div>
+        <div class="slider-row"><span class="text-xs text-muted">duration</span><span class="value"><span id="v-dur">8</span> s</span></div>
+        <input id="traj-dur" class="slider" type="range" min="2" max="30" step="1" value="8" />
+        <div class="separator"></div>
+        <div class="row-between"><span class="text-xs font-medium">Paths</span><button id="kf-add" class="btn btn-outline btn-xs" data-tip="Add the current camera as a keyframe">+ keyframe</button></div>
+        <div id="kf-list" class="kf-list"></div>
+        <div class="flex gap-2">
+          <input id="kf-name" class="input input-sm grow" placeholder="path name" />
+          <button id="kf-save" class="btn btn-xs" disabled>Save</button>
+        </div>
+      </div>
+    </details>
+    <details class="side-section">
+      <summary><span>Overlays</span></summary>
+      <div class="side-body toggle-grid" id="overlay-toggles">
+        <p class="group-label">In the scene</p>
+        <label class="switch-row"><span class="switch-label">Panel &amp; 8×8 grid</span><span class="switch"><input type="checkbox" data-ov="grid" checked /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Skull box</span><span class="switch"><input type="checkbox" data-ov="skull" checked /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Station points</span><span class="switch"><input type="checkbox" data-ov="points" checked /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Boxer construction S–O</span><span class="switch"><input type="checkbox" data-ov="construction" /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Sight lines</span><span class="switch"><input type="checkbox" data-ov="sight" /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Depth wireframe on splats</span><span class="switch"><input type="checkbox" data-ov="wire" /><span class="track"></span></span></label>
+        <p class="group-label">On screen</p>
+        <label class="switch-row"><span class="switch-label">Pose readout</span><span class="switch"><input type="checkbox" data-hud="tl" checked /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Frame rate</span><span class="switch"><input type="checkbox" data-hud="tr" checked /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Plan view</span><span class="switch"><input type="checkbox" data-hud="bl" checked /><span class="track"></span></span></label>
+        <label class="switch-row"><span class="switch-label">Shortcut hints</span><span class="switch"><input type="checkbox" data-hud="br" checked /><span class="track"></span></span></label>
+      </div>
+    </details>
+    <div class="panel-foot"><button id="sidebar-toggle" class="panel-collapse" data-tip="Collapse panel ([)" aria-label="Collapse left panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button></div>
+  </aside>
+
+  <section class="stage card">
+    <div id="stage-body" class="stage-body">
+      <canvas id="canvas"></canvas>
+      <div id="split-handle" class="split-handle" hidden><span></span></div>
+      <button id="reveal-left" class="stage-reveal left" data-tip="Expand panel ([)" aria-label="Show left panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button id="reveal-right" class="stage-reveal right" data-tip="Expand panel (])" aria-label="Show right panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div id="stage-loading" class="stage-loading"><div class="progress indeterminate" style="width:220px"><div class="bar"></div></div><div id="stage-loading-text" class="text-sm text-muted">loading…</div></div>
+
+      <div class="float float-tl" data-float>
+        <div class="hud-pose">
+          <div class="hud-row"><b id="h-scene" class="truncate" style="max-width:260px">—</b><span id="h-mode" class="badge badge-muted text-xs">splat</span></div>
+          <div class="hud-row"><span>Δx</span><b id="h-dx">—</b><span>Δy</span><b id="h-dy">—</b><span>Δz</span><b id="h-dz">—</b><span class="text-muted">mm</span></div>
+          <div class="hud-row text-muted"><span>skull az</span><b id="h-az">—</b><span>el</span><b id="h-el">—</b><span>d</span><b id="h-dist">—</b></div>
+          <div class="hud-row text-muted"><span>fov</span><b id="h-fov">—</b><span>R</span><b id="h-R">—</b><span>α</span><b id="h-alpha">—</b></div>
+        </div>
+      </div>
+      <div class="float float-tr" data-float><span id="fps" class="badge badge-muted mono">— fps</span></div>
+      <div class="float float-bl" data-float>
+        <div class="minimap-wrap"><canvas id="minimap" width="280" height="210"></canvas><button id="minimap-toggle" class="btn btn-ghost btn-xs" data-tip="Collapse map">▾ plan view</button></div>
+      </div>
+      <div class="drawer-scrim" data-drawer="close"></div>
+      <div class="stage-bar" data-float>
+        <button class="bar-btn" data-drawer="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg><span>Scene</span></button>
+        <button class="bar-btn" data-drawer="right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M4 16v2a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v2M16 20h2a2 2 0 0 0 2-2v-2"/><circle cx="12" cy="12" r="3"/></svg><span>Camera</span></button>
+        <button id="btn-reset-m" class="bar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Photo</span></button>
+      </div>
+      <div class="float float-br" data-float><span class="hud-hint text-xs text-muted"><span class="kbd">S</span> capture · <span class="kbd">H</span> clean · <span class="kbd">C</span> view · <span class="kbd">R</span> photo · drag orbit · ⇧ pan · wheel dolly · <span class="kbd">W A S D Q E</span></span></div>
+    </div>
+  </section>
+
+  <aside id="inspector" class="inspector scroll">
+    <div class="drawer-head"><span>Camera</span><button class="btn btn-ghost btn-icon btn-sm drawer-close" data-drawer="right" aria-label="Close panel">&#x2715;</button></div>
+    <details class="card compact side-section" open>
+      <summary><span>Eye position</span><span class="text-xs text-muted">mm, Boxer frame</span></summary>
+      <div class="side-body controls">
+        <div class="control"><div class="slider-row"><span>Δx</span><span class="value"><span id="v-dx">0</span></span></div><input id="c-dx" class="slider" type="range" min="-1200" max="2400" step="1" value="-1047" /></div>
+        <div class="control"><div class="slider-row"><span>Δy</span><span class="value"><span id="v-dy">0</span></span></div><input id="c-dy" class="slider" type="range" min="0" max="2400" step="1" value="1035" /></div>
+        <div class="control"><div class="slider-row"><span>Δz</span><span class="value"><span id="v-dz">0</span></span></div><input id="c-dz" class="slider" type="range" min="20" max="4000" step="1" value="2000" /></div>
+        <div class="control"><div class="slider-row"><span>Field of view</span><span class="value"><span id="v-fov">50</span>°</span></div><input id="c-fov" class="slider" type="range" min="10" max="110" step="1" value="50" /></div>
+        <div class="seg" id="target-tabs"><button data-target="centre" aria-selected="true">look at centre</button><button data-target="skull" aria-selected="false">skull</button><button data-target="free" aria-selected="false">free</button></div>
+        <div class="flex gap-2">
+          <button id="btn-fit-skull" class="btn btn-secondary btn-xs grow">Frame skull</button>
+          <button id="btn-fit-panel" class="btn btn-secondary btn-xs grow">Frame panel</button>
+          <button id="btn-reset" class="btn btn-secondary btn-xs grow" data-tip="Photo camera (R)">Photo</button>
+        </div>
+      </div>
+    </details>
+    <details class="card compact side-section" open>
+      <summary><span>Reconstruct from this camera</span></summary>
+      <div class="side-body controls">
+        <p class="text-xs text-muted static-hide">The painting is rendered from the current camera and passed to SHARP with the render's focal length. The result is added under Tests.</p>
+        <p class="text-xs text-muted static-note">This is the viewing copy. Reconstruction runs SHARP on your own machine from the project repo, which is not public yet; with <code>sharp-studio/server.py</code> running, this page finds it and the full Lab becomes available.</p>
+        <label class="row-between text-xs"><span class="text-muted">Source</span><select id="run-source" class="select input-sm" style="width:150px"><option value="flat">Flat panel</option><option value="current">Current view as rendered</option></select></label>
+        <label class="row-between text-xs"><span class="text-muted">Render size</span><select id="run-size" class="select input-sm" style="width:150px"><option value="1024">1024 px</option><option value="1536" selected>1536 px</option></select></label>
+        <input id="run-tag" class="input input-sm" placeholder="tag, e.g. from-boxer-O" />
+        <button id="btn-run-sharp" class="btn btn-sm">Reconstruct</button>
+        <div id="run-status" class="text-xs text-muted"></div>
+        <div id="user-runs" class="vp-list"></div>
+      </div>
+    </details>
+    <details class="card compact side-section">
+      <summary><span>Capture</span></summary>
+      <div class="side-body controls">
+        <p class="text-xs text-muted static-note">Capture and recording save to disk, so they run from the local server.</p>
+        <input id="cap-tag" class="input input-sm" placeholder="tag" />
+        <input id="cap-note" class="input input-sm" placeholder="note (optional)" />
+        <div class="flex gap-2"><button id="btn-capture-2" class="btn btn-sm grow">Capture</button><button id="btn-capture-set" class="btn btn-outline btn-sm grow" data-tip="Same eye in splat, mesh, flat, split">Set</button></div>
+        <div id="cap-recent" class="cap-recent"></div>
+      </div>
+    </details>
+    <details class="card compact side-section" id="details-section">
+      <summary><span>Scene details</span></summary>
+      <div class="side-body"><dl class="kv" id="scene-kv"></dl></div>
+    </details>
+    <div class="panel-foot"><button id="inspector-toggle" class="panel-collapse" data-tip="Collapse panel (])" aria-label="Collapse right panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></div>
+  </aside>
+</main>
+
+<!-- ================= LOG ================= -->
+<main id="view-log" class="page" hidden>
+  <div class="page-head">
+    <div><h1 class="text-lg">Log</h1><p class="text-muted text-sm">Captures, recordings and reconstructions with their metadata. Files in <code>anamorph/captures/</code> and <code>anamorph/runs_user/</code>.</p></div>
+    <div class="flex gap-2 items-center" style="flex-wrap:wrap">
+      <select id="log-filter-kind" class="select input-sm" style="width:150px"><option value="">all kinds</option><option value="capture">captures</option><option value="recording">recordings</option><option value="user_run">reconstructions</option></select>
+      <select id="log-filter-scene" class="select input-sm" style="width:190px"><option value="">all scenes</option></select>
+      <input id="log-search" class="input input-sm" style="width:180px" placeholder="search…" />
+      <button id="log-snapshot" class="btn btn-outline btn-sm" data-tip="Copy the log index to captures/snapshots/">Snapshot log</button>
+      <a id="log-export-json" class="btn btn-outline btn-sm" download="captures.json">JSON</a>
+      <a id="log-export-csv" class="btn btn-outline btn-sm" download="captures.csv">CSV</a>
+    </div>
+  </div>
+  <div id="log-grid" class="log-grid"></div>
+</main>
+
+<!-- ================= REPORTS ================= -->
+<main id="view-reports" class="page" hidden>
+  <div class="page-head">
+    <div><h1 class="text-lg">Report</h1><p class="text-muted text-sm">Built from runs/ and captures/. Save a version to keep a dated copy.</p></div>
+    <div class="flex gap-2 items-center"><input id="report-note" class="input input-sm" style="width:220px" placeholder="version note" /><button id="report-save" class="btn btn-sm">Save version</button></div>
+  </div>
+  <div id="report-versions" class="versions"></div>
+  <div id="reports" class="reports"></div>
+</main>
+
+<!-- ================= METHOD ================= -->
+<main id="view-method" class="page page-article" hidden>
+  <article id="method" class="prose"></article>
+</main>
+
+<div id="toaster" class="toaster" aria-live="polite"></div>
+<div id="intro" class="dialog-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
+  <div id="intro-card" class="intro-card">
+    <div class="intro-head"><span id="intro-title" class="intro-label">The Post-Original Holbein</span><button id="intro-x" class="btn btn-ghost btn-icon btn-xs" aria-label="Close">&#x2715;</button></div>
+    <p>To observe the skull depicted by Holbein, one must stand at a specific vantage point within the Renaissance collection at the National Gallery. This optimal viewing position can be accurately reconstructed from the panel through precise geometrical analysis, achieving millimeter-level accuracy as demonstrated by <i>Idols of the Cave</i>. However, the objective of this study is to utilize a predictive regression model to perform reverse engineering of the position that most closely approximates the &ldquo;imaginary position&rdquo; from which Holbein was situated during the creation of the painting.</p>
+    <p>The model is SHARP, Apple&rsquo;s single-image reconstruction network. From one photograph it builds the room in the painting as about 1.2 million Gaussian splats, a cloud of small coloured ellipsoids the camera can move through. The photograph carries no camera data, so the model assumes a 30 mm lens, and every metre it reports follows from that guess. The study repeats the reconstruction at lenses from 5 to 200 mm and converts each into panel millimetres, so the position the model favours can be set beside the one geometry gives.</p>
+    <ul>
+      <li><b>Look around.</b> Drag to turn, scroll or pinch to move closer. <i>Photo</i> returns to where the photograph was taken.</li>
+      <li><b>Jump to a spot.</b> Pick a viewpoint from the list on the left (the <i>Scene</i> button on a phone). <i>Boxer anamorphic.m</i> is where the skull should resolve.</li>
+      <li><b>Read the rest.</b> <i>Method</i> is the essay. <i>Log</i> and <i>Report</i> are the measurements behind it.</li>
+    </ul>
+    <div class="intro-foot"><button id="intro-close" class="btn btn-sm">Got it</button></div>
+  </div>
+</div>
+<div id="lightbox" class="dialog-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+  <div class="lightbox-panel">
+    <div class="lightbox-head">
+      <span id="lightbox-title" class="dialog-title"></span>
+      <span class="lightbox-head-actions">
+        <a id="lightbox-open" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">Open original</a>
+        <button id="lightbox-close" class="btn btn-ghost btn-icon btn-sm" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </span>
+    </div>
+    <div class="lightbox-body"><img id="lightbox-img" alt="" /></div>
+    <p id="lightbox-cap" class="dialog-description"></p>
+    <pre id="lightbox-meta" class="lightbox-meta scroll" hidden></pre>
+  </div>
+</div>
+</div>
+
+<script src="splat-core.js?v=20260919082115"></script>
+<script src="viewer.js?v=20260919082115"></script>
+<script src="method.js?v=20260919082115"></script>
+<script src="lab.js?v=20260919082115"></script>
+</body>
+</html>

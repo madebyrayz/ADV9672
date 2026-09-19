@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a static copy of the week-02 app into docs/ for GitHub Pages.
+"""Build a static copy of the week-02 app into docs/week-02/ for GitHub Pages.
 
 The app normally talks to server.py. Pages serves files and nothing else, so this
 snapshots every read-only API response to a file at the same path and rewrites the
@@ -7,27 +7,25 @@ app's absolute URLs to relative ones, since a project site is served from a
 subdirectory rather than the domain root.
 
 The Lab's Gaussian files, about 36 MB a scene, are copied in under splats/ so the
-published Lab can draw every scene. They match this repo's *.splat ignore rule, so they
-never enter its history; tools/deploy_site.sh copies docs/ whole, ignored files
-included, into the public site repo. The write routes have no static equivalent, and
-the build marks itself so the app runs read-only.
+published Lab can draw every scene. Splats elsewhere in the repo are ignored; the ones
+under docs/ are committed, because Pages serves docs/ straight from this repo. The
+write routes have no static equivalent, and the build marks itself so the app runs
+read-only.
 
-Pages does not read docs/ from this repo, which is private; commit the build and run
-tools/deploy_site.sh to publish it.
+docs/index.html is written by hand and is not touched here.
 """
 import json
 import re
 import shutil
 import sys
 from pathlib import Path
-pathlib_Path = Path
 
 ROOT = Path(__file__).resolve().parent.parent
-WEEK = ROOT / "week-02-post-original-holbein"
+WEEK = ROOT / "week-02"
 APP = WEEK / "sharp-studio"
 ANAMORPH = WEEK / "anamorph"
 SITE = "docs"          # published root, one folder per artifact beneath it
-SLUG = "poh"           # this artifact: Post-Original Holbein
+SLUG = "week-02"       # published folder for this week
 DOCS = ROOT / SITE / SLUG
 
 sys.path.insert(0, str(APP))
@@ -57,47 +55,6 @@ def copy_tree(src: Path, dst: Path, suffixes=None) -> int:
         shutil.copy2(f, out)
         n += 1
     return n
-
-
-def write_index(site: pathlib_Path) -> None:
-    """Course index. One row per artifact, so the published root stays a directory
-    rather than becoming whichever week happened to be built last."""
-    site.mkdir(parents=True, exist_ok=True)
-    (site / "index.html").write_text("""<!doctype html>
-<html lang="en"><head><meta charset="utf-8" />
-<title>ADV9672</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="poh/ui/favicon.svg" type="image/svg+xml" />
-<link rel="icon" href="poh/ui/favicon.png" sizes="32x32" />
-<link rel="apple-touch-icon" href="poh/ui/apple-touch-icon.png" />
-<style>
-  :root { color-scheme: light dark; --ink:#111; --dim:#6b6b6b; --line:#e2e0dc; --bg:#f4f2ed; }
-  @media (prefers-color-scheme: dark) { :root { --ink:#f2f2f2; --dim:#8d8d8d; --line:#262626; --bg:#0a0a0a; } }
-  body { margin:0; background:var(--bg); color:var(--ink);
-         font-family:"TWK Lausanne", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
-  main { max-width:720px; margin:0 auto; padding:96px 24px 96px; }
-  h1 { font-size:15px; font-weight:600; letter-spacing:-0.01em; margin:0 0 40px; }
-  ul { list-style:none; padding:0; margin:0; }
-  li { border-top:1px solid var(--line); }
-  li:last-child { border-bottom:1px solid var(--line); }
-  a { display:grid; grid-template-columns:44px 1fr; gap:20px; padding:22px 2px;
-      text-decoration:none; color:inherit; }
-  a:hover { background:color-mix(in srgb, var(--ink) 4%, transparent); }
-  .n { color:var(--dim); font-size:13px; padding-top:2px; }
-  .t { font-size:19px; font-weight:500; letter-spacing:-0.015em; margin-bottom:6px; }
-  .d { color:var(--dim); font-size:14px; line-height:1.5; }
-  @media (max-width: 600px) { main { padding:48px 20px 64px; } a { grid-template-columns:36px 1fr; gap:14px; } }
-</style></head><body><main>
-<h1>ADV9672</h1>
-<ul>
-  <li><a href="poh/"><span class="n">02</span><span>
-    <span class="t">The Post-Original Holbein</span>
-    <span class="d">Where must you stand for the skull in Holbein's <i>The Ambassadors</i> to resolve,
-    and does a monocular reconstruction model put its best viewpoint anywhere near the geometric answer?</span>
-  </span></a></li>
-</ul>
-</main></body></html>
-""")
 
 
 def main() -> None:
@@ -195,7 +152,6 @@ def main() -> None:
         js.write_text(t)
 
     (ROOT / SITE / ".nojekyll").touch()   # otherwise Pages hides paths beginning with an underscore
-    write_index(ROOT / SITE)
     size = sum(f.stat().st_size for f in DOCS.rglob("*") if f.is_file())
     print(f"docs/ built: {total} assets, {(size - splat_bytes) / 1e6:.0f} MB, plus {len(manifest['scenes'])} splats, {splat_bytes / 1e6:.0f} MB")
 
